@@ -1,0 +1,19 @@
+ion-content {
+  --background: url('../../../../../assets/image/background.png');
+}
+
+ion-toolbar {
+  --background: transparent;
+}
+
+ion-list {
+  & ion-item {
+    --background: transparent;
+     background: #eeeeeea6;
+    border: 1px solid #33333348;
+
+    &:nth-child(2n + 1) {
+      background:  #78c1e037;
+    }
+  }
+}

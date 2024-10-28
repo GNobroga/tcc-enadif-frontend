@@ -1,0 +1,80 @@
+<app-login-form>
+  <!-- Imagem de Cabeçalho -->
+  <!-- <div image-content class="flex items-center mx-auto bg-white bg-opacity-20 justify-center w-52 h-52 rounded-full shadow-lg mb-6">
+    <img src="assets/image/student.png" alt="Estudando" class="w-32">
+  </div> -->
+
+  
+  <!-- Cabeçalho de Boas-Vindas -->
+  <div header-content class="flex flex-col items-center justify-center text-center space-y-2 mb-6">
+    <ion-text class="text-3xl font-extrabold text-white">Crie Sua Conta Hoje!</ion-text>
+    <ion-text class="text-lg text-gray-300">Junte-se a nós e comece sua jornada de aprendizado. É fácil e rápido!</ion-text>
+  </div>
+  
+
+  <!-- Formulário de Registro -->
+  <div [formGroup]="form" form-inputs class="flex flex-col gap-4 w-full max-w-md mx-auto">
+    <!-- Campo de Nome -->
+    <div class="relative">
+      <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Nome</label>
+      <input
+        id="name"
+        formControlName="name"
+        pInputText
+        placeholder="Digite seu nome"
+        class="w-full px-4 py-3 bg-white rounded-md shadow-sm border border-gray-300 placeholder-gray-500 text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+      />
+    </div>
+
+    <!-- Campo de E-mail -->
+    <div class="relative">
+      <label for="email" class="block text-sm font-medium text-gray-300 mb-1">E-mail</label>
+      <input
+        id="email"
+        formControlName="email"
+        pInputText
+        type="email"
+        placeholder="Digite seu e-mail"
+        class="w-full px-4 py-3 bg-white rounded-md shadow-sm border border-gray-300 placeholder-gray-500 text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+      />
+    </div>
+
+    <!-- Campo de Senha -->
+    <div class="relative">
+      <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Senha</label>
+      <input
+        id="password"
+        formControlName="password"
+        pInputText
+        type="password"
+        placeholder="Digite sua senha"
+        class="w-full px-4 py-3 bg-white rounded-md shadow-sm border border-gray-300 placeholder-gray-500 text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+      />
+    </div>
+
+    <!-- Campo de Confirmação de Senha -->
+    <div class="relative">
+      <label for="confirmationPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirmar Senha</label>
+      <input
+        id="confirmationPassword"
+        formControlName="confirmationPassword"
+        pInputText
+        type="password"
+        placeholder="Confirme sua senha"
+        class="w-full px-4 py-3 bg-white rounded-md shadow-sm border border-gray-300 placeholder-gray-500 text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+      />
+    </div>
+
+    <!-- Botão de Registro -->
+    <p-button [loading]="loading()" severity="info" (click)="register()" label="Registrar" styleClass="w-full mt-3"></p-button>
+  </div>
+
+  <!-- Link para Entrar -->
+  <div footer-content class="flex items-center justify-center gap-2 text-white mt-4" routerLink="/account/login" matRipple>
+    <span class="text-base">Já tem uma conta?</span>
+    <span class="underline text-primary">Entrar</span>
+  </div>
+</app-login-form>
+
+<!-- Toast para Notificações -->
+<p-toast position="top-center" styleClass="w-[80vw] md:w-[40vw] bg-primary text-white text-center rounded-md shadow-lg" />

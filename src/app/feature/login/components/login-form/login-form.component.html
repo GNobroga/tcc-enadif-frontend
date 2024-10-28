@@ -1,0 +1,16 @@
+<div class="flex flex-col">
+  <ng-content select="[image-content]"></ng-content>
+  <ng-content select="[header-content]"></ng-content>
+  <div class="mt-5">
+    <ng-content select="[form-inputs]"></ng-content>
+  </div>
+    <!-- <p-divider layout="horizontal" align="center" styleClass="text-sm font-bold">OU</p-divider>
+    <p-button (onClick)="loginWith('google')" severity="danger" label="Google" icon="pi pi-google"  styleClass="w-full mt-2"/>
+    <p-button (onClick)="loginWith('github')" label="Github" icon="pi pi-github"  styleClass="w-full mt-5"/> -->
+
+    <ion-item lines="none" [button]="true" class="mt-4">
+      <div class="flex justify-center w-full">
+        <ng-content select="[footer-content]"></ng-content>
+      </div>
+    </ion-item>
+</div>

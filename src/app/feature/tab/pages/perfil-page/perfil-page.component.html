@@ -1,0 +1,61 @@
+<ion-content>
+  <div class="p-4 pt-8">
+    <div class="profile bg-white p-6 rounded-md shadow">
+      <div class="relative w-24 h-24 rounded-full mx-auto">
+        <img class="w-full h-full rounded-full" alt="Silhouette of a person's head" src="{{ user()?.photoURL ? user()?.photoURL : 'assets/image/avatar.svg' }}" />
+        <span class="flex items-center justify-center absolute right-0 -bottom-2 shadow-lg scale-90 w-10 h-10 rounded-full bg-[var(--ion-color-secondary)] transition-transform duration-200 hover:scale-105 cursor-pointer">
+          <input (change)="onUpload($event)" type="file" class="opacity-0 absolute top-0 left-0 w-full h-full rounded-full cursor-pointer" accept="image/*">
+          <i class="fa-solid fa-camera text-white text-xl"></i> <!-- Cor do ícone alterada para um tom mais atraente -->
+        </span>      
+      </div>
+      <div class="mt-3">
+        <span class="flex flex-col cursor-pointer" matRipple matRippleColor="rgba(0, 0, 0, 0.02)" (click)="showDialog()">
+          <ion-label class="font-bold opacity-50 flex items-center gap-2">Nome <i class="fa-solid fa-pencil text-xs"></i></ion-label>
+          <ion-text class="font-medium">{{ user()?.displayName }}</ion-text>
+        </span>
+      </div>
+      <div class="mt-3">
+        <span class="flex flex-col cursor-pointer" matRipple matRippleColor="rgba(0, 0, 0, 0.02)">
+          <ion-label class="font-bold opacity-50 flex items-center gap-2">E-mail</ion-label>
+          <ion-text class="font-medium">{{ user()?.email }}</ion-text>
+        </span>
+      </div>
+      <div class="mt-2">
+        <ion-text class="text-sm opacity-40">Conta criada em {{  user()?.metadata?.creationTime  | date: 'dd/MM/YYYY'}} às {{  user()?.metadata?.creationTime  | date: 'HH:mm:ss'}}</ion-text>
+      </div>
+    </div>
+    <div class="configuration bg-white p-6 mt-5  rounded-md shadow">
+      <ion-text class="text-xl font-bold">Configurações</ion-text>
+      <div class="mt-2">
+        <ion-text class="text-sm opacity-40">Não disponível</ion-text>
+      </div>
+    </div>
+    <div class="mt-5">
+      <button pButton severity="info" class="w-full flex justify-center font-semibold" id="exit-button">Deslogar</button>
+    </div>
+    <div class="mt-4">
+      <button pButton severity="danger" class="w-full flex justify-center font-semibold" id="delete-account-button">Excluir Conta</button>
+    </div>
+    <div class="flex flex-col items-center mt-8 opacity-70">
+      <ion-text class="text-xs">Versão: 1.0.0</ion-text>
+      <ion-text class="text-xs">Feito com &#10084;&#65039; por  <strong>Gabriel Cardoso</strong></ion-text>
+    </div>
+  </div>
+</ion-content>
+
+
+<ion-alert
+  trigger="exit-button"
+  header="Atenção!"
+  message="Você realmente tem certeza de que deseja sair agora?"
+  [buttons]="closeAlertButtons"
+></ion-alert>
+
+<p-toast [position]="'top-center'" styleClass="w-[80vw]" />
+
+<ion-alert
+  trigger="delete-account-button"
+  header="Atenção!"
+  message="Tem certeza de que deseja continuar? Sua conta será permanentemente excluída e poderá ser disponibilizada para outra pessoa."
+  [buttons]="deleteAlertButtons"
+></ion-alert>

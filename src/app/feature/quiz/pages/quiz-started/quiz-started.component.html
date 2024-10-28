@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border" [translucent]="true">
+  <ion-toolbar>
+    <ion-item lines="none" slot="start" class="w-full">
+      <ion-back-button></ion-back-button>
+      <div class="flex items-center">
+        <ion-title class="font-semibold">Enade 2021</ion-title>
+        <i class="heart fa-solid relative -left-3 fa-heart text-2xl scale-75 text-red-600" pBadge *ngIf="remainingChances() > 0" [value]="remainingChances()"  severity="warning" badgeStyleClass="bg-red-800"></i>
+      </div>
+      <div slot="end" class="h-8 min-w-14 {{ timeHasPassed ? 'time-passed' : '' }}" >
+        <ion-text class="text-lg">{{ timerFormatted }}</ion-text>
+      </div>
+    </ion-item>
+  </ion-toolbar>
+  <div class="px-5 ">
+    <ion-progress-bar [value]="currentPercentage()"  slot="start"></ion-progress-bar>
+  </div>
+</ion-header>
+<ion-content class="ion-padding" [scrollX]="true" [scrollEvents]="true">
+  <section>
+
+    @defer (when currentQuestion() !== null) {
+      <div class="mt-3">
+        <app-quiz-question [data]="currentQuestion()!"/>
+       </div>
+    }
+
+
+    @if (isReview()) {
+     <div class="flex gap-3 justify-between">
+        @if (currentQuestionIndex()! > 0) {
+          <ion-button class="mt-5 flex-1 !h-12 normal-case" (click)="seePreviousQuestion()">
+            <span class="text-white font-medium text-lg">Anterior</span>
+          </ion-button>
+        }
+        <ion-button class="mt-5 flex-1 !h-12 normal-case {{ currentQuestionIndex()! > 0 ? '' : 'w-full' }}" (click)="seeNextQuestion()">
+          <span class="text-white font-medium text-lg">Próximo</span>
+        </ion-button>
+     </div>
+    } @else {
+      <ion-button  expand="block" class="mt-5 !h-12 normal-case" (click)="goToNext()" [disabled]="disableButton()">
+        <span class="text-white font-medium text-lg">{{ disableButton() ? 'Bloqueado' : 'Próximo' }}</span>
+      </ion-button>
+    }
+  </section>
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed" class="me-2" *ngIf="isBellSwinging()" (click)="onClickBell()">
+    <ion-fab-button color="primary">
+      <i class="fa-solid fa-bell text-lg swinging-bell" style="color: #FFA500;"></i>
+    </ion-fab-button>
+  </ion-fab>
+
+
+</ion-content>

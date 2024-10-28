@@ -1,0 +1,41 @@
+ion-toolbar, ion-content, ion-item {
+  --background: #eee;
+}
+
+ion-header {
+  & > div {
+    background-color: #eee;
+  }
+}
+ion-progress-bar {
+  background-color: #eee;
+  height: 0.7rem;
+  border-radius: 0.5rem;
+  &::part(track) {
+    background-color:  #ddd;
+  }
+}
+
+
+ion-button {
+  --background: #1A7ECC;
+  --border-radius: 0.5rem !important;
+}
+
+
+.heart {
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+  0%, 100% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+}
+
+.time-passed {
+  @apply bg-red-600 flex items-center justify-center text-white rounded-lg
+}

@@ -1,0 +1,23 @@
+
+<div [formGroup]="form" class="h-full flex flex-col justify-center items-center">
+    <div image-content class="flex items-center mx-auto bg-white bg-opacity-20 justify-center w-52 h-52 rounded-full shadow-lg mb-6">
+        <i class="fa-solid fa-user-shield text-7xl text-gray-100"></i>
+    </div>
+    <div class="w-full text-white">
+        <div class="flex justify-center my-1">
+            <ion-text class="text-4xl font-medium">Resetar senha</ion-text>
+        </div>
+        <p class="text-base mt-7 text-center mb-7">Você receberá instruções para resetar sua senha por e-mail.</p>
+        <input formControlName="email" type="email" pInputText class="w-full py-4 mt-3" placeholder="Digite seu Email"/>
+        <button (click)="sendEmail()" severity="info" pButton class="mt-5 w-full flex justify-center items-center gap-2 text-base font-bold">
+            <i class="fa-solid fa-envelope"></i>
+            Enviar
+        </button>
+        <button routerLink="/account/login" pButton severity="warning" class="mt-5 w-full flex justify-center items-center gap-2 text-base font-bold">
+            <i class="fa-solid fa-arrow-left"></i>
+            Voltar
+        </button>
+    </div>
+</div>
+
+<p-toast [position]="'top-center'" styleClass="w-[80vw]" />

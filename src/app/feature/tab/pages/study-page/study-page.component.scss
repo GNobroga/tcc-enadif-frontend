@@ -1,0 +1,18 @@
+.search-button {
+  --box-shadow: none;
+}
+ion-progress-bar {
+  --progress-background: white;
+  --background: white;
+  @apply opacity-60;
+}
+
+.button-start {
+  --background: rgb(37, 175, 249);
+}
+
+
+ion-content {
+  --padding-bottom: 0.5rem;
+}
+

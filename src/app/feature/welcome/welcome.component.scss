@@ -1,0 +1,19 @@
+ion-content {
+  --background: url('../../../assets/image/background.png');
+}
+.bar {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+  @apply rounded-full;
+
+  &--active {
+    background-color: #50b5e4;
+  }
+}
+
+
+
+

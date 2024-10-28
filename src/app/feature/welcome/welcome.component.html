@@ -1,0 +1,23 @@
+<ion-content class="ion-padding">
+    <div class="h-full flex items-center relative">
+
+      @if (currentStep() === 1) {
+        <app-step1/>
+      } @else if (currentStep() === 2) {
+        <app-step2/>
+      } @else {
+        <app-step3/>
+      }
+
+
+      <div class="absolute bottom-0 w-full flex items-center justify-between">
+        <p-button [raised]="true" styleClass="text-[var(--ion-color-primary)] bg-white" [ngStyle]="{ 'visibility': currentStep() < 2 ? 'hidden' : 'visible' }" size="small" slot="start" label="Anterior" [text]="true" (click)="previousStep()"></p-button>
+        <div class="flex">
+          <div class="bar" [ngClass]="{ 'bar--active': currentStep() === 1 }"></div>
+          <div class="bar" [ngClass]="{ 'bar--active': currentStep() === 2 }"></div>
+          <div class="bar" [ngClass]="{ 'bar--active': currentStep() === 3 }"></div>
+        </div>
+        <p-button [raised]="true" styleClass="text-[var(--ion-color-primary)] bg-white" [ngStyle]="{ 'visibility': currentStep() > 2 ? 'hidden' : 'visible' }" size="small" slot="end" label="Próximo" [text]="true" (click)="nextStep()"></p-button>
+      </div>
+    </div>
+</ion-content>
