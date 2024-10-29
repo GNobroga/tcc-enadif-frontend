@@ -3,7 +3,6 @@ import { register } from 'swiper/element';
 
 register();
 
-
 @Component({
   selector: 'app-root',
   template: `

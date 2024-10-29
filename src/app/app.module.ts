@@ -14,6 +14,7 @@ import { CoreModule } from './core/core.module';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { quizResultReducer } from './store/reducers/quiz-result.reducer';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +36,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
+    provideFirestore(() => getFirestore()),
     provideHttpClient(withInterceptors([authInterceptor])),
   ],
   bootstrap: [AppComponent],

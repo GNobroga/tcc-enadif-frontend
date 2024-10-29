@@ -17,7 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     .pipe(switchMap(idToken => {
       const clone = req.clone({
         setHeaders: {
-          Authorization: `Berear ${idToken}`,
+          Authorization: `Bearer ${idToken}`.trim(),
         },
       });
       return next(clone);

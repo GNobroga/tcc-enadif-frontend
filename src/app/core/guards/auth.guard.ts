@@ -13,6 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         router.navigate(['account', 'login']);
         observer.next(false);
       } else {
+        console.log(await user?.getIdToken())
         observer.next(true);
       }
     });

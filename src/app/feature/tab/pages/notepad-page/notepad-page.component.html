@@ -15,27 +15,19 @@
   </div> -->
   <div class="py-4 px-2 mt-3">
     <div class="[&_div]:w-40 flex flex-wrap  gap-3 justify-center cursor-pointer">
-      <div class="bg-white rounded-md" matRipple>
-        <div class="h-1 bg-red-500 rounded-l-lg rounded-r-lg"></div>
-        <div class="p-3">
-          <ion-text class="text-sm opacity-60">16 de ago de 2024</ion-text>
-          <div class="flex flex-col mt-3">
-            <ion-text class="font-medium">Nota sem título</ion-text>
-            <ion-text class="text-xs">Conteúdo...</ion-text>
+     
+      @for (notepad of notepads(); track notepad.id) {
+        <div class="bg-white rounded-md" matRipple [routerLink]="['/tabs', 'create-note']" [queryParams]="{ existingId: notepad.id }" >
+          <div class="h-1 bg-[{{ notepad.color }}] rounded-l-lg rounded-r-lg"></div>
+          <div class="p-3">
+            <ion-text class="text-sm opacity-60">{{ notepad.createdAt | date: 'd \'de\' MMM \'de\' y' }}</ion-text>
+            <div class="flex flex-col mt-3">
+              <ion-text class="font-medium truncate">{{ notepad.title }}</ion-text>
+              <ion-text class="text-xs truncate">{{ notepad.description }}</ion-text>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="bg-white rounded-md" matRipple>
-        <div class="h-1 bg-red-500 rounded-l-lg rounded-r-lg"></div>
-        <div class="p-3">
-          <ion-text class="text-sm opacity-60">16 de ago de 2024</ion-text>
-          <div class="flex flex-col mt-3">
-            <ion-text class="font-medium">Nota sem título</ion-text>
-            <ion-text class="text-xs">Conteúdo...</ion-text>
-          </div>
-        </div>
-      </div>
+      }
    </div>
   </div>
 </ion-content>
