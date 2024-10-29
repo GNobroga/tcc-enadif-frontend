@@ -10,29 +10,42 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <!-- <div class="h-full flex items-center justify-center text-center px-4">
+  <div *ngIf="!notepads()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
+    <i class="fa-solid fa-face-frown-open text-7xl text-[var(--ion-color-secondary)]"></i>
     <ion-text class="text-lg opacity-30 font-semibold">Você ainda não tem nenhuma nota, aperte em + para criar uma!</ion-text>
-  </div> -->
-  <div class="p-4 mt-3">
-    <div class="[&_div]:w-40 flex flex-wrap  gap-3 cursor-pointer">
-     
+  </div>
+  <div *ngIf="notepads()?.length" class="p-4 mt-3">
+    <div class="flex flex-wrap gap-2 cursor-pointer [&_div]:w-40">
       @for (notepad of notepads(); track notepad.id) {
-        <div class="bg-white rounded-md" matRipple [routerLink]="['/tabs', 'note-edit']" [queryParams]="{ sourceId: notepad.id }" >
-          <div class="h-1 bg-[{{ notepad.color }}] rounded-l-lg rounded-r-lg"></div>
+        <div
+          class="bg-white rounded-md shadow-md hover:shadow-lg transition-shadow duration-200"
+          matRipple
+          [pTooltip]="notepad.description | textTruncate"
+          [routerLink]="['/tabs', 'note-edit']"
+          [queryParams]="{ sourceId: notepad.id }"
+        >
+          <!-- Cor de fundo superior ajustável -->
+          <div
+            [ngStyle]="getBackgroundColor(notepad.color)"
+            class="h-1 rounded-t-md"
+          ></div>
+    
+          <!-- Conteúdo principal da nota -->
           <div class="p-3">
-            <ion-text class="text-sm opacity-60">{{ notepad.createdAt | date: 'd \'de\' MMM \'de\' y' }}</ion-text>
-            <div class="flex flex-col mt-3">
-              <ion-text class="font-medium truncate">{{ notepad.title }}</ion-text>
-              <ion-text class="text-xs truncate">{{ notepad.description }}</ion-text>
+            <ion-text class="text-sm text-gray-500">
+              {{ notepad.createdAt | date: 'd \'de\' MMM \'de\' y' }}
+            </ion-text>
+            <div class="mt-3">
+              <ion-text
+                class="block font-medium truncate text-lg"
+                [title]="notepad.title"
+              >
+                {{ notepad.title }}
+              </ion-text>
             </div>
           </div>
         </div>
-      } @empty { 
-          <span class="flex flex-col gap-2 items-center w-full">
-            <i class="text-6xl fa-solid fa-note-sticky text-[var(--ion-color-primary)]"></i>
-            <p class="text-base font-medium">Nenhuma nota cadastrada</p>
-          </span>
       }
-   </div>
+    </div>    
   </div>
 </ion-content>

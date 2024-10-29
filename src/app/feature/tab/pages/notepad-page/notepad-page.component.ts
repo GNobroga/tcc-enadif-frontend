@@ -18,5 +18,11 @@ export class NotepadPageComponent implements OnInit {
     this.notepadService.listAll().subscribe();
   }
 
+  getBackgroundColor(color: string) {
+    return {
+      backgroundColor: color,
+    };
+  }
+
 
 }

@@ -1,9 +1,9 @@
-import { Component, DoCheck, effect, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertButton, ViewDidEnter, ViewDidLeave } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
-import { debounceTime, forkJoin, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { INotepad } from 'src/app/core/interfaces/notepad';
 import NotepadService from 'src/app/core/services/notepad.service';
 
@@ -48,7 +48,7 @@ export class CreateNotePageComponent implements OnInit, ViewDidEnter, ViewDidLea
 
   form = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(2000)]),
-      description: new FormControl('', [Validators.required, Validators.maxLength(5000)]),
+      description: new FormControl('', [Validators.required, Validators.maxLength(2000000)]),
   });
 
   notepad = signal<INotepad | null>(null);
