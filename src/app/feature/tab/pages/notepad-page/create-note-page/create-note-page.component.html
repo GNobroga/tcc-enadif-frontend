@@ -1,9 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar [ngStyle]="{ '--background': headerColor() }">
     <ion-item lines="none" [ngStyle]="{ '--background': headerColor() }">
-      <ion-back-button color="light" defaultHref="/tabs/notepad"></ion-back-button>
+      <ion-back-button color="light" defaultHref="/tabs/notes"></ion-back-button>
       <ion-title color="light">Nova Nota</ion-title>
-      <ion-button href="/tabs/notepad" fill="clear" color="light">
+      <ion-button [ngClass]="{ invisible: notepad() === null }" id="confirm-button" fill="clear" color="light">
         <i slot="icon-only"  class="fa-solid fa-trash text-xl"></i>
       </ion-button>
     </ion-item>
@@ -30,3 +30,12 @@
     </div>
   </div>
 </ion-content>
+
+<p-toast preventOpenDuplicates="true" position="top-center" styleClass="w-[80vw]"/>
+
+<ion-alert
+  trigger="confirm-button"
+  header="Alerta"
+  message="Você realmente deseja excluir?"
+  [buttons]="alertButtons"
+></ion-alert>

@@ -3,7 +3,7 @@
     <ion-item color="primary" lines="none">
       <ion-back-button color="light" defaultHref="/tabs"></ion-back-button>
       <ion-title color="light">Minhas Notas</ion-title>
-      <ion-button routerLink="/tabs/create-note" fill="clear" color="light">
+      <ion-button routerLink="/tabs/note-edit" fill="clear" color="light">
         <i slot="icon-only" class="fa-solid fa-circle-plus text-2xl"></i>
       </ion-button>
     </ion-item>
@@ -13,11 +13,11 @@
   <!-- <div class="h-full flex items-center justify-center text-center px-4">
     <ion-text class="text-lg opacity-30 font-semibold">Você ainda não tem nenhuma nota, aperte em + para criar uma!</ion-text>
   </div> -->
-  <div class="py-4 px-2 mt-3">
-    <div class="[&_div]:w-40 flex flex-wrap  gap-3 justify-center cursor-pointer">
+  <div class="p-4 mt-3">
+    <div class="[&_div]:w-40 flex flex-wrap  gap-3 cursor-pointer">
      
       @for (notepad of notepads(); track notepad.id) {
-        <div class="bg-white rounded-md" matRipple [routerLink]="['/tabs', 'create-note']" [queryParams]="{ existingId: notepad.id }" >
+        <div class="bg-white rounded-md" matRipple [routerLink]="['/tabs', 'note-edit']" [queryParams]="{ sourceId: notepad.id }" >
           <div class="h-1 bg-[{{ notepad.color }}] rounded-l-lg rounded-r-lg"></div>
           <div class="p-3">
             <ion-text class="text-sm opacity-60">{{ notepad.createdAt | date: 'd \'de\' MMM \'de\' y' }}</ion-text>
@@ -27,6 +27,11 @@
             </div>
           </div>
         </div>
+      } @empty { 
+          <span class="flex flex-col gap-2 items-center w-full">
+            <i class="text-6xl fa-solid fa-note-sticky text-[var(--ion-color-primary)]"></i>
+            <p class="text-base font-medium">Nenhuma nota cadastrada</p>
+          </span>
       }
    </div>
   </div>

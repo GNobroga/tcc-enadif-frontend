@@ -56,11 +56,11 @@ const routes: Routes = [
     component: SearchPageComponent,
   },
   {
-    path: 'notepad',
+    path: 'notes',
     component: NotepadPageComponent,
   },
   {
-    path: 'create-note',
+    path: 'note-edit',
     component: CreateNotePageComponent,
   },
   {

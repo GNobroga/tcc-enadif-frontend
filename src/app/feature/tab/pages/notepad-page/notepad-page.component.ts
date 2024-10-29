@@ -15,7 +15,7 @@ export class NotepadPageComponent implements OnInit {
   notepads = this.notepadService.notepads;
 
   ngOnInit(): void {
-    this.notepadService.listAll;
+    this.notepadService.listAll().subscribe();
   }
 
 
