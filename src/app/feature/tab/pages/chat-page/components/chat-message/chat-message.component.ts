@@ -1,7 +1,7 @@
-import { AfterViewChecked, Component, effect, ElementRef, HostListener, Input, OnInit, Renderer2, signal, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, effect, ElementRef, HostListener, input, Input, OnInit, Renderer2, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api/menuitem';
-import { ChatPageComponent } from '../../chat-page.component';
+import { ChatMessage, ChatPageComponent } from '../../chat-page.component';
 import ChatMenuComponent from '../chat-menu/chat-menu.component';
 
 export interface ChatMessageMenuItem {
@@ -25,6 +25,9 @@ export class ChatMessageComponent {
   menuClosed = signal(true);
 
   chatMenu!: ElementRef<HTMLElement>;
+
+  @Input({ required: true, })
+  payload: ChatMessage = {} as ChatMessage;
 
   readonly items: ChatMessageMenuItem[] = [
     {

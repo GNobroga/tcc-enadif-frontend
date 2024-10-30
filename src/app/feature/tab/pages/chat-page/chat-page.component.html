@@ -5,15 +5,19 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll()">
-  <div class="p-4 flex flex-col gap-5">
-    <app-chat-message *ngFor="let _ of messages; let even = even; let index = index" [isOwnMessage]="!even"/>
+  <div class="p-4 flex flex-col gap-5" *ngIf="messages().length">
+    <app-chat-message [payload]="message" [isOwnMessage]="message.fromId === user().uid" *ngFor="let message of messages();"/>
+  </div>
+  <div *ngIf="!messages()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
+    <i class="fa-solid fa-face-frown-open text-7xl text-[var(--ion-color-secondary)]"></i>
+    <ion-text class="text-lg opacity-60 font-semibold">Ainda não há nenhuma mensagem.</ion-text>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-item lines="none">
-      <ion-input placeholder="Digite alguma coisa.."></ion-input>
-      <ion-button size="large" slot="end" color="dark" class="scale-75">
+      <ion-input [(ngModel)]="message" placeholder="Digite alguma coisa.."></ion-input>
+      <ion-button (click)="sendMessage()" size="large" slot="end" color="dark" class="scale-75">
         <ion-icon color="light"  slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-item>

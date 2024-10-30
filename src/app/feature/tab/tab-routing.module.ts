@@ -64,8 +64,15 @@ const routes: Routes = [
     component: CreateNotePageComponent,
   },
   {
-    path: 'chat',
+    path: 'friend-chat',
     component: ChatPageComponent,
+  },
+  {
+    path: 'global-chat',
+    component: ChatPageComponent,
+    data: {
+      isGlobal: true,
+    }
   },
   {
     path: 'achievement',

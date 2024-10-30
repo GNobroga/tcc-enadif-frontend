@@ -1,6 +1,16 @@
-import { Component, HostListener, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
-import { MenuItem } from 'primeng/api/menuitem';
+import { Component, HostListener, input, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
+import { Auth, User } from '@angular/fire/auth';
+import { IonContent, ViewDidEnter } from '@ionic/angular';
+import { io, Socket } from 'socket.io-client';
+import { environment } from 'src/environments/environment';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
+
+export type ChatMessage = {
+  fromId: string;
+  displayName: string;
+  message: string;
+  sentAt: Date;
+}
 
 @Component({
   selector: 'app-chat-page',
@@ -10,15 +20,65 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
     chatMessages: new ViewChildren(ChatMessageComponent)
   }
 })
-export class ChatPageComponent {
+export class ChatPageComponent implements ViewDidEnter {
+
+  @ViewChild(IonContent)
+  ionContent: IonContent = {} as IonContent;
+
+  isGlobal = input(false);
 
   chatMessages?: QueryList<ChatMessageComponent>;
 
-  readonly messages = new Array(10);
-
   firstClick = signal(true);
 
-  constructor() { }
+  user = signal<User>({} as User);
+
+  socket = signal({} as Socket);
+
+  message = '';
+
+  messages = signal<ChatMessage[]>([]);
+
+  constructor(
+    readonly auth: Auth
+  ) {}
+
+
+  ionViewDidEnter(): void {
+      this.user.set(this.auth.currentUser!);
+      if (this.isGlobal()) {
+        this.startGlobalChat();
+      }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' || this.message.trim() === '') return;
+    this.sendSocketMessage(this.message);
+  }
+
+  sendMessage()  {
+    if (this.message.trim() === '') return;
+    this.sendSocketMessage(this.message);
+  }
+
+  private sendSocketMessage(message: string) {
+    this.socket().emit('send-message', this.message);
+    this.message = '';
+    setTimeout(() => {
+      this.ionContent.scrollToBottom(200);
+    }, 100);
+  }
+
+  private async startGlobalChat() {
+    const socket = io(`${environment.apiUrl}global-chat`, {
+      auth: {
+        token: await this.user().getIdToken(), 
+      },
+    });
+    this.socket.set(socket);
+    socket.on('receive-message', payload => this.messages().push(payload));
+  }
 
   onScroll() {
     this.chatMessages?.forEach(chatMessage => chatMessage.menuClosed.set(true));
