@@ -11,6 +11,7 @@
   <div *ngIf="!messages()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
     <i class="fa-solid fa-face-frown-open text-7xl text-[var(--ion-color-secondary)]"></i>
     <ion-text class="text-lg opacity-60 font-semibold">Ainda não há nenhuma mensagem.</ion-text>
+    <p class="text-xs" *ngIf="isGlobal">Ao sair as mensagens serão apagados</p>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">

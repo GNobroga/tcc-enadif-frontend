@@ -18,13 +18,15 @@
         <ion-icon class="text-[#bba741] text-xl" color="primary" name="flame"></ion-icon>
         <span class="font-semibold">1</span>
       </p-chip>
-      <div (click)="op.toggle($event)" pBadge value="1" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex justify-center items-center p-0 ms-2 bg-orange-600">
+      <div (click)="op.toggle($event)" pBadge value="1" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex items-center justify-center p-0 ms-2 bg-orange-600">
         <i class="fa-solid fa-bell text-xl text-white"></i>
       </div>
       <p-overlayPanel #op>
         <ng-template pTemplate="content">
             <div>
-                <ion-text class="text-lg font-bold mb-2">Solicitações de Amizade</ion-text>
+                <div class="mb-2">
+                  <ion-text class="text-lg font-bold mb-2">Notificações</ion-text>
+                </div>
     
                 <div class="p-3 border rounded-lg mb-2 flex flex-col">
                     <div class="text-sm">
