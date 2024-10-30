@@ -18,6 +18,60 @@
         <ion-icon class="text-[#bba741] text-xl" color="primary" name="flame"></ion-icon>
         <span class="font-semibold">1</span>
       </p-chip>
+      <div (click)="op.toggle($event)" pBadge value="1" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex justify-center p-0 ms-2 bg-orange-600">
+        <i class="fa-solid fa-bell text-xl text-white"></i>
+      </div>
+      <p-overlayPanel #op>
+        <ng-template pTemplate="content">
+            <div>
+                <ion-text class="text-lg font-bold mb-2">Solicitações de Amizade</ion-text>
+    
+                <div class="p-3 border rounded-lg mb-2 flex flex-col">
+                    <div class="text-sm">
+                        <p class="font-medium"><strong>João Miguel</strong> quer ser seu amigo!</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button 
+                            pButton 
+                            label="Aceitar" 
+                            icon="pi pi-check" 
+                            class="p-button-success p-button-sm" 
+                        ></button>
+                        <button 
+                            pButton 
+                            label="Rejeitar" 
+                            icon="pi pi-times" 
+                            class="p-button-danger p-button-sm" 
+                        ></button>
+                    </div>
+                </div>
+                
+                <p-divider></p-divider>
+
+                <div class="p-3 border rounded-lg mb-2 flex flex-col">
+                  <div class="text-sm">
+                      <p class="font-medium"><strong>João Miguel</strong> quer ser seu amigo!</p>
+                  </div>
+                  <div class="flex space-x-2">
+                      <button 
+                          pButton 
+                          label="Aceitar" 
+                          icon="pi pi-check" 
+                          class="p-button-success p-button-sm" 
+                      ></button>
+                      <button 
+                          pButton 
+                          label="Rejeitar" 
+                          icon="pi pi-times" 
+                          class="p-button-danger p-button-sm" 
+                      ></button>
+                  </div>
+              </div>
+  
+    
+            </div>
+        </ng-template>
+    </p-overlayPanel>
     </ion-buttons>
   </ion-toolbar>
   <ion-item lines="none" color="primary">

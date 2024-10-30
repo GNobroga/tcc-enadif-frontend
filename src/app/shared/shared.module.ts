@@ -30,12 +30,15 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TagModule } from 'primeng/tag';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+
 
 @NgModule({
   declarations: [],
   imports: [],
   exports: [
     InputGroupModule,
+    OverlayPanelModule,
     CardModule,
     TagModule,
     ToggleButtonModule,

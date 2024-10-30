@@ -62,6 +62,10 @@ export class CreateNotePageComponent implements OnInit, ViewDidEnter, ViewDidLea
       text: 'Confirmar',
       handler: () => this.notepadService.deleteById(this.notepad()?.id!)
         .subscribe(() => {  
+          this.form.patchValue({
+            title: '',
+            description: '',
+          });
           this.router.navigate(['tabs', 'notes']);
         }),
     },
