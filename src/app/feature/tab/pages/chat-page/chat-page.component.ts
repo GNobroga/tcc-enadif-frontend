@@ -1,12 +1,13 @@
 import { Component, HostListener, input, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { ActivatedRoute } from '@angular/router';
-import { IonContent, ViewDidEnter, ViewWillLeave } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertButton, IonContent, ViewDidEnter, ViewWillLeave } from '@ionic/angular';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
 import ChatManagerService from 'src/app/core/services/chat-manager.service';
 import { lastValueFrom } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 export type ChatMessage = {
   fromId: string;
@@ -21,7 +22,8 @@ export type ChatMessage = {
   styleUrls: ['./chat-page.component.scss'],
   queries: {
     chatMessages: new ViewChildren(ChatMessageComponent)
-  }
+  },
+  providers: [MessageService],
 })
 export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
 
@@ -44,23 +46,51 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
 
   messages = signal<ChatMessage[]>([]);
 
+  isLoading = signal(false);
+
+  closeAlertButtons = [
+    {
+      text: 'Cancelar',
+    },
+    {
+      text: 'Apagar',
+      handler: () => {
+        if (!this.roomId()) return;
+        this.messageService.add({
+          severity: 'info',
+          detail: 'A sala será apagada',
+        });
+        setTimeout(() => {
+          this.chatManagerService.leavePrivateChat(this.roomId()!).subscribe(() => {
+                this.router.navigate(['/tabs/community']);
+          });
+        }, 1000);
+      }
+    },
+  ] as AlertButton[];
+
   constructor(
     readonly auth: Auth,
     readonly route: ActivatedRoute,
+    readonly router: Router,
     readonly chatManagerService: ChatManagerService,
+    readonly messageService: MessageService,
   ) {}
 
 
   async ionViewDidEnter() {
       this.roomId.set(null);
+      this.isLoading.set(false);
       this.user.set(this.auth.currentUser!);
       if (this.isGlobal()) {
         this.startGlobalChat();
         return;
       } 
       const roomId = this.route.snapshot.params['roomId'] as string;
+      this.isLoading.set(true);
       const messages = await lastValueFrom(this.chatManagerService.listMessagesFromChat(roomId));
       this.messages.set(messages);
+      this.isLoading.set(false);
 
       this.scrollToEnd();
     

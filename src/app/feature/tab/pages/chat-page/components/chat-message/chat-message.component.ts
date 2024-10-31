@@ -18,7 +18,7 @@ export interface ChatMessageMenuItem {
     chatMenu: new ViewChild(ChatMenuComponent, { read: ElementRef }),
   }
 })
-export class ChatMessageComponent {
+export class ChatMessageComponent implements OnInit{
 
   @Input()
   public isOwnMessage = false;
@@ -30,7 +30,7 @@ export class ChatMessageComponent {
   @Input({ required: true, })
   payload: ChatMessage = {} as ChatMessage;
 
-  readonly items: ChatMessageMenuItem[] = [
+  items: ChatMessageMenuItem[] = [
     {
       label: 'Ver perfil',
       command: () => {
@@ -66,4 +66,17 @@ export class ChatMessageComponent {
     }, { allowSignalWrites: true })
   }
 
+  ngOnInit(): void {
+      if (!this.parent.isGlobal()) {
+        this.items = [
+          {
+            label: 'Ver perfil',
+            command: () => {
+              this.menuClosed.set(true);
+              this.router.navigate(['tabs', 'profile']);
+            },
+          },
+        ];
+      }
+  }
 }

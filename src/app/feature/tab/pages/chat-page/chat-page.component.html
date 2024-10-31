@@ -1,17 +1,24 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-back-button slot="start" defaultHref="/tabs"></ion-back-button>
+    <ion-back-button slot="start" defaultHref="{{ isGlobal() ? '/tabs' : '/tabs/community' }}"></ion-back-button>
     <ion-title>Bate papo</ion-title>
+    <button *ngIf="!isGlobal()" id="trash-button" slot="end" pButton class="bg-transparent outline-none border-none me-2 hover:border-none">
+      <i class="fa-solid fa-trash"></i>
+    </button>
   </ion-toolbar>
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll()">
-  <div class="p-4 flex flex-col gap-5" *ngIf="messages().length">
-    <app-chat-message [payload]="message" [isOwnMessage]="message.fromId === user().uid" *ngFor="let message of messages();"/>
-  </div>
-  <div *ngIf="!messages()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
-    <i class="fa-solid fa-face-frown-open text-7xl text-[var(--ion-color-secondary)]"></i>
-    <ion-text class="text-lg opacity-60 font-semibold">Ainda não há nenhuma mensagem.</ion-text>
-    <p class="text-xs" *ngIf="isGlobal">Ao sair as mensagens serão apagados</p>
+ <ng-container *ngIf="!isLoading()">
+    <div class="p-4 flex flex-col gap-5" *ngIf="messages().length">
+      <app-chat-message [payload]="message" [isOwnMessage]="message.fromId === user().uid" *ngFor="let message of messages();"/>
+    </div>
+    <div *ngIf="!messages()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
+      <ion-text class="text-lg opacity-60 font-semibold">Nenhuma mensagem por aqui ainda. Que tal começar a conversa?</ion-text>
+      <p class="text-xs" *ngIf="isGlobal()">Ao sair as mensagens serão apagados</p>
+    </div>
+ </ng-container>
+  <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+    <ion-spinner class="w-20 h-20"></ion-spinner>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
@@ -24,3 +31,13 @@
     </ion-item>
   </ion-toolbar>
 </ion-footer>
+
+<ion-alert
+  *ngIf="!isGlobal()"
+  trigger="trash-button"
+  header="Atenção!"
+  message="Você realmente tem certeza que deseja encerrar essa conversa?"
+  [buttons]="closeAlertButtons"
+></ion-alert>
+
+<p-toast [position]="'top-center'" styleClass="w-[80vw]" />

@@ -15,7 +15,24 @@
 
   <ion-content>
     <ion-list lines="none" class="friends">
+    
+        <!-- <ion-item button routerLink="/tabs/chat">
+          <p-avatar
+          label="G"
+          size="large"
+          styleClass="font-bold bg-[#5B6CBE] text-white"
+          shape="circle" />
+          <div class="flex flex-col ms-4 w-full gap-0.5 pb-3">
+            <div class="flex justify-between items-center">
+              <ion-text class="font-medium mt-3">Gabriel Cardoso</ion-text>
 
+              <p-tag *ngIf="even" severity="success"  value="Online" [rounded]="true" />
+              <p-tag *ngIf="!even" severity="warning"  value="Offline" [rounded]="true" />
+            </div>
+            <ion-text class="text-sm opacity-80">Visto por último ontem às 15:00</ion-text>
+          </div>
+        </ion-item> -->
+      
 
     </ion-list>
   </ion-content>
@@ -31,7 +48,7 @@
     </ion-toolbar>
     <ion-toolbar color="primary">
       <div class="px-3 pb-3">
-        <ion-searchbar  [animated]="true" placeholder="Pesquisar..."></ion-searchbar>
+        <ion-searchbar [formControl]="searchByName"  [animated]="true" placeholder="Pesquisar..." ></ion-searchbar>
       </div>
     </ion-toolbar>
   </ion-header>
@@ -42,16 +59,18 @@
       </ion-fab-button>
     </ion-fab>
 
-
-
-
   <ion-content>
-    <ion-list>
 
-      @for (privateChat of privateChats(); track privateChat.roomId) {
+    <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+      <ion-spinner class="w-20 h-20"></ion-spinner>
+    </div>
+
+    <ion-list *ngIf="!isLoading() && cacheListPrivateChat().length">
+
+      @for (privateChat of cacheListPrivateChat(); track privateChat.roomId) {
         <ion-item button [routerLink]="['/tabs/friend-chat', privateChat.roomId]">
           <p-avatar
-          label="G"
+          label="{{ privateChat.participantTwo.displayName!.charAt(0) }}"
           size="large"
           styleClass="font-bold bg-[#5B6CBE] text-white"
           shape="circle" />
@@ -60,7 +79,7 @@
               <ion-text class="font-medium">{{ privateChat.participantTwo.displayName }}</ion-text>
               
               @if (privateChat.messages.length) {
-                <ion-text class="text-sm">{{ getLastMessage(privateChat).text | textTruncate: 20 }}</ion-text>
+                <ion-text class="text-sm">Ver todas mensagens</ion-text>
               } @else {
                 <ion-text class="text-sm">Nenhuma mensagem</ion-text>
               }
@@ -68,13 +87,15 @@
 
             <div *ngIf="privateChat.messages.length" class="flex flex-col gap-1">
               <span class="text-xs">{{ getLastMessage(privateChat).sentAt | date: 'hh:mm a'  }}</span>
-              <p-badge [value]="privateChat.messages.length"/>
             </div>
           </div>
         </ion-item>
-      }
-    
+      } 
     </ion-list>
+
+    <div *ngIf="!isLoading() && !cacheListPrivateChat().length" class="h-full flex flex-col gap-2 items-center justify-center text-center p-4">
+      <ion-text class="text-lg opacity-70 font-semibold">Nenhuma conversa por aqui ainda. Que tal fazer amizades?</ion-text>
+    </div>
 
   </ion-content>
 </div>
