@@ -64,7 +64,7 @@ const routes: Routes = [
     component: CreateNotePageComponent,
   },
   {
-    path: 'friend-chat',
+    path: 'friend-chat/:roomId',
     component: ChatPageComponent,
   },
   {

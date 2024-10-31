@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createUserWithEmailAndPassword, signOut, updateProfile } from '@firebase/auth';
 import { MessageService } from 'primeng/api';
+import UserService from 'src/app/core/services/user.service';
 import CustomValidators from 'src/app/core/validators/custom-validators';
 
 @Component({
@@ -28,6 +29,7 @@ export class CreateAccountPageComponent implements OnInit {
     readonly messageService: MessageService,
     readonly auth: Auth,
     readonly router: Router,
+    readonly userService: UserService,
   ) {}
  
   ngOnInit() {
@@ -47,6 +49,7 @@ export class CreateAccountPageComponent implements OnInit {
         email!,
         password!,
       );
+      this.userService.initializeProgress();
       await updateProfile(user, { displayName: name });
       this.router.navigate(["/account/created"]);
     } catch (error) {

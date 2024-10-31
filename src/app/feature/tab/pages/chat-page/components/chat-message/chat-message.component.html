@@ -3,7 +3,7 @@
     <p-avatar
       label="G"
       size="large"
-      styleClass="font-bold bg-[#5B6CBE] text-white cursor-pointer"
+      styleClass="font-bold bg-[#5B6CBE] text-white {{ !isOwnMessage ? 'cursor-pointer' : '' }}"
       (click)="menuClosed.set(!menuClosed())"
       shape="circle"/>
   </div>
@@ -17,7 +17,9 @@
     </div>
   </div>
 
-  <app-chat-menu class="absolute top-12 z-40" [items]="items" [menuClosed]="menuClosed()" />
+  @if (!isOwnMessage) {
+    <app-chat-menu class="absolute top-12 z-40" [items]="items" [menuClosed]="menuClosed()" />
+  }
 
 </div>
 

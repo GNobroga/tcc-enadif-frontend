@@ -9,7 +9,8 @@ import { tap, shareReplay } from "rxjs";
     providedIn: 'root',
 })
 export default class NotepadService extends BaseService {
-    constructor(private readonly httpClient: HttpClient) {
+    
+    constructor() {
         super('notes');
     }
 

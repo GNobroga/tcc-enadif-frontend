@@ -1,6 +1,10 @@
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { inject, Inject } from "@angular/core";
 import { environment } from "src/environments/environment";
 
 export default abstract class BaseService {
+
+    protected httpClient: HttpClient = inject(HttpClient);
 
     constructor(public baseEndpoint: string) {}
 

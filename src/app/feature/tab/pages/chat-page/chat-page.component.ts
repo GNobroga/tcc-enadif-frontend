@@ -1,9 +1,12 @@
 import { Component, HostListener, input, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { IonContent, ViewDidEnter } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { IonContent, ViewDidEnter, ViewWillLeave } from '@ionic/angular';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
+import ChatManagerService from 'src/app/core/services/chat-manager.service';
+import { lastValueFrom } from 'rxjs';
 
 export type ChatMessage = {
   fromId: string;
@@ -20,7 +23,7 @@ export type ChatMessage = {
     chatMessages: new ViewChildren(ChatMessageComponent)
   }
 })
-export class ChatPageComponent implements ViewDidEnter {
+export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
 
   @ViewChild(IonContent)
   ionContent: IonContent = {} as IonContent;
@@ -35,20 +38,57 @@ export class ChatPageComponent implements ViewDidEnter {
 
   socket = signal({} as Socket);
 
+  roomId = signal<string | null>(null);
+
   message = '';
 
   messages = signal<ChatMessage[]>([]);
 
   constructor(
-    readonly auth: Auth
+    readonly auth: Auth,
+    readonly route: ActivatedRoute,
+    readonly chatManagerService: ChatManagerService,
   ) {}
 
 
-  ionViewDidEnter(): void {
+  async ionViewDidEnter() {
+      this.roomId.set(null);
       this.user.set(this.auth.currentUser!);
       if (this.isGlobal()) {
         this.startGlobalChat();
-      }
+        return;
+      } 
+      const roomId = this.route.snapshot.params['roomId'] as string;
+      const messages = await lastValueFrom(this.chatManagerService.listMessagesFromChat(roomId));
+      this.messages.set(messages);
+
+      this.scrollToEnd();
+    
+      this.roomId.set(roomId);
+      const socket = io(`${environment.apiUrl}private-chat`, {
+        auth: {
+          token: await this.user().getIdToken(), 
+        },
+      });
+
+      socket.on('connect', () => {
+        socket.on('receive-message', (messages: ChatMessage[]) => {
+          this.messages.set(messages);
+          this.scrollToEnd();
+        });
+      }); 
+      this.socket.set(socket);
+  }
+
+
+  private scrollToEnd() {
+    setTimeout(() => {
+      this.ionContent.scrollToBottom(200);
+    }, 100);
+  }
+
+  async ionViewWillLeave() {
+      this.socket().close();
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -63,11 +103,13 @@ export class ChatPageComponent implements ViewDidEnter {
   }
 
   private sendSocketMessage(message: string) {
-    this.socket().emit('send-message', this.message);
+    if (!this.isGlobal() && this.roomId()) {
+      this.socket().emit('send-message', { roomId: this.roomId(), message: this.message, });
+    } else {
+      this.socket().emit('send-message', this.message);
+    }
+
     this.message = '';
-    setTimeout(() => {
-      this.ionContent.scrollToBottom(200);
-    }, 100);
   }
 
   private async startGlobalChat() {
@@ -76,8 +118,11 @@ export class ChatPageComponent implements ViewDidEnter {
         token: await this.user().getIdToken(), 
       },
     });
-    this.socket.set(socket);
-    socket.on('receive-message', payload => this.messages().push(payload));
+    socket.on('connect', () => this.socket.set(socket));
+    socket.on('receive-message', payload => {
+      this.messages().push(payload);
+      this.scrollToEnd();
+    });
   }
 
   onScroll() {
@@ -100,7 +145,9 @@ export class ChatPageComponent implements ViewDidEnter {
 
     const target = event.target as HTMLElement;
 
-    const parent = chatMessage.chatMenu.nativeElement;
+    const parent = chatMessage.chatMenu?.nativeElement;
+
+    if (!parent) return;
 
     if (!this.targetEquals(parent, target)) {
       this.chatMessages?.forEach(chatMessage => chatMessage.menuClosed.set(true));

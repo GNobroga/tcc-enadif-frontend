@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api/menuitem';
 import { ChatMessage, ChatPageComponent } from '../../chat-page.component';
 import ChatMenuComponent from '../chat-menu/chat-menu.component';
+import ChatManagerService from 'src/app/core/services/chat-manager.service';
 
 export interface ChatMessageMenuItem {
   label: string;
@@ -40,7 +41,9 @@ export class ChatMessageComponent {
     {
       label: 'Bate papo',
       command: () => {
-
+        this.chatManagerService.createPrivateChat(this.payload.fromId).subscribe(({ roomId }) => {
+          this.router.navigate(['/tabs/friend-chat', roomId]);
+        });
       },
     },
   ];
@@ -48,6 +51,7 @@ export class ChatMessageComponent {
   constructor(
     readonly router: Router,
     readonly parent: ChatPageComponent,
+    readonly chatManagerService: ChatManagerService
   ) {
     effect(() => {
       if (!this.menuClosed()) {

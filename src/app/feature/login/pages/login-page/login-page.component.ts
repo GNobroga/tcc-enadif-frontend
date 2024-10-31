@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import AuthService from 'src/app/core/services/auth.service';
+import UserService from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-login-page',
@@ -26,6 +27,7 @@ export class LoginPageComponent {
     readonly messageService: MessageService,
     readonly router: Router,
     readonly authService: AuthService,
+    readonly userService: UserService
   ) {}
 
   async login() {
@@ -40,6 +42,7 @@ export class LoginPageComponent {
       const { email, password } = this.form.value;
 
       if (await this.authService.signInDefault(email!, password!)) {
+        this.userService.initializeProgress();
         this.router.navigate(['tabs']);
       }
       

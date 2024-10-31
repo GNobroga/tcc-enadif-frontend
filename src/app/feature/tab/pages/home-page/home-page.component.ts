@@ -1,27 +1,43 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { register } from 'swiper/element';
-import { SwiperOptions } from 'swiper/types';
-import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
+import { filter } from 'rxjs';
 
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
+  queries: {
+    overlayPanel: new ViewChild(OverlayPanel),
+  }
 })
 export class HomePageComponent implements OnInit {
 
   user = signal<User | null>(null);
 
+  overlayPanel: OverlayPanel = {} as OverlayPanel;
+
   constructor(
-    public readonly dialog: MatDialog,
-    public readonly auth: Auth
-  ) { }
+    readonly dialog: MatDialog,
+    readonly auth: Auth,
+    readonly router: Router,
+    readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
+      
+  }
 
   ngOnInit(): void {
     this.user.set(this.auth.currentUser);
+
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.overlayPanel.hide();
+        this.changeDetectorRef.detectChanges();
+      })
   }
 
   public openWeekdaySequenceDialog() {
