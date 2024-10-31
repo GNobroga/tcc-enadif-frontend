@@ -60,14 +60,14 @@
               <ion-text class="font-medium">{{ privateChat.participantTwo.displayName }}</ion-text>
               
               @if (privateChat.messages.length) {
-                <ion-text class="text-sm">{{ getLastMessage(privateChat).text }}</ion-text>
+                <ion-text class="text-sm">{{ getLastMessage(privateChat).text | textTruncate: 20 }}</ion-text>
               } @else {
                 <ion-text class="text-sm">Nenhuma mensagem</ion-text>
               }
             </div>
 
             <div *ngIf="privateChat.messages.length" class="flex flex-col gap-1">
-              <span class="text-xs">{{ getLastMessage(privateChat).sentAt }}</span>
+              <span class="text-xs">{{ getLastMessage(privateChat).sentAt | date: 'hh:mm a'  }}</span>
               <p-badge [value]="privateChat.messages.length"/>
             </div>
           </div>

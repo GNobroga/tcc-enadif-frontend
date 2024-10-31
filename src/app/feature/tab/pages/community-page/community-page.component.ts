@@ -36,7 +36,7 @@ export class CommunityPage implements OnInit {
   get lastMessage() {
     const chats = this.privateChats();
     if (chats && chats.length) {
-      return chats[0];
+      return chats[chats.length - 1];
     } 
     return null;
   }
