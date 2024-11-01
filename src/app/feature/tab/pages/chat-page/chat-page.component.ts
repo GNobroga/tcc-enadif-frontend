@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 export type ChatMessage = {
   fromId: string;
   displayName: string;
+  photoUrl: string;
   message: string;
   sentAt: Date;
 }

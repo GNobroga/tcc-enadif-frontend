@@ -3,7 +3,8 @@
     <ion-buttons slot="start">
       <p-avatar
         routerLink="/tabs/perfil"
-        [label]="firstName[0]"
+        [image]="user()?.photoURL ?? undefined"
+        [label]="user()?.photoURL! ? undefined : firstName[0] "
         styleClass="mr-2"
         shape="circle"
         styleClass="font-bold bg-[#5B6CBE] text-white"
@@ -35,13 +36,15 @@
                           <p class="font-medium"><strong>{{ notification.userName }}</strong> quer ser seu amigo!</p>
                       </div>
                       <div class="flex space-x-2">
-                          <button 
+                          <button
+                              (click)="sendFriendRequest(notification.id)"
                               pButton 
                               label="Aceitar" 
                               icon="pi pi-check" 
                               class="p-button-success p-button-sm" 
                           ></button>
                           <button 
+                              (click)="rejectFriendRequest(notification.id)"
                               pButton 
                               label="Rejeitar" 
                               icon="pi pi-times" 
@@ -164,3 +167,4 @@
   </div>
 </ion-content>
 
+<p-toast [position]="'top-center'" styleClass="w-[80vw]" />

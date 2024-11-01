@@ -5,11 +5,15 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import { filter } from 'rxjs';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
+import UserService from 'src/app/core/services/user.service';
+import UserFriendService from 'src/app/core/services/user-friend.service';
+import { MessageService } from 'primeng/api';
 
 
 export type UserFriendNotification = {
+  id: string;
   userName: string;
   userId: string;
 }
@@ -20,7 +24,8 @@ export type UserFriendNotification = {
   styleUrls: ['./home-page.component.scss'],
   queries: {
     overlayPanel: new ViewChild(OverlayPanel),
-  }
+  },
+  providers: [MessageService],
 })
 export class HomePageComponent implements OnInit {
 
@@ -29,35 +34,60 @@ export class HomePageComponent implements OnInit {
   overlayPanel: OverlayPanel = {} as OverlayPanel;
 
   listFriendNotification = signal([] as UserFriendNotification[]);
+  
+  socket = signal<Socket | null>(null);
 
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
     readonly router: Router,
     readonly changeDetectorRef: ChangeDetectorRef,
+    readonly userFriendService: UserFriendService,
+    readonly messageService: MessageService,
   ) {
       
-  }
+  }  
 
   async ngOnInit() {
     this.user.set(this.auth.currentUser);
-
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe(async () => {
+        this.socket()?.close();
         this.overlayPanel.hide();
         this.changeDetectorRef.detectChanges();
+        const socket = io(`${environment.apiUrl}user-notification`, {
+          auth: {
+            token: await this.user()?.getIdToken(),
+          }
+        });
+        this.socket.set(socket);
+        socket.on('connect', () => {
+          socket.emit('list-friend-notifications');
+          socket.on('receive-friend-notification', this.listFriendNotification.set);
+        });
       });
-    
-      const socket = io(`${environment.apiUrl}user-notification`, {
-        auth: {
-          token: await this.user()?.getIdToken(),
-        }
-      });
+  }
 
-      socket.on('connect', () => {
-        socket.emit('send-friend-notifications');
-        socket.on('receive-friend-notification', this.listFriendNotification.set);
+  sendFriendRequest(requestId: string) {
+    this.userFriendService.acceptRequest(requestId).subscribe(() => {
+      this.overlayPanel.hide();
+      this.messageService.add({
+        severity: 'success',
+        detail: 'Você aceitou a solicitação de amizade',
       });
+    });
+  }
+
+  rejectFriendRequest(requestId: string) {
+    this.userFriendService.rejectRequest(requestId).subscribe(() => {
+      this.overlayPanel.hide();
+      setTimeout(() => {
+        this.messageService.add({
+          severity: 'info',
+          detail: 'Você recusou a solicitação de amizade',
+        });
+      }, 200)
+    })
   }
 
   public openWeekdaySequenceDialog() {

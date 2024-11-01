@@ -74,7 +74,7 @@ export class ChatMessageComponent implements OnInit{
             label: 'Ver perfil',
             command: () => {
               this.menuClosed.set(true);
-              this.router.navigate(['tabs', 'profile']);
+              this.router.navigate(['tabs', 'profile', this.payload.fromId]);
             },
           },
         ];

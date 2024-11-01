@@ -10,7 +10,19 @@ export default class UserFriendService extends BaseService {
         super('user-friend');
     }
 
+    removeFriend(friendId: string) {
+        return this.httpClient.get(this.getApiEndpoint(`remove-friend/${friendId}`));
+    }
+
     sendRequestFriend(friendId: string) {
         return this.httpClient.get(this.getApiEndpoint(`send-request/${friendId}`));
+    }
+
+    acceptRequest(friendRequestId: string) {
+        return this.httpClient.get(this.getApiEndpoint(`accept-request/${friendRequestId}`));
+    }
+
+    rejectRequest(friendRequestId: string) {
+        return this.httpClient.get(this.getApiEndpoint(`reject-request/${friendRequestId}`));
     }
 }

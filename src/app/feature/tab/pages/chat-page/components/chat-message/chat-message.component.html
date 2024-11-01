@@ -1,7 +1,8 @@
 <div class="flex gap-5 relative" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
   <div>
     <p-avatar
-      label="{{payload.displayName[0]}}"
+      [image]="payload.photoUrl"
+      label="{{payload.photoUrl ? undefined : payload.displayName[0]}}"
       size="large"
       styleClass="font-bold bg-[#5B6CBE] text-white {{ !isOwnMessage ? 'cursor-pointer' : '' }}"
       (click)="menuClosed.set(!menuClosed())"

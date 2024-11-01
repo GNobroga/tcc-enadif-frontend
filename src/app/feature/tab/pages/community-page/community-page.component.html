@@ -1,4 +1,4 @@
-<ion-menu contentId="menu-community-content" [menuId]="menuId">
+<ion-menu #menu contentId="menu-community-content" [menuId]="menuId">
   <ion-header class="ion-no-border" [translucent]="true">
     <ion-toolbar color="primary">
       <div slot="start" class="flex gap-2 items-center">
@@ -8,30 +8,36 @@
     </ion-toolbar>
     <ion-toolbar color="primary">
       <div class="px-3 pb-3">
-        <ion-searchbar  [animated]="true" placeholder="Pesquisar..."></ion-searchbar>
+        <ion-searchbar [formControl]="searchByName2"  [animated]="true" placeholder="Pesquisar..."></ion-searchbar>
       </div>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
-    <ion-list lines="none" class="friends">
+    <div class="h-full flex items-center justify-center text-center" *ngIf="!isFriendInfoLoading() && !cacheListFriendInfo().length">
+      <ion-text class="text-lg opacity-70 font-semibold">Nenhum amigo por aqui ainda. Que tal fazer amizades?</ion-text>
+    </div>
+    <ion-list lines="none" class="friends" *ngIf="!isFriendInfoLoading() && cacheListFriendInfo().length">
     
-        <!-- <ion-item button routerLink="/tabs/chat">
+        <ion-item button (click)="createPrivateChat(friend.friendId)" *ngFor="let friend of cacheListFriendInfo()">
           <p-avatar
-          label="G"
+          [image]="friend.photoUrl"
+          [label]="friend.photoUrl! ? undefined : friend.friendName[0]"
           size="large"
           styleClass="font-bold bg-[#5B6CBE] text-white"
           shape="circle" />
           <div class="flex flex-col ms-4 w-full gap-0.5 pb-3">
             <div class="flex justify-between items-center">
-              <ion-text class="font-medium mt-3">Gabriel Cardoso</ion-text>
-
-              <p-tag *ngIf="even" severity="success"  value="Online" [rounded]="true" />
-              <p-tag *ngIf="!even" severity="warning"  value="Offline" [rounded]="true" />
+              <ion-text class="font-medium mt-3">{{ friend.friendName }}</ion-text>
+              @if (friend.status) {
+                <p-tag severity="success"  value="Online" [rounded]="true" />
+              } @else {
+                <p-tag severity="warning"  value="Offline" [rounded]="true" /> 
+              }
             </div>
             <ion-text class="text-sm opacity-80">Visto por último ontem às 15:00</ion-text>
           </div>
-        </ion-item> -->
+        </ion-item> 
       
 
     </ion-list>
@@ -70,7 +76,8 @@
       @for (privateChat of cacheListPrivateChat(); track privateChat.roomId) {
         <ion-item button [routerLink]="['/tabs/friend-chat', privateChat.roomId]">
           <p-avatar
-          label="{{ privateChat.participantTwo.displayName!.charAt(0) }}"
+          [image]="privateChat.participantTwo.photoURL ?? undefined"
+          label="{{ privateChat.participantTwo.photoURL ? undefined : privateChat.participantTwo.displayName!.charAt(0) }}"
           size="large"
           styleClass="font-bold bg-[#5B6CBE] text-white"
           shape="circle" />

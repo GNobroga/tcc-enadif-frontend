@@ -31,7 +31,14 @@ export class UserProfileComponent implements OnInit  {
     {
       label: 'Remover amigo',
       command: () => {
-        this.messageService.add({severity: 'success', summary: 'Exclusão', detail: 'removido com sucesso!'});
+        this.userFriendService.removeFriend(this.profileId()).subscribe(payload => {
+          const { removed } = payload as any;
+          if (removed) {
+            this.messageService.add({severity: 'success', summary: 'Exclusão', detail: 'removido com sucesso!'});
+          } else {
+            this.messageService.add({severity: 'error', summary: 'Exclusão', detail: 'Vocês não são amigos'});
+          }
+        });
       },
     },
   ];
