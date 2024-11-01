@@ -5,23 +5,32 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="p-4">
-    <ion-grid>
+  <div class="p-4 h-full">
+    <ion-segment (ionChange)="onChange($event)" mode="ios" value="default">
+      <ion-segment-button value="default">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="acquired">
+        <ion-label>Adquiridas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    
+    <ion-grid class="mt-2" *ngIf="cacheAchievements().length">
       <ion-row>
-        <ion-col size="6">
+        <ion-col size="6" *ngFor="let achievement of cacheAchievements()">
 
-          <div class="relative h-48" >
+          <div class="relative h-48">
             <div class="flex flex-col bg-[#5D9CCC] text-white rounded-lg shadow-md p-3 h-full">
-              <!-- <div class="item-hidden">
+              <div class="item-hidden" *ngIf="!achievement.acquired">
                 <ion-img src="assets/image/trancar.png" class="w-16 h-16"></ion-img>
-              </div> -->
-              <ion-img src="assets/image/lancamento-do-foguete.png" class="w-20 h-20 mb-2 mx-auto"></ion-img>
-            <ion-text class="font-medium text-sm">Tudo tem um <br/> começo</ion-text>
-            <ion-text class="text-xs opacity-80">Você fez seu primeiro quizz</ion-text>
+              </div>
+              <ion-img [src]="achievement.imageUrl" class="w-20 h-20 mb-2 mx-auto"></ion-img>
+            <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>
+            <ion-text class="text-xs opacity-80">{{ achievement.detail }}</ion-text>
             </div>
          </div>
         </ion-col>
-        <ion-col size="6">
+        <!-- <ion-col size="6">
          <div class="relative h-48" >
             <div class="flex flex-col bg-[#b79d5c] text-white rounded-lg shadow-md p-3 h-full">
               <div class="item-hidden">
@@ -32,8 +41,11 @@
               <ion-text class="text-xs opacity-80">Você fez completou 10 quizz</ion-text>
             </div>
          </div>
-        </ion-col>
+        </ion-col> -->
       </ion-row>
     </ion-grid>
+    <span *ngIf="!cacheAchievements().length" class="flex items-center justify-center text-center h-full">
+      <ion-text class="text-lg opacity-60 font-semibold">No momento não há nenhuma conquista</ion-text>
+    </span>
   </div>
 </ion-content>

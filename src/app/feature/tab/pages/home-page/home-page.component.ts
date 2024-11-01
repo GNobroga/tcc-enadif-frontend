@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import UserService from 'src/app/core/services/user.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
 import { MessageService } from 'primeng/api';
+import AchievementService from 'src/app/core/services/achievement.service';
 
 
 export type UserFriendNotification = {
@@ -37,6 +38,8 @@ export class HomePageComponent implements OnInit {
   
   socket = signal<Socket | null>(null);
 
+  achievementAcquiredCount = signal(0);
+
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
@@ -44,16 +47,23 @@ export class HomePageComponent implements OnInit {
     readonly changeDetectorRef: ChangeDetectorRef,
     readonly userFriendService: UserFriendService,
     readonly messageService: MessageService,
+    readonly achievementService: AchievementService,
   ) {
       
   }  
 
   async ngOnInit() {
+    this.achievementService.countAcquired().subscribe(({ count }) => {
+      this.achievementAcquiredCount.set(count);
+    });
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(async () => {
+        this.achievementService.countAcquired().subscribe(({ count }) => {
+          this.achievementAcquiredCount.set(count);
+        });
         this.socket()?.close();
-        this.overlayPanel.hide();
+        this.overlayPanel?.hide();
         this.changeDetectorRef.detectChanges();
         const socket = io(`${environment.apiUrl}user-notification`, {
           auth: {
@@ -70,7 +80,7 @@ export class HomePageComponent implements OnInit {
 
   sendFriendRequest(requestId: string) {
     this.userFriendService.acceptRequest(requestId).subscribe(() => {
-      this.overlayPanel.hide();
+      this.overlayPanel?.hide();
       this.messageService.add({
         severity: 'success',
         detail: 'Você aceitou a solicitação de amizade',
@@ -80,7 +90,7 @@ export class HomePageComponent implements OnInit {
 
   rejectFriendRequest(requestId: string) {
     this.userFriendService.rejectRequest(requestId).subscribe(() => {
-      this.overlayPanel.hide();
+      this.overlayPanel?.hide();
       setTimeout(() => {
         this.messageService.add({
           severity: 'info',
