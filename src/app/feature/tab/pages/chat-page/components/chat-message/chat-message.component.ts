@@ -10,6 +10,7 @@ export interface ChatMessageMenuItem {
   command: () => void;
 }
 
+
 @Component({
   selector: 'app-chat-message',
   templateUrl: './chat-message.component.html',
@@ -35,7 +36,7 @@ export class ChatMessageComponent implements OnInit{
       label: 'Ver perfil',
       command: () => {
         this.menuClosed.set(true);
-        this.router.navigate(['tabs', 'profile']);
+        this.router.navigate(['/tabs/profile', this.payload.fromId]);
       },
     },
     {

@@ -79,7 +79,7 @@ const routes: Routes = [
     component: AchievementPageComponent,
   },
   {
-    path: 'profile',
+    path: 'profile/:id',
     component: UserProfileComponent,
   }
 ];

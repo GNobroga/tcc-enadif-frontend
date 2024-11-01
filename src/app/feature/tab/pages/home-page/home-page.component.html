@@ -18,7 +18,7 @@
         <ion-icon class="text-[#bba741] text-xl" color="primary" name="flame"></ion-icon>
         <span class="font-semibold">1</span>
       </p-chip>
-      <div (click)="op.toggle($event)" pBadge value="1" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex items-center justify-center p-0 ms-2 bg-orange-600">
+      <div (click)="op.toggle($event)" pBadge *ngIf="listFriendNotification().length" [value]="listFriendNotification().length!" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex items-center justify-center p-0 ms-2 bg-orange-600">
         <i class="fa-solid fa-bell text-xl text-white"></i>
       </div>
       <p-overlayPanel #op>
@@ -27,50 +27,29 @@
                 <div class="mb-2">
                   <ion-text class="text-lg font-bold mb-2">Notificações</ion-text>
                 </div>
-    
-                <div class="p-3 border rounded-lg mb-2 flex flex-col">
-                    <div class="text-sm">
-                        <p class="font-medium"><strong>João Miguel</strong> quer ser seu amigo!</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button 
-                            pButton 
-                            label="Aceitar" 
-                            icon="pi pi-check" 
-                            class="p-button-success p-button-sm" 
-                        ></button>
-                        <button 
-                            pButton 
-                            label="Rejeitar" 
-                            icon="pi pi-times" 
-                            class="p-button-danger p-button-sm" 
-                        ></button>
-                    </div>
-                </div>
-
-                <p-divider></p-divider>
-
-                <div class="p-3 border rounded-lg mb-2 flex flex-col">
-                  <div class="text-sm">
-                      <p class="font-medium"><strong>João Miguel</strong> quer ser seu amigo!</p>
+                
+                <ng-container *ngFor="let notification of listFriendNotification(); let even = even" >
+                  <p-divider *ngIf="!even"></p-divider> 
+                  <div class="p-3 border rounded-lg mb-2 flex flex-col">
+                      <div class="text-sm">
+                          <p class="font-medium"><strong>{{ notification.userName }}</strong> quer ser seu amigo!</p>
+                      </div>
+                      <div class="flex space-x-2">
+                          <button 
+                              pButton 
+                              label="Aceitar" 
+                              icon="pi pi-check" 
+                              class="p-button-success p-button-sm" 
+                          ></button>
+                          <button 
+                              pButton 
+                              label="Rejeitar" 
+                              icon="pi pi-times" 
+                              class="p-button-danger p-button-sm" 
+                          ></button>
+                      </div>
                   </div>
-                  <div class="flex space-x-2">
-                      <button 
-                          pButton 
-                          label="Aceitar" 
-                          icon="pi pi-check" 
-                          class="p-button-success p-button-sm" 
-                      ></button>
-                      <button 
-                          pButton 
-                          label="Rejeitar" 
-                          icon="pi pi-times" 
-                          class="p-button-danger p-button-sm" 
-                      ></button>
-                  </div>
-              </div>
-  
-    
+                </ng-container>  
             </div>
         </ng-template>
     </p-overlayPanel>

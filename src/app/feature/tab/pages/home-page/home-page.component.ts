@@ -5,7 +5,14 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import { filter } from 'rxjs';
+import { io } from 'socket.io-client';
+import { environment } from 'src/environments/environment';
 
+
+export type UserFriendNotification = {
+  userName: string;
+  userId: string;
+}
 
 @Component({
   selector: 'app-home-page',
@@ -21,6 +28,8 @@ export class HomePageComponent implements OnInit {
 
   overlayPanel: OverlayPanel = {} as OverlayPanel;
 
+  listFriendNotification = signal([] as UserFriendNotification[]);
+
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
@@ -30,14 +39,25 @@ export class HomePageComponent implements OnInit {
       
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.user.set(this.auth.currentUser);
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.overlayPanel.hide();
         this.changeDetectorRef.detectChanges();
-      })
+      });
+    
+      const socket = io(`${environment.apiUrl}user-notification`, {
+        auth: {
+          token: await this.user()?.getIdToken(),
+        }
+      });
+
+      socket.on('connect', () => {
+        socket.emit('send-friend-notifications');
+        socket.on('receive-friend-notification', this.listFriendNotification.set);
+      });
   }
 
   public openWeekdaySequenceDialog() {
