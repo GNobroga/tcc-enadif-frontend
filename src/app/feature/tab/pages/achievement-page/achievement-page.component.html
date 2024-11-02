@@ -20,9 +20,9 @@
         <ion-col size="6" *ngFor="let achievement of cacheAchievements()">
 
           <div class="relative h-48">
-            <div class="flex flex-col bg-[#5D9CCC] text-white rounded-lg shadow-md p-3 h-full">
+            <div [ngStyle]="{ backgroundColor: achievement.color || '#b79d5c'}" class="flex flex-col text-white rounded-lg shadow-md p-3 h-full">
               <div class="item-hidden" *ngIf="!achievement.acquired">
-                <ion-img src="assets/image/trancar.png" class="w-16 h-16"></ion-img>
+                <ion-img src="assets/image/trancar.png" class="w-16 h-16 hover:scale-125 transition-all"></ion-img>
               </div>
               <ion-img [src]="achievement.imageUrl" class="w-20 h-20 mb-2 mx-auto"></ion-img>
             <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>

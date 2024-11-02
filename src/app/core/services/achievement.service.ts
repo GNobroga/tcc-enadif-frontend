@@ -29,6 +29,7 @@ export type Achievement = {
     imageUrl: string;
     createdAt: Date;
     acquired: boolean;
+    color: string;
 }
 
 @Injectable({

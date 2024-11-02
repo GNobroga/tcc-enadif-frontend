@@ -1,6 +1,8 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { ActivatedRoute } from '@angular/router';
 import { ChartData, ChartOptions } from 'chart.js';
+import UserService, { UserStats } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-statistic-page',
@@ -13,43 +15,74 @@ export class StatisticPageComponent  implements OnInit {
 
   options!: ChartOptions;
 
+  stats = signal<UserStats | null>(null);
+
+  constructor(
+        readonly auth: Auth,
+        readonly userService: UserService,
+        readonly route: ActivatedRoute,
+    ) {}
+
+  connectedUser = signal(this.auth.currentUser);
+
   ngOnInit() {
-      const documentStyle = getComputedStyle(document.documentElement);
-
-      this.data = {
-          datasets: [
-              {
-                  data: [11, 16, 7, 3, 14],
-                  backgroundColor: [
-                      documentStyle.getPropertyValue('--red-500'),
-                      documentStyle.getPropertyValue('--green-500'),
-                      documentStyle.getPropertyValue('--yellow-500'),
-                      documentStyle.getPropertyValue('--bluegray-500'),
-                      documentStyle.getPropertyValue('--blue-500'),
-                  ],
-                  label: 'My dataset'
-              }
-          ],
-          labels: ['lógica', 'computação', 'software', 'segurança', 'infraestrutura'],
-      };
-
-      this.options = {
-          plugins: {
-              legend: {
-                  labels: {
-                      color: 'white'
-                  }
-              }
-          },
-          scales: {
-              r: {
-                  grid: {
-                      color: 'white'
-                  }
-              }
-          }
-      };
+      this.route.url.subscribe(() => {
+        this.userService.getStats().subscribe(stats => {
+            this.updateData(stats.correctAnswersByCategory);
+            this.stats.set(stats);
+        });
+      });
   }
+
+  private updateData(correctAnswersByCategory: Record<string, number>) {
+    const documentStyle = getComputedStyle(document.documentElement);
+    this.data = {
+        datasets: [
+            {
+                data: Object.values(correctAnswersByCategory),
+                backgroundColor: [
+                    documentStyle.getPropertyValue('--red-500'),
+                    documentStyle.getPropertyValue('--green-500'),
+                    documentStyle.getPropertyValue('--yellow-500'),
+                    documentStyle.getPropertyValue('--bluegray-500'),
+                    documentStyle.getPropertyValue('--blue-500'),
+                ],
+                label: 'My dataset'
+            }
+        ],
+        labels: Object.keys(correctAnswersByCategory),
+    };
+
+    this.options = {
+        plugins: {
+            legend: {
+                labels: {
+                    color: 'white'
+                }
+            }
+        },
+        scales: {
+            r: {
+                grid: {
+                    color: 'white'
+                }
+            }
+        }
+    };
+  }
+
+    calculateAccuracyRate(stats: UserStats): number {
+        const { totalAnsweredQuestions, correctAnswersCount } = stats;
+
+        if (totalAnsweredQuestions === 0) {
+            return 0; 
+        }
+
+        const accuracyRate = (correctAnswersCount / totalAnsweredQuestions) * 100;
+
+        return parseFloat(accuracyRate.toFixed(2)); 
+    }
+
 
 
 }
