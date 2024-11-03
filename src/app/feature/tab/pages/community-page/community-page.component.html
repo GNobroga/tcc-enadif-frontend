@@ -38,9 +38,10 @@
             <ion-text class="text-sm opacity-80">Clique aqui para enviar uma mensagem</ion-text>
           </div>
         </ion-item> 
-      
-
     </ion-list>
+    <div *ngIf="isFriendInfoLoading()" class="h-full flex items-center justify-center">
+      <ion-spinner class="w-20 h-20"></ion-spinner>
+    </div>
   </ion-content>
 </ion-menu>
 

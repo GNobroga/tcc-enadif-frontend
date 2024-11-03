@@ -11,6 +11,11 @@ ion-button {
     @apply font-bold opacity-50;
   }
 
+  &:not(.checked) {
+    --background-hover: transparent;
+    --ripple-color: transparent;
+  }
+
   &.checked {
     --background: var(--ion-color-primary);
 

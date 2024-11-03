@@ -151,6 +151,7 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
     });
     socket.on('connect', () => this.socket.set(socket));
     socket.on('receive-message', payload => {
+      console.log(payload)
       this.messages().push(payload);
       this.scrollToEnd();
     });

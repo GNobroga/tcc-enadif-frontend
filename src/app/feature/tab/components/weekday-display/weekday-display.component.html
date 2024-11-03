@@ -1,43 +1,43 @@
 <div class="bg-white rounded-2xl">
   <ul class="flex [&_li]:flex [&_li]:flex-1 [&_li]:items-center [&_li]:justify-center">
     <li>
-      <ion-button size="small" class="checked" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(0) }" (click)="isMarked(0) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">D</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" class="checked" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(1) }" (click)="isMarked(1) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" class="checked" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(2) }" (click)="isMarked(2) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">T</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(3) }" (click)="isMarked(3) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">Q</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(4) }" (click)="isMarked(4) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">Q</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(5) }" (click)="isMarked(5) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
     <li>
-      <ion-button size="small" (click)="openDialog()">
+      <ion-button size="small" [class]="{ checked: isMarked(6) }" (click)="isMarked(6) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>

@@ -12,6 +12,12 @@ export interface UserStats {
     correctAnswersByCategory: Record<string, number>;
 }
 
+export interface UserDaysSequence {
+    id: string;
+    days: boolean[];
+    startDate: Date;
+}
+
 
 @Injectable({
     providedIn: 'root',
@@ -29,5 +35,9 @@ export default class UserService extends BaseService {
 
     getStats() {
         return this.httpClient.get<UserStats>(this.getApiEndpoint('stats'));
+    }
+
+    getDaysSequence() {
+        return this.httpClient.get<UserDaysSequence>(this.getApiEndpoint('days-sequence'));
     }
 }
