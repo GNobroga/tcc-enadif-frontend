@@ -8,6 +8,7 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
 import ChatManagerService from 'src/app/core/services/chat-manager.service';
 import { lastValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { TimeScale } from 'chart.js';
 
 export type ChatMessage = {
   fromId: string;
@@ -96,6 +97,7 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
       this.scrollToEnd();
     
       this.roomId.set(roomId);
+
       const socket = io(`${environment.apiUrl}private-chat`, {
         auth: {
           token: await this.user().getIdToken(), 
@@ -103,10 +105,15 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
       });
 
       socket.on('connect', () => {
-        socket.on('receive-message', (messages: ChatMessage[]) => {
-          this.messages.set(messages);
+
+        socket.on('receive-message', (message: ChatMessage) => {
+          if (!this.messages()) {
+            this.messages.set([]);
+          }
+          this.messages().push(message);
           this.scrollToEnd();
         });
+
       }); 
       this.socket.set(socket);
   }

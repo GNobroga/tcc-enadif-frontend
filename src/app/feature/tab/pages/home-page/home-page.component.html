@@ -23,7 +23,7 @@
       <div (click)="op.toggle($event)" pBadge [value]="listFriendNotification().length!" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex items-center justify-center p-0 ms-2 bg-orange-600">
         <i class="fa-solid fa-bell text-xl text-white"></i>
       </div>
-        <p-overlayPanel #op>
+        <p-overlayPanel #op styleClass="w-[80vw]">
           <ng-template pTemplate="content">
               <div>
                   <div class="mb-2">

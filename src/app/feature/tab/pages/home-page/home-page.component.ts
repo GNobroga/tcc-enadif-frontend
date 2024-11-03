@@ -91,13 +91,11 @@ export class HomePageComponent implements OnInit {
   rejectFriendRequest(requestId: string) {
     this.userFriendService.rejectRequest(requestId).subscribe(() => {
       this.overlayPanel?.hide();
-      setTimeout(() => {
         this.messageService.add({
           severity: 'info',
           detail: 'Você recusou a solicitação de amizade',
         });
-      }, 200)
-    })
+      });
   }
 
   public openWeekdaySequenceDialog() {

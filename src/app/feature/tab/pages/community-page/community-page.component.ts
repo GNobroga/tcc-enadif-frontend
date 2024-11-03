@@ -1,4 +1,4 @@
-import { Component, computed, DoCheck, effect, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, DoCheck, effect, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonMenu, MenuController, SearchbarChangeEventDetail, ViewDidEnter } from '@ionic/angular';
 import ChatManagerService, { ChatPrivate } from 'src/app/core/services/chat-manager.service';
@@ -28,7 +28,7 @@ export type FriendInfo = {
   templateUrl: './community-page.component.html',
   styleUrls: ['./community-page.component.scss'],
 })
-export class CommunityPage implements ViewDidEnter, OnInit{
+export class CommunityPage implements ViewDidEnter, OnInit, OnDestroy {
 
   countItems = new Array(10);
 
@@ -73,6 +73,10 @@ export class CommunityPage implements ViewDidEnter, OnInit{
     });
   }
 
+  ngOnDestroy(): void {
+      this.socket()?.close();
+  }
+
   async ngOnInit() {
       const socket = io(`${environment.apiUrl}user-notification`, {
         auth: {
@@ -99,8 +103,10 @@ export class CommunityPage implements ViewDidEnter, OnInit{
             this.cacheListPrivateChat.set(this.chatManagerService.privateChats());
             this.isLoading.set(false);
             this.ionMenu.close();
+            this.isFriendInfoLoading.set(true);
           });
       });
+
       this.searchByName.valueChanges.subscribe(data => {
         if (!data && data?.trim() === '') {
           this.cacheListPrivateChat.set(this.privateChats());

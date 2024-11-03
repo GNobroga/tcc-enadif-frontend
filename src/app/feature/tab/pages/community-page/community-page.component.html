@@ -30,9 +30,9 @@
             <div class="flex justify-between items-center">
               <ion-text class="font-medium mt-3">{{ friend.friendName }}</ion-text>
               @if (friend.status) {
-                <p-tag severity="success"  value="Online" [rounded]="true" />
+                <p-tag severity="success" styleClass="scale-90" value="Online" [rounded]="true" />
               } @else {
-                <p-tag severity="warning"  value="Offline" [rounded]="true" /> 
+                <p-tag severity="warning" styleClass="scale-90" value="Offline" [rounded]="true" /> 
               }
             </div>
             <ion-text class="text-sm opacity-80">Clique aqui para enviar uma mensagem</ion-text>

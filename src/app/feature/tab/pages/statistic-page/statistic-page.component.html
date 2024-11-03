@@ -10,17 +10,25 @@
         <div slot="start" class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
           <img class="w-1o h-10 rounded-full" [src]="connectedUser()?.photoURL ?? 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
         </div>
-        <span class="flex flex-col text-white pb-2">
-          <ion-text class="font-bold text-2xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
+        <span class="flex flex-col text-white pb-2 space-y-1">
+          <ion-text class="font-bold text-xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
           <ion-text class="text-sm font-thin">Vamos analisar o seu desempenho?</ion-text>
         </span>
       </ion-item>
     </ion-toolbar>
-    <div class="p-3 bg-[var(--ion-color-primary)]"></div>
+    <div class="p-4 bg-[var(--ion-color-primary)]"></div>
   </ion-header>
   <div class="p-4">
 
-    <div class=" p-4 rounded-lg flex flex-col gap-5   bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white mt-4 mb-2">
+
+    <div class="flex flex-col items-start space-y-1">
+      <ion-text class="text-2xl font-semibold text-primary">Estatísticas</ion-text>
+      <p class="text-sm text-gray-600">Visualize os dados e métricas importantes em tempo real</p>
+      <div class="h-1 w-16 bg-primary rounded-full"></div>
+    </div>
+    
+
+    <div class="shadow-md p-4 rounded-lg flex flex-col gap-5   bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white mt-2 mb-2">
       <ion-text class="font-medium text-lg">Acertos por Categoria</ion-text>
       <p-chart type="polarArea" [data]="data" [options]="options"/>
     </div>
@@ -28,7 +36,7 @@
 
     <div class="flex flex-wrap gap-3 mt-4">
 
-        <span class="flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
           <span class="flex flex-col">
             <ion-text class="text-lg font-bold">{{ calculateAccuracyRate(stats) }}%</ion-text>
             <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
@@ -37,7 +45,7 @@
         </span>
 
 
-        <span  class="flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
           <span class="flex flex-col">
             <ion-text class="text-lg font-bold">{{ stats.totalAnsweredQuestions }}</ion-text>
             <ion-text class="text-sm opacity-70">Questões totais</ion-text>
@@ -45,7 +53,7 @@
           <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
         </span>
 
-        <span  class="flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#47A34C] text-white p-5 items-center rounded-lg">
+        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#47A34C] text-white p-5 items-center rounded-lg">
           <span class="flex flex-col">
             <ion-text class="text-lg font-bold">{{  stats.correctAnswersCount }}</ion-text>
             <ion-text class="text-sm opacity-70">Certas</ion-text>
@@ -53,7 +61,7 @@
           <i class="fa-solid fa-check text-2xl"></i>
         </span>
 
-        <span  class="flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#c10808]  text-white p-5 items-center rounded-lg">
+        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#c10808]  text-white p-5 items-center rounded-lg">
           <span class="flex flex-col">
             <ion-text class="text-lg font-bold">{{ stats.incorrectAnswersCount }}</ion-text>
             <ion-text class="text-sm">Erradas</ion-text>
@@ -61,7 +69,7 @@
           <i class="fa-solid fa-xmark text-3xl"></i>
         </span>
 
-        <span  class="flex flex-1 min-w-full p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+        <span  class="shadow-md flex flex-1 min-w-full p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
           <i class="fa-solid fa-chart-simple  text-2xl "></i>
           <span class="flex flex-col ms-4">
             <ion-text class="text-lg font-bold"># {{ stats.currentUserRanking }}</ion-text>
@@ -69,7 +77,7 @@
           </span>
         </span>
 
-        <span  class="flex flex-1 min-w-full  p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+        <span  class="shadow-md flex flex-1 min-w-full  p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
           <i class="fa-solid fa-clock text-3xl "></i>
           <span class="flex flex-col ms-4">
             <ion-text class="text-lg font-bold">{{ stats.averageResponseTime }} min</ion-text>
