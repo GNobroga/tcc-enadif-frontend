@@ -1,15 +1,16 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
-import { AlertButton } from '@ionic/angular';
-import { DialogService } from 'primeng/dynamicdialog';
-import { ChangeNameComponent } from '../../components/change-name/change-name.component';
-import { MessageService } from 'primeng/api';
-import { Auth, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signOut, updateProfile, User } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { deleteObject, getDownloadURL, list, listAll, ref, Storage, uploadBytes } from '@angular/fire/storage';
-import ConfirmPasswordComponent from '../../components/confirm-password/confirm-password.component';
-import { filter, first, interval, scan, Scheduler, skipUntil, skipWhile, takeWhile } from 'rxjs';
-import { isNullOrEmpty } from 'src/app/core/utils/is-null';
+import { Component, OnInit, signal } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
+import { Auth, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signOut, updateProfile, User } from '@angular/fire/auth';
+import { deleteObject, getDownloadURL, listAll, ref, Storage, uploadBytes } from '@angular/fire/storage';
+import { Router } from '@angular/router';
+import { AlertButton, LoadingController } from '@ionic/angular';
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { first } from 'rxjs';
+import { isNullOrEmpty } from 'src/app/core/utils/is-null';
+import { ChangeNameComponent } from '../../components/change-name/change-name.component';
+import ConfirmPasswordComponent from '../../components/confirm-password/confirm-password.component';
+import UserService from 'src/app/core/services/user.service';
 
 
 @Component({
@@ -71,7 +72,8 @@ export class PerfilPageComponent implements OnInit {
               });
   
               setTimeout(async () => {
-                await deleteUser(this.user()!);     
+                await deleteUser(this.user()!);    
+                this.userService.deleteUser().subscribe();
               }, 1000);
   
             } catch (error) {
@@ -91,9 +93,11 @@ export class PerfilPageComponent implements OnInit {
   constructor(
     readonly dialogService: DialogService,
     readonly messageService: MessageService,
+    readonly userService: UserService,
     readonly auth: Auth,
     readonly router: Router,
-    readonly storage: Storage
+    readonly storage: Storage,
+    readonly loadingController: LoadingController,
   ) {}
 
   ngOnInit(): void {
@@ -153,11 +157,28 @@ export class PerfilPageComponent implements OnInit {
     }
   }
 
+  async deleteUserPhoto() {
+    try {
+      const loading = this.loadingController.create({ 
+        animated: true,
+        spinner: 'bubbles',
+        message: 'Carregando...',
+      });
+      (await loading).present();
+      await this.deleteUserFiles(this.user()?.uid!);
+      await updateProfile(this.user()!, { photoURL: '' });
+      (await loading).dismiss();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async deleteUserFiles(userId: string) {
     try {
         const userFilesRef = ref(this.storage, `profile_pictures/${userId}`);
         const result = await listAll(userFilesRef);
         await Promise.all(result.items.map(async item => {
+          console.log(item.name)
           const fileRef = ref(this.storage, `profile_pictures/${userId}/${item.name}`);
           await deleteObject(fileRef);
         }));

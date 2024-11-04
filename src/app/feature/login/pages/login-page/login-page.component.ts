@@ -23,22 +23,28 @@ export class LoginPageComponent {
   });
 
   constructor(
-    readonly loadingController: LoadingController,
     readonly messageService: MessageService,
     readonly router: Router,
     readonly authService: AuthService,
-    readonly userService: UserService
+    readonly userService: UserService,
+    readonly loadingController: LoadingController,
   ) {}
 
   async login() {
-    try { 
+    const loading = this.loadingController.create({
+      animated: true,
+      spinner: 'bubbles',
+      message: 'Carregando...',
+    });
 
+    try { 
+   
       if (!this.validateControls()) {
         return;
       }
 
-      this.loading.set(true);
-
+      (await loading).present();
+  
       const { email, password } = this.form.value;
 
       if (await this.authService.signInDefault(email!, password!)) {
@@ -51,7 +57,7 @@ export class LoginPageComponent {
         this.handleFirebaseErrors(error);
       }
     } finally {
-      this.loading.set(false);
+      (await loading).dismiss();
     }    
   }
 

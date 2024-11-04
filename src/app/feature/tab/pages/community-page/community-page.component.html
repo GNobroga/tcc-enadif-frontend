@@ -40,7 +40,7 @@
         </ion-item> 
     </ion-list>
     <div *ngIf="isFriendInfoLoading()" class="h-full flex items-center justify-center">
-      <ion-spinner class="w-20 h-20"></ion-spinner>
+      <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
     </div>
   </ion-content>
 </ion-menu>
@@ -60,7 +60,7 @@
     </ion-toolbar>
   </ion-header>
 
-    <ion-fab vertical="bottom" horizontal="end" class="me-2 mb-2" (click)="showMenu()">
+    <ion-fab  vertical="bottom" horizontal="end" class="me-2 mb-2" (click)="showMenu()">
       <ion-fab-button>
         <ion-icon name="chatbubbles" color="light"></ion-icon>
       </ion-fab-button>
@@ -69,7 +69,7 @@
   <ion-content>
 
     <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
-      <ion-spinner class="w-20 h-20"></ion-spinner>
+      <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
     </div>
 
     <ion-list *ngIf="!isLoading() && cacheListPrivateChat().length">

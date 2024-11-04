@@ -40,4 +40,8 @@ export default class UserService extends BaseService {
     getDaysSequence() {
         return this.httpClient.get<UserDaysSequence>(this.getApiEndpoint('days-sequence'));
     }
+
+    deleteUser() {
+        return this.httpClient.delete(this.getApiEndpoint());
+    }
 }
