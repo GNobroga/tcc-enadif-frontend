@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, computed, inject, Input, OnInit, signal } from '@angular/core';
 import { QuizStartedComponent } from '../../pages/quiz-started/quiz-started.component';
-import { first } from 'rxjs';
-import { ViewDidEnter } from '@ionic/angular';
 
 export type Alternative = {
   id: number;
@@ -22,12 +20,12 @@ export type Question = {
   asking: Asking;
   alternatives: Alternative[];
   correctId: number;
+  category: 'logic' | 'computing' | 'software' | 'security' | 'infrastructure'
 };
 
 const ALPHABET = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 ];
-
 
 @Component({
   selector: 'app-quiz-question',
@@ -63,7 +61,6 @@ export class QuizQuestionComponent implements OnInit, AfterViewInit {
           this.scrollEnd.set(false);
         }, 450);
       }
-
       this.currentScrollSize.set(event.detail.currentY);
     });
   }
@@ -94,7 +91,6 @@ export class QuizQuestionComponent implements OnInit, AfterViewInit {
       if (this.data.correctId === alternativeId) {
         return { correct: true };
       }
-
       return { wrong: true };
     }
 

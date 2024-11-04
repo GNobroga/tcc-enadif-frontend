@@ -7,10 +7,16 @@
     </ion-toolbar>
     <ion-toolbar color="primary">
       <ion-item slot="start" color="primary" lines="none">
-        <div slot="start" class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
-          <img class="w-1o h-10 rounded-full" [src]="connectedUser()?.photoURL ?? 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-        </div>
-        <span class="flex flex-col text-white pb-2 space-y-1">
+        <p-avatar
+          routerLink="/tabs/perfil"
+          [image]="connectedUser()?.photoURL ?? undefined"
+          [label]="connectedUser()?.photoURL! ? undefined : connectedUser()?.displayName?.at(0)"
+          styleClass="mr-2"
+          shape="circle"
+          styleClass="font-bold bg-[#5B6CBE] text-white"
+          size="large" />
+
+        <span class="flex flex-col text-white pb-2 space-y-1 ms-3">
           <ion-text class="font-bold text-xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
           <ion-text class="text-sm font-thin">Vamos analisar o seu desempenho?</ion-text>
         </span>
