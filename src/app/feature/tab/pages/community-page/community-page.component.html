@@ -14,9 +14,13 @@
   </ion-header>
 
   <ion-content>
-    <div class="h-full flex items-center justify-center text-center" *ngIf="!isFriendInfoLoading() && !cacheListFriendInfo().length">
-      <ion-text class="text-lg opacity-70 font-semibold">Nenhum amigo por aqui ainda. Que tal fazer amizades?</ion-text>
+    <div class="h-full flex flex-col items-center justify-center text-center p-4" *ngIf="!isFriendInfoLoading() && !cacheListFriendInfo().length">
+      <i class="fa-solid fa-users text-7xl text-[var(--ion-color-primary)]"></i>
+      <ion-text class="text-xl font-semibold text-gray-800">Ainda não tem amigos por aqui!</ion-text>
+      <ion-text class="text-lg opacity-80 font-medium text-gray-600">Clique no ícone de bate-papo para começar a fazer novas conexões. 😊</ion-text>
     </div>
+    
+    
     <ion-list lines="none" class="friends" *ngIf="!isFriendInfoLoading() && cacheListFriendInfo().length">
     
         <ion-item button (click)="createPrivateChat(friend.friendId)" *ngFor="let friend of cacheListFriendInfo()">
@@ -102,8 +106,11 @@
     </ion-list>
 
     <div *ngIf="!isLoading() && !cacheListPrivateChat().length" class="h-full flex flex-col gap-2 items-center justify-center text-center p-4">
-      <ion-text class="text-lg opacity-70 font-semibold">Nenhuma conversa por aqui ainda. Que tal fazer amizades?</ion-text>
+      <i class="fa-solid fa-comment-dots text-7xl text-[var(--ion-color-primary)]"></i>
+      <ion-text class="text-xl font-semibold text-gray-800">Ainda sem conversas! Clique na bolinha de bate-papo para começar uma nova!</ion-text>
+      <ion-text class="text-lg opacity-80 font-medium text-gray-600">Basta tocar na bolinha de chat para iniciar um bate-papo e fazer novas amizades! 💬</ion-text>
     </div>
-
+    
+    
   </ion-content>
 </div>

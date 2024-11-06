@@ -1,195 +1,19 @@
-import { Component, OnDestroy, signal, ViewChild } from '@angular/core';
+import { Component, effect, OnDestroy, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonContent, ViewDidEnter } from '@ionic/angular';
+import { IonContent, NavController, ViewDidEnter } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { interval, scan, Subscription, tap } from 'rxjs';
+import { interval, lastValueFrom, scan, Subscription, tap } from 'rxjs';
 import { AppState, selectQuizResultData } from 'src/app/store';
 import { setQuizResultData } from 'src/app/store/actions/quiz-result.actions';
 import { Question, QuizQuestionComponent } from '../../components/quiz-question/quiz-question.component';
 import { QuizResultState } from '../quiz-result/quiz-result.component';
+import QuizService from 'src/app/core/services/quiz.service';
 
 export type ReviewState = {
   review: boolean;
   timer: [number, number, number];
   correctQuestionsId: number[];
 }
-
-const questions: Question[] = [
-    // {
-    //     id: 1,
-    //     title: 'Programação',
-    //     content: `
-    //         A expressão Big Data refere-se a um conjunto de técnicas e ferramentas para o armazenamento e
-    //         manipulação de conjuntos de dados muito grandes. Tecnologias tradicionais, como bancos de dados
-    //         relacionais e ferramentas de processamento sequencial, não suportam o vasto volume de dados.
-    //         O Big Data possui quatro características marcantes: volume, variedade, velocidade e veracidade.
-    //     `,
-    //     asking: {
-    //         title: `
-    //             Considerando as informações apresentadas e o conjunto de características marcantes do Big Data,
-    //         avalie as afirmações a seguir
-    //         `,
-    //         body: [
-    //             `
-    //                 I. Em relação ao volume, a quantidade de dados gerados e coletados em diversos tipos de aplicações
-    //                 está aumentando exponencialmente, e as ferramentas de Big Data devem ser capazes de lidar
-    //                 apropriadamente com esse desafio
-    //             `,
-    //             `
-    //                 II. No que diz respeito à variedade, os dados podem ser coletados de diferentes fontes e com
-    //                 diferentes formatos e estruturas e se dividem em dados estruturados, como os dados dos
-    //                 cidadãos; dados semiestruturados, como os dados de sensores; e dados não-estruturados,
-    //                 como os de câmeras de vídeo de segurança.
-    //             `,
-    //             `
-    //                 III. Quanto à velocidade, o processamento de dados deve ocorrer em condições de alta latência,
-    //                 pois eles podem se tornar inúteis, como, por exemplo, dados coletados de sensores de veículos,
-    //                 a análise de redes sociais e as informações sobre o trânsito da cidade.
-    //             `,
-    //             `
-    //                 IV. No que se refere à veracidade, como os dados são coletados de múltiplas fontes, é importante
-    //                 garantir sua qualidade, utilizando fontes confiáveis e consistentes, a fim de evitar erros e
-    //                 comprometer as análises.
-    //             `,
-    //         ],
-    //         footer: 'É correto apenas o que se afirma em',
-    //     },
-    //     alternatives: [
-    //         {
-    //             id: 1,
-    //             label: 'I e IV.'
-    //         },
-    //         {
-    //             id: 2,
-    //             label: 'II e III.',
-    //         },
-    //         {
-    //             id: 3,
-    //             label: 'III e IV.',
-    //         },
-    //         {
-    //             id: 4,
-    //             label: 'I, II e III.',
-    //         },
-    //         {
-    //             id: 5,
-    //             label: 'I, II e IV.',
-    //         }
-    //     ],
-    //     correctId: 1
-    // },
-    // {
-    //     id: 2,
-    //     title: 'Gestão',
-    //     content: `
-    //        Um Sistema de Informação Gerencial (SIG) representa um conjunto de recursos dentre os quais é possível
-    //         citar os sistemas: de apoio à decisão, de especialistas, de informação executiva, de gestão de pessoas
-    //         e de gestão de projetos, os quais permitem que a instituição funcione de forma eficiente. Os sistemas
-    //         especialistas são sistemas inteligentes que armazenam e processam o conhecimento adquirido de
-    //         profissionais especializados em uma determinada área do conhecimento.
-    //     `,
-    //     asking: {
-    //         title: `
-    //            Considerando o uso de um componente para um sistema especialista voltado para diagnósticos médicos,
-    //             assinale a opção correta
-    //         `,
-    //     },
-    //     alternatives: [
-    //         {
-    //             id: 1,
-    //             label: `
-    //                 Base de conhecimento é o componente que mantém os axiomas gramaticais e léxicos definidos
-    //                 pelos especialistas.
-    //             `
-    //         },
-    //         {
-    //             id: 2,
-    //             label: `
-    //                 Base de informações estratégicas é o componente que possui as técnicas de navegação nas bases
-    //                 de conhecimento
-    //             `,
-    //         },
-    //         {
-    //             id: 3,
-    //             label: `
-    //                 Base de regras é o componente que traduz todas as informações externas que estejam em interação
-    //                 com o sistema especialista.
-    //             `,
-    //         },
-    //         {
-    //             id: 4,
-    //             label: `
-    //                 Analisador semântico é o componente que obtém e armazena informações sobre diagnósticos por
-    //                 meio de um reconhecimento de regras gramaticais.
-    //             `,
-    //         },
-    //         {
-    //             id: 5,
-    //             label: `
-    //             Motor de inferência é o componente que possui um conjunto de heurísticas adotadas para a resolução
-    //             de problemas na execução das tarefas.
-    //             `,
-    //         }
-    //     ],
-    //     correctId: 1
-    // },
-    {
-      id: 3,
-      title: 'Gestão',
-      category: 'computing',
-      content: `
-        No desenvolvimento do módulo de integração do sistema do SAMU com os sistemas de hospitais,
-        um analista gerou o seguinte diagrama de sequência
-      `,
-      photos: ['assets/enade/questao-pagina-35.png'],
-      asking: {
-          title: `
-             Com relação ao diagrama apresentado, avalie as asserções a seguir e a relação proposta entre elas.
-          `,
-          body: [
-            `I. As chamadas 4: procurarVaga() e 5: procurarVaga() são feitas simultaneamente (em paralelo) pela
-            API para minimizar o tempo de espera da chamada 2: procurarLeitos().`,
-            `II. As chamadas 10: definirVaga() e 12: definirVaga() são feitas simultaneamente (em paralelo),
-            mas a espera do retorno é feita em sequência, o que aumentará o tempo de resposta`,
-          ],
-          footer: 'A respeito dessas asserções, assinale a opção correta.',
-      },
-      alternatives: [
-          {
-              id: 1,
-              label: `
-                  As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I
-              `
-          },
-          {
-              id: 2,
-              label: `
-                 As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I
-              `,
-          },
-          {
-              id: 3,
-              label: `
-                  A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
-              `,
-          },
-          {
-              id: 4,
-              label: `
-                 A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
-              `,
-          },
-          {
-              id: 5,
-              label: `
-              As asserções I e II são proposições falsas
-              `,
-          }
-      ],
-      correctId: 1
-  },
-
-];
 
 export const QUIZ_STARTED_REVIEW_STATE_KEY = 'quiz_started_review_state';
 
@@ -202,7 +26,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     timer = signal([0, 0, 0]); // hours, minutes and seconds
 
-    questions = questions;
+    questions = signal([] as Question[]);
 
     static readonly HOUR_LIMIT = 2; // 2 horas
 
@@ -216,7 +40,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     currentQuestionIndex = signal<number | null>(null);
 
-    listCorrectQuestionsId = signal<number[]>([]);
+    listCorrectQuestionsId = signal<string[]>([]);
 
     currentPercentage = signal(0);
 
@@ -232,16 +56,65 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     timerSubscription = new Subscription();
 
+    quizId = signal<string | null>(null);
+
+    category = signal<string | null>(null);
+
+    isCustomized = signal(false);
+
+    excludeCategories = signal(false);
+
+    isLoading = signal(false);
+
     constructor(
       readonly router: Router,
       readonly route: ActivatedRoute,
-      readonly store: Store<AppState>
-    ) {}
+      readonly store: Store<AppState>,
+      readonly quizService: QuizService,
+      readonly navController: NavController,
+    ) {
+    }
 
-    ionViewDidEnter(): void {
+    async ionViewDidEnter() {
       this.timerSubscription.unsubscribe();
+      const quizId = this.route.snapshot.params['id'];
+      if (!quizId) {
+        this.router.navigate(['/quiz']);
+        return;
+      }
 
-      console.log(this.store.selectSignal(selectQuizResultData)())
+      this.isLoading.set(true);
+      this.quizId.set(quizId);
+
+      const category = this.route.snapshot.queryParams['category'];
+      const isCustomized = this.route.snapshot.queryParams['customized'] as boolean;
+      const excludeCategories = this.route.snapshot.queryParams['excludeCategories'] ?? [];
+
+      this.isCustomized.set(isCustomized);
+      this.excludeCategories.set(excludeCategories);
+ 
+      let fetchQuestions = isCustomized  ? 
+        lastValueFrom(this.quizService.findById(quizId, excludeCategories)) :
+        lastValueFrom(this.quizService.getByQuizIdAndCategory(quizId, category));
+      
+      if (category) {
+        this.category.set(category);
+      }
+  
+      const { questions } = await fetchQuestions;
+
+      if (!questions.length && this.isCustomized()) {
+       this.navController.navigateBack(['/quiz/customized'], {
+          queryParams: {
+            excludeCategories: this.excludeCategories(),
+            quizId: this.quizId(),
+            no_questions: true,
+          }
+       });
+        return;
+      }
+
+      this.questions.set(questions);
 
       const data = this.store.selectSignal(selectQuizResultData)();
 
@@ -262,11 +135,12 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         this.showBellSwinging();
       }
 
-      if (this.questions.length > 0) {
-        this.currentQuestion.set(this.questions[0]);
+      if (this.questions().length > 0) {
+        this.currentQuestion.set(this.questions()[0]);
         this.currentQuestionIndex.set(0);
       }
 
+      this.isLoading.set(false);
     }
 
 
@@ -305,12 +179,10 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
    }
 
    onClickBell() {
+      // Pego a alternativa correta
       const correctId = this.currentQuestion()?.correctId!;
-      if (correctId === this.quizQuestionComponent.selectedAlternativeId()) {
-        return;
-      }
+      // Atualizo a quantidade de corações disponíveis.
       this.remainingChances.update(oldRemainingChances => oldRemainingChances - 1);
-      this.listCorrectQuestionsId().push(correctId);
       this.quizQuestionComponent.markAnswer(correctId);
    }
 
@@ -318,30 +190,38 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         if (this.currentQuestionIndex() === null) return;
 
         const currentQuestionIndex = this.currentQuestionIndex()! + 1;
-        this.currentPercentage.set(currentQuestionIndex / this.questions.length);
+        this.currentPercentage.set(currentQuestionIndex / this.questions().length);
 
 
         if (this.quizQuestionComponent.isCorrect()) {
-          this.listCorrectQuestionsId.set(this.listCorrectQuestionsId().concat(this.currentQuestion()!.id));
+          this.listCorrectQuestionsId.set(this.listCorrectQuestionsId().concat(this.currentQuestion()!._id));
         }
 
         this.quizQuestionComponent.selectedAlternativeId.set(null);
 
-        if (currentQuestionIndex < this.questions.length) {
-            this.currentQuestion.set(this.questions[currentQuestionIndex]);
+        if (currentQuestionIndex < this.questions().length) {
+            this.currentQuestion.set(this.questions()[currentQuestionIndex]);
             this.currentQuestionIndex.set(currentQuestionIndex);
             this.disableButton.set(true);
             this.quizQuestionComponent.scrollEnd.set(false);
             this.quizQuestionComponent.scrollEndSize.set(-1);
             this.showBellSwinging();
+            this.ionContent.scrollToTop(200);
         } else {
           this.store.dispatch(setQuizResultData({
             correctQuestionsId: this.listCorrectQuestionsId(),
-            questions: this.questions,
+            questions: this.questions(),
             timer: this.timer(),
             showDialog: true
           }));
-          this.router.navigate(['/quiz/result']);
+          this.router.navigate(['/quiz/result'], {
+            queryParams: {
+              quizId: this.quizId(),
+              category: this.category(),
+              customized: this.isCustomized(),
+              excludeCategories: this.excludeCategories(),
+            },
+          });
         }
    }
 
@@ -355,14 +235,21 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
    seeNextQuestion() {
       const currentQuestionIndex = this.currentQuestionIndex()! + 1;
-      if (currentQuestionIndex < this.questions.length) {
-        this.currentQuestion.set(this.questions[currentQuestionIndex]);
+      if (currentQuestionIndex < this.questions().length) {
+        this.currentQuestion.set(this.questions()[currentQuestionIndex]);
         this.currentQuestionIndex.set(currentQuestionIndex);
       } else {
         this.store.dispatch(setQuizResultData({
           showDialog: false
         } as QuizResultState));
-        this.router.navigate(['/quiz/result']);
+        this.router.navigate(['/quiz/result'], {
+          queryParams: {
+            quizId: this.quizId(),
+            category: this.category(),
+            customized: this.isCustomized(),
+            excludeCategories: this.excludeCategories(),
+          },
+        });
       }
    }
 
@@ -370,7 +257,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       if (this.currentQuestionIndex() === null) return;
       const currentQuestionIndex = this.currentQuestionIndex()! - 1;
       if (currentQuestionIndex >= 0) {
-        this.currentQuestion.set(this.questions[currentQuestionIndex]);
+        this.currentQuestion.set(this.questions()[currentQuestionIndex]);
         this.currentQuestionIndex.set(currentQuestionIndex);
       }
    }

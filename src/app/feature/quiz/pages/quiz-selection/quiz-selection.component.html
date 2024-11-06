@@ -6,69 +6,49 @@
   <ion-toolbar>
     <div class="flex  border border-black border-opacity-5 mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md {{ cssClass }} text-white">
       <ion-text class="font-bold  text-xl">{{ title }}</ion-text>
-      <ion-text class="text-sm">9 provas</ion-text>
+      <ion-text class="text-sm">{{ quizzes().length }} provas</ion-text>
     </div>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <section class="p-5">
-    <ul class="flex flex-col gap-5">
-      <li class="flex border w-full border-black border-opacity-20 shadow-lg rounded-lg cursor-pointer" matRipple routerLink="/quiz/started">
-        <div class="bg-[#D1DDF7] flex items-center justify-center min-w-24 rounded-tl-lg rounded-bl-lg">
-          <ion-img src="assets/image/computer.png" class="w-12 h-12 self-center"></ion-img>
-        </div>
-        <div class="flex-1 p-4 flex flex-col gap-2 bg-white">
-          <ion-text class="font-semibold">Enade 2021</ion-text>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Respondidas:</ion-text>
-            <ion-text class="font-medium">0</ion-text> de
-            <ion-text class="font-medium">30</ion-text>
-          </span>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Tempo decorrido:</ion-text>
-            <ion-text class="font-medium">0m</ion-text>
-            <ion-text class="font-medium">00s</ion-text>
-          </span>
-        </div>
-      </li>
-
-      <li class="flex border border-black border-opacity-20 shadow-lg rounded-lg cursor-pointer" matRipple routerLink="/quiz/started">
-        <div class="bg-[#D1DDF7] flex items-center justify-center min-w-24 rounded-tl-lg rounded-bl-lg">
-          <ion-img src="assets/image/computer.png" class="w-12 h-12 self-center"></ion-img>
-        </div>
-        <div class="flex-1 p-4 flex flex-col gap-2 bg-white">
-          <ion-text class="font-semibold">Enade 2023</ion-text>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Respondidas:</ion-text>
-            <ion-text class="font-medium">0</ion-text> de
-            <ion-text class="font-medium">30</ion-text>
-          </span>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Tempo decorrido:</ion-text>
-            <ion-text class="font-medium">0m</ion-text>
-            <ion-text class="font-medium">00s</ion-text>
-          </span>
-        </div>
-      </li>
-
-      <li class="flex border border-black border-opacity-20 shadow-lg rounded-lg cursor-pointer" matRipple routerLink="/quiz/started">
-        <div class="bg-[#D1DDF7] flex items-center justify-center min-w-24 rounded-tl-lg rounded-bl-lg">
-          <ion-img src="assets/image/computer.png" class="w-12 h-12 self-center"></ion-img>
-        </div>
-        <div class="flex-1 p-4 flex flex-col gap-2 bg-white">
-          <ion-text class="font-semibold">Enade 2024</ion-text>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Respondidas:</ion-text>
-            <ion-text class="font-medium">0</ion-text> de
-            <ion-text class="font-medium">30</ion-text>
-          </span>
-          <span class="flex items-center gap-1 text-sm">
-            <ion-text>Tempo decorrido:</ion-text>
-            <ion-text class="font-medium">0m</ion-text>
-            <ion-text class="font-medium">00s</ion-text>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </section>
+  <ng-container *ngIf="!isLoading()">
+    <div *ngIf="!quizzes().length" class="h-full flex flex-col items-center justify-center space-y-4 p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-md">
+      <ion-icon name="sad-outline" class="text-6xl text-gray-500"></ion-icon>
+      <p class="text-lg text-gray-600 text-center">Não há simulados disponíveis para essa categoria.</p>
+    </div>
+    
+    <section class="p-5" *ngIf="quizzes().length">
+      <ul class="flex flex-col gap-5">
+        @for (quiz of quizzes(); track quiz._id) {
+          <li [routerLink]="['/quiz/started', quiz._id]" [queryParams]="{ category }" class="flex flex-col sm:flex-row w-full border border-solid  border-black border-opacity-20 shadow-xl rounded-lg cursor-pointer" matRipple>
+            <div style="background-image: url('../../../../../assets/enade/enade-bg.jpg'); background-size: cover;" class="bg-[#D1DDF7] flex items-center justify-center bg-center py-3 h-28 rounded-tl-lg rounded-tr-lg">
+            </div>
+          
+            <div class="flex-1 p-4 pb-6 flex flex-col gap-2 bg-white">
+              <ion-text class="font-semibold text-base">Ano do Simulado {{ quiz.year }}</ion-text>
+              
+              <!-- Progresso das questões respondidas -->
+              <span class="flex items-center gap-1 text-sm">
+                <ion-text>Respondidas:</ion-text>
+                <ion-text class="font-medium">{{ getCountQuestionsDone(quiz.questions) }}</ion-text> de
+                <ion-text class="font-medium">{{ quiz.questions.length }}</ion-text>
+              </span>
+          
+              <!-- Barra de progresso com PrimeNG -->
+              <p-progressBar [value]="(getCountQuestionsDone(quiz.questions) / quiz.questions.length) * 100" [showValue]="true" [style]="{ 'width': '100%' }" class="my-2"></p-progressBar>
+          
+              <!-- Tempo decorrido com PrimeNG Badge -->
+              <span class="flex items-center gap-1 text-sm">
+                <ion-text>Tempo decorrido:</ion-text>
+                <p-badge value="{{ getTimeSpent(quiz) }}" severity="success" class="ml-2 text-xs sm:text-sm"></p-badge>
+              </span>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  </ng-container>
+  <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+  </div>
 </ion-content>

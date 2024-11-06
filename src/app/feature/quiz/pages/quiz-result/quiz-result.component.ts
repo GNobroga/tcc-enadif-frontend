@@ -14,7 +14,7 @@ export const QUIZ_RESULT_STATE_KEY = 'quiz_result_state';
 export interface QuizResultState {
   questions?: Question[];
   timer: number[];
-  correctQuestionsId: number[];
+  correctQuestionsId: string[];
   showDialog?: boolean;
   review?: boolean;
 }
@@ -33,7 +33,15 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
   questions = signal<Question[]>([]);
   timer = signal<number[]>([0, 0, 0]);
-  correctQuestionsId = signal<number[]>([]);
+  correctQuestionsId = signal<string[]>([]);
+
+  quizId = signal<string | null>(null);
+
+  category = signal<string | null>(null);
+
+  excludeCategories = signal<string[]>([]);
+
+  isCustomized = signal(false);
 
   constructor(
     readonly animationController: AnimationController,
@@ -44,6 +52,11 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
   ) { }
 
   ionViewDidEnter() {
+    this.quizId.set(this.route.snapshot.queryParams['quizId'] as string);
+    this.category.set(this.route.snapshot.queryParams['category'] as string);
+    this.isCustomized.set(this.route.snapshot.queryParams['customized'] as boolean);
+    this.excludeCategories.set(this.route.snapshot.queryParams['excludeCategories'] as string[]);
+
     const data = this.store.selectSignal(selectQuizResultData)();
     if (!data) return;
     const { questions = [], timer, correctQuestionsId, showDialog = true } = data;
@@ -93,9 +106,9 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
   }
 
   get timerFormatted() {
-    const [hours, minutes, seconds] = this.timer();
+    const [hours, minutes, seconds] = this.timer() ?? [0, 0, 0];
     const hoursString = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
-    return `${hoursString}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${hoursString}${minutes?.toString().padStart(2, '0')}:${seconds?.toString().padStart(2, '0')}`;
   }
 
   get percentageHits() {
@@ -108,16 +121,40 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       timer: this.timer(),
       correctQuestionsId: this.correctQuestionsId(),
     } as QuizResultState))
-    this.router.navigate(['/quiz/started']);
+    if (!this.isCustomized()) {
+      this.router.navigate(['/quiz/started', this.quizId()], {
+        queryParams: { category: this.category() },
+      });
+      return;
+    }
+    this.router.navigate(['/quiz/started', this.quizId()], {
+      queryParams: { 
+        customized: this.isCustomized(), 
+        excludeCategories: this.excludeCategories(),
+      },
+    });
   }
 
-  isCorrectQuestion(id: number) {
+  isCorrectQuestion(id: string) {
     return this.correctQuestionsId().includes(id);
   }
 
   async restart() {
     this.store.dispatch(resetQuizResultData());
-    await this.router.navigate(['/quiz/started']);
+    if (this.isCustomized()) {
+      this.router.navigate(['/quiz/customized'], {
+        queryParams: {
+          excludeCategories: this.excludeCategories(),
+          quizId: this.quizId(),
+        },
+      });
+      return;
+    }
+    this.router.navigate(['/quiz/started', this.quizId()], {
+      queryParams: {
+        category: this.category(),
+      },
+    });
   }
 
   async goToStudyPage() {

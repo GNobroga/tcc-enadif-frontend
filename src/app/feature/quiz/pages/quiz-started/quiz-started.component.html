@@ -6,23 +6,30 @@
         <ion-title class="font-semibold">Enade 2021</ion-title>
         <i class="heart fa-solid relative -left-3 fa-heart text-2xl scale-75 text-red-600" pBadge *ngIf="remainingChances() > 0" [value]="remainingChances()"  severity="warning" badgeStyleClass="bg-red-800"></i>
       </div>
-      <div slot="end" class="h-8 min-w-14 {{ timeHasPassed ? 'time-passed' : '' }}" >
-        <ion-text class="text-lg">{{ timerFormatted }}</ion-text>
+      <div slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded {{ timeHasPassed ? 'bg-gray-300 text-gray-500' : 'bg-blue-200 text-blue-800' }}">
+        <ion-text class="text-lg font-medium">{{ timerFormatted }}</ion-text>
       </div>
     </ion-item>
   </ion-toolbar>
-  <div class="px-5 ">
-    <ion-progress-bar mode="ios" [value]="currentPercentage()"  slot="start"></ion-progress-bar>
-  </div>
+  <div class="px-5 py-3 rounded-lg">
+    <ion-progress-bar mode="ios" [value]="currentPercentage()" color="primary" class="rounded"></ion-progress-bar>
+    <ion-text class="text-sm font-medium mt-2 block text-center text-gray-600">
+      Questão <span class="text-primary">{{ isReview() ? (currentQuestionIndex()! + 1) : currentQuestionIndex() }}</span> de 
+      <span class="text-primary">{{ questions().length }}</span>
+    </ion-text>
+</div>
+
 </ion-header>
 <ion-content class="ion-padding" [scrollX]="true" [scrollEvents]="true">
-  <section>
+  <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+  </div>
+  <section *ngIf="!isLoading()">
 
-    @defer (when currentQuestion() !== null) {
-      <div class="mt-3">
-        <app-quiz-question [data]="currentQuestion()!"/>
-       </div>
-    }
+
+    <div class="mt-3" *ngIf="currentQuestion()">
+      <app-quiz-question [data]="currentQuestion()!"/>
+    </div>
 
 
     @if (isReview()) {
@@ -44,10 +51,9 @@
   </section>
 
   <ion-fab vertical="top" horizontal="end" slot="fixed" class="me-2" *ngIf="isBellSwinging()" (click)="onClickBell()">
-    <ion-fab-button color="primary">
-      <i class="fa-solid fa-bell text-lg swinging-bell" style="color: #FFA500;"></i>
+    <ion-fab-button color="warning">
+      <i class="fa-solid fa-bell text-xl text-white"></i>
     </ion-fab-button>
   </ion-fab>
-
 
 </ion-content>

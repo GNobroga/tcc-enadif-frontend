@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
 import ChatManagerService from 'src/app/core/services/chat-manager.service';
 import { lastValueFrom } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TimeScale } from 'chart.js';
 
 export type ChatMessage = {
@@ -49,6 +49,15 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
   messages = signal<ChatMessage[]>([]);
 
   isLoading = signal(false);
+
+  items: MenuItem[] = [
+    {
+      icon: '',
+      command: () => {
+        console.log('oi')
+      }
+    }
+  ]
 
   closeAlertButtons = [
     {

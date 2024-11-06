@@ -1,6 +1,5 @@
-@if (stats(); as stats) {
-  
 <ion-content #content>
+ <ng-container>
   <ion-header>
     <ion-toolbar color="primary">
       <ion-back-button slot="start" defaultHref="/tabs"></ion-back-button>
@@ -15,88 +14,89 @@
           shape="circle"
           styleClass="font-bold bg-[#5B6CBE] text-white"
           size="large" />
-
+        
         <span class="flex flex-col text-white pb-2 space-y-1 ms-3">
-          <ion-text class="font-bold text-xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
-          <ion-text class="text-sm font-thin">Vamos analisar o seu desempenho?</ion-text>
+          <ion-text class="font-bold text-2xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
+          <ion-text class="text-sm font-light">Vamos analisar o seu desempenho?</ion-text>
         </span>
       </ion-item>
     </ion-toolbar>
     <div class="p-4 bg-[var(--ion-color-primary)]"></div>
   </ion-header>
-  <div class="p-4">
 
-
-    <div class="flex flex-col items-start space-y-1">
-      <ion-text class="text-2xl font-semibold text-primary">Estatísticas</ion-text>
-      <p class="text-sm text-gray-600">Visualize os dados e métricas importantes em tempo real</p>
+  <div class="p-4" *ngIf="stats()">
+    <!-- Estatísticas -->
+    <div class="flex flex-col items-start space-y-2">
+      <ion-text class="text-3xl font-semibold text-primary">Estatísticas</ion-text>
+      <p class="text-sm text-gray-600">Visualize os dados e métricas importantes em tempo real.</p>
       <div class="h-1 w-16 bg-primary rounded-full"></div>
     </div>
-    
 
-    <div class="shadow-md p-4 rounded-lg flex flex-col gap-5   bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white mt-2 mb-2">
+    <!-- Gráfico de Acertos por Categoria -->
+    <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-2 mb-4">
       <ion-text class="font-medium text-lg">Acertos por Categoria</ion-text>
       <p-chart type="polarArea" [data]="data" [options]="options"/>
     </div>
 
-
-    <div class="flex flex-wrap gap-3 mt-4">
-
-        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
-          <span class="flex flex-col">
-            <ion-text class="text-lg font-bold">{{ calculateAccuracyRate(stats) }}%</ion-text>
-            <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
-          </span>
-          <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
+    <!-- Estatísticas Individuais -->
+    <div class="flex flex-wrap gap-4 mt-4">
+      <!-- Taxa de Acerto -->
+      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+        <span class="flex flex-col">
+          <ion-text class="text-2xl font-semibold">{{ calculateAccuracyRate(stats()!) }}%</ion-text>
+          <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
         </span>
+        <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
+      </span>
 
-
-        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
-          <span class="flex flex-col">
-            <ion-text class="text-lg font-bold">{{ stats.totalAnsweredQuestions }}</ion-text>
-            <ion-text class="text-sm opacity-70">Questões totais</ion-text>
-          </span>
-          <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
+      <!-- Questões Totais -->
+      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+        <span class="flex flex-col">
+          <ion-text class="text-2xl font-semibold">{{ stats()!.totalAnsweredQuestions }}</ion-text>
+          <ion-text class="text-sm opacity-70">Questões totais</ion-text>
         </span>
+        <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
+      </span>
 
-        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#47A34C] text-white p-5 items-center rounded-lg">
-          <span class="flex flex-col">
-            <ion-text class="text-lg font-bold">{{  stats.correctAnswersCount }}</ion-text>
-            <ion-text class="text-sm opacity-70">Certas</ion-text>
-          </span>
-          <i class="fa-solid fa-check text-2xl"></i>
+      <!-- Certas -->
+      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#47A34C] text-white p-5 items-center rounded-lg">
+        <span class="flex flex-col">
+          <ion-text class="text-2xl font-semibold">{{ stats()!.correctAnswersCount }}</ion-text>
+          <ion-text class="text-sm opacity-70">Certas</ion-text>
         </span>
+        <i class="fa-solid fa-check text-3xl"></i>
+      </span>
 
-        <span  class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#c10808]  text-white p-5 items-center rounded-lg">
-          <span class="flex flex-col">
-            <ion-text class="text-lg font-bold">{{ stats.incorrectAnswersCount }}</ion-text>
-            <ion-text class="text-sm">Erradas</ion-text>
-          </span>
-          <i class="fa-solid fa-xmark text-3xl"></i>
+      <!-- Erradas -->
+      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#c10808] text-white p-5 items-center rounded-lg">
+        <span class="flex flex-col">
+          <ion-text class="text-2xl font-semibold">{{ stats()!.incorrectAnswersCount }}</ion-text>
+          <ion-text class="text-sm">Erradas</ion-text>
         </span>
+        <i class="fa-solid fa-xmark text-3xl"></i>
+      </span>
 
-        <span  class="shadow-md flex flex-1 min-w-full p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
-          <i class="fa-solid fa-chart-simple  text-2xl "></i>
-          <span class="flex flex-col ms-4">
-            <ion-text class="text-lg font-bold"># {{ stats.currentUserRanking }}</ion-text>
-            <ion-text class="text-sm">Ranking</ion-text>
-          </span>
+      <!-- Ranking -->
+      <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+        <i class="fa-solid fa-chart-simple text-3xl"></i>
+        <span class="flex flex-col ms-4">
+          <ion-text class="text-2xl font-semibold"># {{ stats()!.currentUserRanking }}</ion-text>
+          <ion-text class="text-sm">Ranking</ion-text>
         </span>
+      </span>
 
-        <span  class="shadow-md flex flex-1 min-w-full  p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
-          <i class="fa-solid fa-clock text-3xl "></i>
-          <span class="flex flex-col ms-4">
-            <ion-text class="text-lg font-bold">{{ stats.averageResponseTime }} min</ion-text>
-            <ion-text class="text-sm">Tempo médio/questão</ion-text>
-          </span>
+      <!-- Tempo Médio por Questão -->
+      <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+        <i class="fa-solid fa-clock text-3xl"></i>
+        <span class="flex flex-col ms-4">
+          <ion-text class="text-2xl font-semibold">{{ stats()!.averageResponseTime }} min</ion-text>
+          <ion-text class="text-sm">Tempo médio/questão</ion-text>
         </span>
-
-
+      </span>
     </div>
-
-
-
   </div>
+ </ng-container>
+ <div *ngIf="!stats()" class="h-full flex items-center justify-center">
+  <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+</div>
 </ion-content>
-
-}

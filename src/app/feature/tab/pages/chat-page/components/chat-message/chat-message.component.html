@@ -1,27 +1,36 @@
-<div class="flex gap-5 relative" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
+<div class="flex gap-4 relative" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
+  <!-- Avatar do remetente -->
   <div>
     <p-avatar
       [image]="payload.photoUrl"
-      label="{{payload.photoUrl ? undefined : payload.displayName[0]}}"
+      label="{{ payload.photoUrl ? undefined : payload.displayName[0] }}"
       size="large"
-      styleClass="font-bold bg-[#5B6CBE] text-white {{ !isOwnMessage ? 'cursor-pointer' : '' }}"
+      styleClass="font-bold bg-[#5B6CBE] text-white {{ !isOwnMessage ? 'cursor-pointer' : '' }} transition-transform transform hover:scale-105"
       (click)="menuClosed.set(!menuClosed())"
-      shape="circle"/>
+      shape="circle"
+    />
   </div>
-  <div class="relative top-0.5">
-    <span class="flex items-center gap-2 text-sm" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
-      <ion-text>{{  payload.displayName }}</ion-text>
-      <ion-text>{{ payload.sentAt | date: 'hh:mm a' }}</ion-text>
+
+  <!-- Detalhes da mensagem -->
+  <div class="relative">
+    <!-- Nome e horário -->
+    <span class="flex items-center gap-2 text-sm text-gray-600" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
+      <ion-text class="font-semibold">{{ payload.displayName }}</ion-text>
+      <ion-text class="text-gray-500">{{ payload.sentAt | date: 'hh:mm a' }}</ion-text>
     </span>
-    <div class="bg-white max-w-[70vw] break-words p-2 rounded-md mt-2 text-sm" [ngClass]="{ '!bg-[var(--ion-color-primary)]': isOwnMessage, 'text-white': isOwnMessage }">
-        {{ payload.message }}
+
+    <!-- Caixa da mensagem -->
+    <div
+      class="p-3 rounded-lg mt-2 text-sm break-words relative"
+      [ngClass]="{
+        'bg-[#F1F1F1] text-black shadow-md': !isOwnMessage,
+        'bg-[var(--ion-color-primary)] text-white shadow-lg': isOwnMessage
+      }"
+    >
+      {{ payload.message }}
     </div>
   </div>
 
-  @if (!isOwnMessage) {
-    <app-chat-menu class="absolute top-12 z-40" [items]="items" [menuClosed]="menuClosed()" />
-  }
-
+  <!-- Menu de chat visível apenas para mensagens recebidas -->
+  <app-chat-menu *ngIf="!isOwnMessage" class="absolute top-12 left-0 z-40" [items]="items" [menuClosed]="menuClosed()" />
 </div>
-
-

@@ -31,11 +31,15 @@ import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 @NgModule({
   declarations: [],
-  imports: [],
+  imports: [PickerComponent],
   exports: [
+    SpeedDialModule,
+    PickerComponent,
     InputGroupModule,
     OverlayPanelModule,
     CardModule,

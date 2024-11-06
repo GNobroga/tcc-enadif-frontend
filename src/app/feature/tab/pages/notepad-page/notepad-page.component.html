@@ -11,9 +11,10 @@
 </ion-header>
 <ion-content>
   <div *ngIf="!notepads()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
-    <i class="fa-solid fa-face-frown-open text-7xl text-[var(--ion-color-secondary)]"></i>
-    <ion-text class="text-lg opacity-60 font-semibold">Você ainda não tem nenhuma nota, aperte em + para criar uma!</ion-text>
-  </div>
+    <i class="fa-solid fa-pen-to-square text-7xl text-[var(--ion-color-primary)]"></i>
+    <ion-text class="text-xl font-semibold text-gray-800">Parece que você ainda não tem nenhuma nota! ✨</ion-text>
+    <ion-text class="text-lg opacity-80 font-medium text-gray-600">Clique em "+" para criar a sua primeira nota e começar a organizar suas ideias!</ion-text>
+  </div>  
   <div *ngIf="notepads()?.length" class="p-4 mt-3">
     <div class="flex flex-wrap gap-2 cursor-pointer [&_div]:w-40">
       @for (notepad of notepads(); track notepad.id) {

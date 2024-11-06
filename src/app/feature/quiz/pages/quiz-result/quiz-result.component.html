@@ -3,7 +3,10 @@
     <ion-item lines="none" slot="start" class="w-full">
       <ion-back-button></ion-back-button>
       <ion-title class="font-semibold">Resultado</ion-title>
-      <ion-text slot="end" class="text-lg">{{ timerFormatted  }}</ion-text>
+
+      <div slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded bg-blue-200 text-blue-800">
+        <ion-text class="text-lg font-medium">{{ timerFormatted }}</ion-text>
+      </div>
     </ion-item>
   </ion-toolbar>
   <div class="px-5 bg-transparent">
@@ -11,10 +14,10 @@
   </div>
   <div class="px-5 pt-4">
     <swiper-container [slidesPerView]="9" [spaceBetween]="2" [speed]="300">
-      @for(question of questions(); track question.id) {
+      @for(question of questions(); track question._id; let index = $index) {
         <swiper-slide>
-          <div class="w-8 h-8 flex items-center justify-center border border-black rounded-md font-bold {{ isCorrectQuestion(question.id) ? 'correct' : 'wrong' }} text-white">
-            {{ question.id }}
+          <div class="w-8 h-8 flex items-center justify-center border border-black rounded-md font-bold {{ isCorrectQuestion(question._id) ? 'correct' : 'wrong' }} text-white">
+            {{ index + 1 }}
           </div>
         </swiper-slide>
       }
@@ -49,7 +52,7 @@
       <ion-button color="dark">Avaliar</ion-button>
     </div>
     <ion-button expand="block" class="mt-5 !h-12" (click)="reviewQuestions()">
-      <span class="normal-case text-white text-lg">Ver Gabarito</span>
+      <span class="normal-case text-white text-lg">Revisar</span>
     </ion-button>
   </div>
   <ion-button expand="block" class="mt-5 !h-12" (click)="restart()">

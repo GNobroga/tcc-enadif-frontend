@@ -6,34 +6,52 @@
   <ion-toolbar>
     <div class="flex  border mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md bg-gradient-to-r  to-[#1A7ECC] from-[#1E8FE8] text-white">
       <ion-text class="font-bold  text-xl">Simulado Personalizado</ion-text>
-      <ion-text class="text-sm">{{ count() }} Questões Aleatórias</ion-text>
+      <ion-text *ngIf="quiz()" class="text-sm">{{ count() }} Questões Aleatórias</ion-text>
+      <ion-text *ngIf="!quiz()" class="text-xs">Selecione um ano de referência</ion-text>
     </div>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <section class="p-5">
-    <div class="py-3">
-      <span class="flex items-center gap-2 font-medium text-xl">
-        <ion-text>Quantidade de questões:</ion-text>
-        <ion-text>{{ count() }}</ion-text>
-      </span>
-      <ion-range (ionChange)="onRangeChange($event)" color="tertiary" aria-label="Volume" [value]="30" max="30" min="10"></ion-range>
+    <div class="py-3 flex items-center gap-2">
+      <ion-text class="font-medium text-xl">Ano:</ion-text>
+      <ion-select (ionChange)="onChange($event)" placeholder="Escolha o ano" interface="popover">
+        <ion-select-option *ngFor="let obj of data()" [value]="obj.id">
+         Simulado de {{ obj.year }}
+        </ion-select-option>
+      </ion-select>
     </div>
-    <div class="mt-4">
-      <mat-divider class="opacity-40"></mat-divider>
-    </div>
-    <div class="mt-6">
-      <ion-text class="font-medium text-xl">Disciplinas selecionados: </ion-text>
-      <div class="mt-6">
-        <ion-checkbox checked labelPlacement="end"  color="tertiary">Lógica de Programação</ion-checkbox>
-        <ion-checkbox checked labelPlacement="end"  color="tertiary" class="mt-3">Fundamentos da Computação</ion-checkbox>
-        <ion-checkbox checked labelPlacement="end"  color="tertiary" class="mt-3">Desenvolvimento de Software</ion-checkbox>
-        <ion-checkbox checked labelPlacement="end"  color="tertiary" class="mt-3">Segurança da Informação</ion-checkbox>
-        <ion-checkbox checked labelPlacement="end"  color="tertiary" class="mt-3">Insfraestrutura</ion-checkbox>
+    
+    <ng-container *ngIf="quiz()">
+      <div class="py-3">
+        <span class="flex items-center gap-2 font-medium text-xl">
+          <ion-text>Quantidade de questões:</ion-text>
+          <ion-text>{{ count() }}</ion-text>
+        </span>
+        <ion-range (ionChange)="onRangeChange($event)" color="tertiary" aria-label="Volume" [value]="totalQuestions" [max]="totalQuestions" [min]="minQuestions"></ion-range>
       </div>
-    </div>
-    <ion-button class="normal-case mt-7" color="tertiary" expand="block" size="large">
-      <span class="text-white">Iniciar</span>
-    </ion-button>
+      <div class="mt-4">
+        <mat-divider class="opacity-40"></mat-divider>
+      </div>
+      <div class="mt-6">
+        <ion-text class="font-medium text-xl">Disciplinas selecionados: </ion-text>
+        <div class="mt-6">
+          <ion-checkbox [checked]="!containsCategoryInExcludeCategories('logic')" (ionChange)="toggleExcludeCategories('logic')" labelPlacement="end"  color="tertiary">Lógica de Programação</ion-checkbox>
+          <ion-checkbox [checked]="!containsCategoryInExcludeCategories('computing')" (ionChange)="toggleExcludeCategories('computing')" labelPlacement="end"  color="tertiary" class="mt-3">Fundamentos da Computação</ion-checkbox>
+          <ion-checkbox [checked]="!containsCategoryInExcludeCategories('software')" (ionChange)="toggleExcludeCategories('software')" labelPlacement="end"  color="tertiary" class="mt-3">Desenvolvimento de Software</ion-checkbox>
+          <ion-checkbox [checked]="!containsCategoryInExcludeCategories('security')" (ionChange)="toggleExcludeCategories('security')" labelPlacement="end"  color="tertiary" class="mt-3">Segurança da Informação</ion-checkbox>
+          <ion-checkbox [checked]="!containsCategoryInExcludeCategories('infrastructure')" (ionChange)="toggleExcludeCategories('infrastructure')" labelPlacement="end"  color="tertiary" class="mt-3">Insfraestrutura</ion-checkbox>
+        </div>
+      </div>
+      <ion-button (click)="onStart()" class="normal-case mt-7" color="tertiary" expand="block" size="large">
+        <span class="text-white">Iniciar</span>
+      </ion-button>
+    </ng-container>
+    <div *ngIf="!quiz()" class="flex items-center justify-center flex-col gap-3 mt-10">
+      <ion-spinner name="crescent" class="w-16 h-16"></ion-spinner>
+      <ion-text color="medium" class="text-lg text-center">
+        <p>Selecione um ano para iniciar o simulado</p>
+      </ion-text>
+    </div>    
   </section>
 </ion-content>

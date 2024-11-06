@@ -31,6 +31,7 @@
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/preferences": "^6.0.2",
     "@capacitor/status-bar": "6.0.1",
+    "@ctrl/ngx-emoji-mart": "^9.2.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@ionic/angular": "^8.0.0",
     "@ngrx/store": "^18.0.2",

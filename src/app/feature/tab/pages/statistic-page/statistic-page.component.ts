@@ -16,7 +16,7 @@ export class StatisticPageComponent  implements OnInit {
   options!: ChartOptions;
 
   stats = signal<UserStats | null>(null);
-
+  
   constructor(
         readonly auth: Auth,
         readonly userService: UserService,

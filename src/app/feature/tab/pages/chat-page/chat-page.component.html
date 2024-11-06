@@ -12,10 +12,15 @@
     <div class="p-4 flex flex-col gap-5" *ngIf="messages().length">
       <app-chat-message [payload]="message" [isOwnMessage]="message.fromId === user().uid" *ngFor="let message of messages();"/>
     </div>
-    <div *ngIf="!messages()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
-      <ion-text class="text-lg opacity-60 font-semibold">Nenhuma mensagem por aqui ainda. Que tal começar a conversa?</ion-text>
-      <p class="text-xs" *ngIf="isGlobal()">Ao sair as mensagens serão apagados</p>
+    <div *ngIf="!messages()?.length" class="h-full flex flex-col items-center justify-center text-center px-4">
+      <i class="fa-solid fa-comments text-6xl text-[var(--ion-color-primary)] mb-4"></i>
+      <ion-text class="text-xl font-semibold text-gray-800">Nenhuma mensagem por aqui ainda!</ion-text>
+      <ion-text class="text-lg opacity-80 font-medium text-gray-600 mt-2">Que tal começar uma conversa?</ion-text>
+      
+      <!-- Aviso de mensagens apagadas ao sair, somente visível se for global -->
+      <p class="text-xs text-gray-500 mt-4" *ngIf="isGlobal()">Lembre-se: ao sair, suas mensagens serão apagadas.</p>
     </div>
+    
  </ng-container>
   <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
     <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
@@ -24,10 +29,13 @@
 <ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-item lines="none">
+      <!-- <emoji-mart  set="apple"></emoji-mart> -->
       <ion-input [(ngModel)]="message" placeholder="Digite alguma coisa.."></ion-input>
-      <ion-button (click)="sendMessage()" size="large" slot="end" color="dark" class="scale-75">
-        <ion-icon color="light"  slot="icon-only" name="send"></ion-icon>
-      </ion-button>
+     <div slot="end" class="flex">
+        <ion-button (click)="sendMessage()" size="large" color="dark" class="scale-75">
+          <ion-icon color="light"  slot="icon-only" name="send"></ion-icon>
+        </ion-button>
+     </div>
     </ion-item>
   </ion-toolbar>
 </ion-footer>

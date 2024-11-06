@@ -37,10 +37,10 @@
       </div>
     </div>
     <div class="mt-5">
-      <button pButton severity="info" class="w-full flex justify-center font-semibold" id="exit-button">Deslogar</button>
+      <button pButton severity="info" class="w-full flex justify-center font-semibold" id="exit-button" (click)="onSignOut()">Deslogar</button>
     </div>
     <div class="mt-4">
-      <button pButton severity="danger" class="w-full flex justify-center font-semibold" id="delete-account-button">Excluir Conta</button>
+      <button pButton severity="danger" class="w-full flex justify-center font-semibold" id="delete-account-button" (click)="onConfirmUserDelation()">Excluir Conta</button>
     </div>
     <div class="flex flex-col items-center mt-8 opacity-70">
       <ion-text class="text-xs">Versão: 1.0.0</ion-text>
@@ -49,20 +49,4 @@
   </div>
 </ion-content>
 
-
-<ion-alert
-  trigger="exit-button"
-  header="Atenção!"
-  message="Você realmente tem certeza de que deseja sair agora?"
-  [buttons]="closeAlertButtons"
-></ion-alert>
-
 <p-toast [position]="'top-center'" styleClass="w-[80vw]" />
-
-<ion-alert
-  trigger="delete-account-button"
-  header="Atenção!"
-  message="Tem certeza de que deseja continuar? Sua conta será permanentemente excluída e poderá ser disponibilizada para outra pessoa."
-  [buttons]="deleteAlertButtons"
-></ion-alert>
-

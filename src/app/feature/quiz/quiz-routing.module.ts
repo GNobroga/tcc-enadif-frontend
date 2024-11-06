@@ -13,6 +13,7 @@ const routes: Routes = [
     data: {
       title: 'Fundamentos da Computação',
       cssClass: 'bg-gradient-to-l from-[#59eb60] to-[#03a20b]',
+      category: 'computing',
     }
   },
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     data: {
       title: 'Infraestrutura',
       cssClass: 'bg-gradient-to-l from-[#55e4c5] to-[#0851c7]',
+      category: 'infrastructure',
     }
   },
   {
@@ -29,6 +31,7 @@ const routes: Routes = [
     data: {
       title: 'Lógica de Programação',
       cssClass: 'bg-gradient-to-l from-[#ffb429] to-[#f15c17]',
+      category: 'logic',
     }
   },
   {
@@ -37,6 +40,7 @@ const routes: Routes = [
     data: {
       title: 'Segurança da Informação',
       cssClass: 'bg-gradient-to-l from-[#9fe949] to-[#049a70]',
+      category: 'security',
     }
   },
   {
@@ -45,6 +49,7 @@ const routes: Routes = [
     data: {
       title: 'Desenvolvimento de Software',
       cssClass: 'bg-gradient-to-l from-[#2fd6e9] to-[#2b06d0]',
+      category: 'software',
     }
   },
   {
@@ -56,7 +61,7 @@ const routes: Routes = [
     component: QuizHistoryComponent,
   },
   {
-    path: 'started',
+    path: 'started/:id',
     component: QuizStartedComponent,
   },
   {

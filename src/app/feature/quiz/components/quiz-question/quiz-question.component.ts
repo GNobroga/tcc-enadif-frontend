@@ -13,14 +13,15 @@ export type Asking = {
 };
 
 export type Question = {
-  id: number;
+  _id: string;
   title: string;
   content: string;
   photos?: string[];
   asking: Asking;
   alternatives: Alternative[];
   correctId: number;
-  category: 'logic' | 'computing' | 'software' | 'security' | 'infrastructure'
+  category: 'logic' | 'computing' | 'software' | 'security' | 'infrastructure',
+  done?: boolean;
 };
 
 const ALPHABET = [
@@ -100,7 +101,7 @@ export class QuizQuestionComponent implements OnInit, AfterViewInit {
   }
 
   get correct() {
-    return this.parent.listCorrectQuestionsId().includes(this.data.id);
+    return this.parent.listCorrectQuestionsId().includes(this.data._id);
   }
 
 

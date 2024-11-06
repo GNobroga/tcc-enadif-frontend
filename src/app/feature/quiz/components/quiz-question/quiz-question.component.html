@@ -1,55 +1,52 @@
-<div class="question shadow-lg rounded-bl-lg rounded-br-lg" [ngClass]="getQuestionStatusClass()">
-  <div class="question__header">
-    <span class="label">1</span>
-    <ion-text class="text-lg font-medium">{{ data.title }}</ion-text>
+<div class="question shadow-lg rounded-lg overflow-hidden" [ngClass]="getQuestionStatusClass()">
+  <!-- Cabeçalho da pergunta -->
+  <div class="question__header p-4 bg-white border-b border-gray-200">
+    <span class="label text-3xl font-semibold text-gray-800">{{ parent.currentQuestionIndex()! + 1 }}</span>
+    <div *ngIf="data.title" class="mt-4 font-medium text-lg text-gray-700">
+      <ion-text class="text-base">{{ data.title }}</ion-text>
+    </div>
   </div>
-  <div class="question__content space-y-5">
-    <p class="leading-loose tracking-tight text-base">
+
+  <!-- Conteúdo da pergunta -->
+  <div class="question__content px-4 py-3 bg-gray-50">
+    <p class="leading-relaxed text-base text-gray-700">
       {{ data.content }}
     </p>
-    <div *ngIf="data.photos">
+
+    <div *ngIf="data.photos" class="mt-4">
       <ion-grid>
         <ion-row>
           <ion-col size="12" *ngFor="let photo of data.photos">
-            <!-- <ngx-image-zoom
-              fullImage="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg"
-
-              [magnification]="1"
-              [enableScrollZoom]="true"
-              [enableLens]="true"
-              [lensWidth]="200"
-              [lensHeight]="200"
-          ></ngx-image-zoom> -->
-            <!-- <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="250" [preview]="true"></p-image> -->
+            <img [src]="photo" alt="question photo" class="w-full rounded-lg shadow-lg" />
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
-    <div>
-      <p class="leading-loose tracking-tight font-medium text-base">
+
+    <div class="space-y-3 mt-4">
+      <ion-text class="font-medium text-xl text-gray-800">
         {{ data.asking.title }}
-      </p>
-      @if (data.asking.body; as body) {
-        <div class="ms-3 opacity-85">
-          @for (askingContent of body; track askingContent) {
-            <p>{{ askingContent }}</p>
-          }
+      </ion-text>
+      <div *ngIf="data.asking.body" class="ms-3 opacity-85">
+        <div *ngFor="let askingContent of data.asking.body">
+          <p class="text-base text-gray-600">{{ askingContent }}</p>
         </div>
-      }
-      <p class="font-medium">{{ data.asking.footer  }}</p>
+      </div>
+      <p class="font-medium text-xs break-words text-gray-500">
+        {{ data.asking.footer }}
+      </p>
     </div>
   </div>
 
-  <div class="question__footer [&>div]:bg-white  [&>div]:cursor-pointer ">
-    @for (alternative of data.alternatives; track alternative.id; let index = $index) {
-      <div class="p-4 text-justify items-center flex gap-3" matRipple (click)="markAnswer(alternative.id)" [ngClass]="getAlternativeStatusClass(alternative.id)">
-        <div class="bg-black w-full relative  h-full max-w-6 max-h-6 rounded-full text-white flex items-center justify-center">
-          <strong>{{ getOrder(index) }}</strong>
+  <!-- Alternativas -->
+  <div class="question__footer [&>div]:bg-white  [&>div]:cursor-pointer">
+    <div *ngFor="let alternative of data.alternatives; let index = index" (click)="markAnswer(alternative.id)" [ngClass]="getAlternativeStatusClass(alternative.id)">
+      <div class="p-4 flex items-center gap-4 cursor-pointer  rounded-lg">
+        <div class="bg-black min-w-8 min-h-8 rounded-full text-white flex items-center justify-center">
+          <strong class="text-xl">{{ getOrder(index) }}</strong>
         </div>
-        <span class="text-base">
-         {{ alternative.label }}
-        </span>
+        <span class="text-sm">{{ alternative.label }}</span>
       </div>
-    }
+    </div>
   </div>
 </div>
