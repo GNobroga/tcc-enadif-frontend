@@ -124,7 +124,7 @@ export class PerfilPageComponent {
 
   public showDialog() {
     const ref = this.dialogService.open(ChangeNameComponent, {
-      header: 'Atualizar nome',
+      header: 'Editar',
       modal: true,
       width: '90vw',
       styleClass: 'bg-red-500',
