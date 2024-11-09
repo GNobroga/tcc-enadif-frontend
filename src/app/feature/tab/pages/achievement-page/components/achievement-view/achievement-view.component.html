@@ -1,5 +1,10 @@
 <ion-content>
-    <div class="min-h-screen" 
+    <div *ngIf="!achievement" class="h-full flex justify-center items-center">
+        <div class="h-full flex items-center justify-center">
+            <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+        </div>
+    </div>
+    <div *ngIf="achievement" class="min-h-screen" 
          [ngClass]="{
               'bg-blue-500': achievement?.type === 'social',
               'bg-yellow-500': achievement?.type === 'learning',

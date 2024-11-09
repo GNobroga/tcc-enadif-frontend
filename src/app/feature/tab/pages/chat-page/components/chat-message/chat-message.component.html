@@ -15,7 +15,7 @@
   <div class="relative">
     <!-- Nome e horário -->
     <span class="flex items-center gap-2 text-sm text-gray-600" [ngClass]="{ 'flex-row-reverse': isOwnMessage }">
-      <ion-text class="font-semibold">{{ payload.displayName }}</ion-text>
+      <ion-text class="font-medium">{{ payload.displayName }}</ion-text>
       <ion-text class="text-gray-500">{{ payload.sentAt | date: 'hh:mm a' }}</ion-text>
     </span>
 
