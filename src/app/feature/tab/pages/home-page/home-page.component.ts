@@ -11,6 +11,9 @@ import UserService from 'src/app/core/services/user.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
 import { MessageService } from 'primeng/api';
 import AchievementService from 'src/app/core/services/achievement.service';
+import { ViewDidEnter } from '@ionic/angular';
+import { DialogService } from 'primeng/dynamicdialog';
+import AcquiredAchievementComponent from '../achievement-page/components/acquired-achievement/acquired-achievement.component';
 
 
 export type UserFriendNotification = {
@@ -26,7 +29,7 @@ export type UserFriendNotification = {
   queries: {
     overlayPanel: new ViewChild(OverlayPanel),
   },
-  providers: [MessageService],
+  providers: [MessageService, DialogService],
 })
 export class HomePageComponent implements OnInit {
 
@@ -48,6 +51,7 @@ export class HomePageComponent implements OnInit {
     readonly userFriendService: UserFriendService,
     readonly messageService: MessageService,
     readonly achievementService: AchievementService,
+    readonly dialogService: DialogService,
   ) {
       
   }  
@@ -59,9 +63,21 @@ export class HomePageComponent implements OnInit {
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(async () => {
+
+        this.achievementService.check()
+        .subscribe(({ hasNew }) => {
+          if (!hasNew) return;
+          this.dialogService.open(AcquiredAchievementComponent, {
+            styleClass: 'w-[90vw] !m-0 !p-0',
+            modal: true,
+          });
+        });
+        
+
         this.achievementService.countAcquired().subscribe(({ count }) => {
           this.achievementAcquiredCount.set(count);
         });
+
         this.socket()?.close();
         this.overlayPanel?.hide();
         this.changeDetectorRef.detectChanges();

@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   return new Observable(observer => {
     auth.onAuthStateChanged(async user => {
       if (isNullOrEmpty(user)) {
-        router.navigate(['account', 'login']);
+        router.navigate(['/account/login']);
         observer.next(false);
       } else {
         console.log(await user?.getIdToken())

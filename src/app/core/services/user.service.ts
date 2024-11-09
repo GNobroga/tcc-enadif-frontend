@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import BaseService from "./base.service";
 
 export interface UserStats {
-    id: string;
+    _id: string;
     totalAnsweredQuestions: number;
     incorrectAnswersCount: number;
     correctAnswersCount: number;
@@ -10,6 +10,7 @@ export interface UserStats {
     averageResponseTime: number;
     countFriends: number;
     correctAnswersByCategory: Record<string, number>;
+    trialPeriod: boolean;
 }
 
 export interface UserDaysSequence {

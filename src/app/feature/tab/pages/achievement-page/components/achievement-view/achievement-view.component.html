@@ -1,0 +1,64 @@
+<ion-content>
+    <div class="min-h-screen" 
+         [ngClass]="{
+              'bg-blue-500': achievement?.type === 'social',
+              'bg-yellow-500': achievement?.type === 'learning',
+              'bg-red-500': achievement?.type === 'ranking',
+              'bg-green-500': achievement?.type === 'no-error',
+              'bg-purple-500': achievement?.type === 'no-wrong',
+              'bg-orange-500': achievement?.type === 'trial-period',
+              'bg-teal-500': achievement?.type === 'consecutive-days'
+          }">
+      
+      <!-- Toolbar -->
+      <ion-toolbar style="--background: transparent;">
+          <ion-back-button color="light" slot="start" defaultHref="/tabs/achievement"></ion-back-button>
+      </ion-toolbar>
+  
+      <div class="achievement-detail flex flex-col items-center justify-center h-full px-8 py-12 text-center">
+    
+          <!-- Achievement Image -->
+          <div class="achievement-img-wrapper w-40 h-40 mb-8 rounded-full bg-white shadow-xl overflow-hidden mx-auto">
+            <ion-img [src]="achievement?.imageUrl" class="w-full h-full object-cover"></ion-img>
+          </div>
+      
+          <!-- Achievement Header -->
+          <ion-text class="text-5xl font-semibold text-white mb-6">{{ achievement?.header }}</ion-text>
+      
+          <!-- Achievement Detail -->
+          <ion-text class="text-lg text-white mb-6 px-6">{{ achievement?.detail }}</ion-text>
+      
+          <!-- Achievement Type Icon or Label -->
+          <div class="type-label w-full mb-6 text-center">
+            <ion-text class="text-lg text-white font-semibold">Tipo de Conquista:</ion-text>
+            <div class="flex justify-center gap-4 mt-4">
+              <span *ngIf="achievement?.type === 'social'" class="badge bg-blue-700 text-white py-2 px-4 rounded-full">Social</span>
+              <span *ngIf="achievement?.type === 'learning'" class="badge bg-yellow-700 text-white py-2 px-4 rounded-full">Aprendizado</span>
+              <span *ngIf="achievement?.type === 'ranking'" class="badge bg-red-700 text-white py-2 px-4 rounded-full">Ranking</span>
+              <span *ngIf="achievement?.type === 'no-error'" class="badge bg-green-700 text-white py-2 px-4 rounded-full">Sem Erros</span>
+              <span *ngIf="achievement?.type === 'no-wrong'" class="badge bg-purple-700 text-white py-2 px-4 rounded-full">Sem Erros</span>
+              <span *ngIf="achievement?.type === 'trial-period'" class="badge bg-orange-700 text-white py-2 px-4 rounded-full">Período de Teste</span>
+              <span *ngIf="achievement?.type === 'consecutive-days'" class="badge bg-teal-700 text-white py-2 px-4 rounded-full">Dias Consecutivos</span>
+            </div>
+          </div>
+      
+          <!-- Goal and Progress -->
+          <div class="goal-info w-full mb-8">
+            <ion-text class="text-white text-lg">Meta: <span class="font-semibold">{{ achievement?.goal }}</span> pontos</ion-text>
+            <ion-progress-bar [value]="progress / 100" color="light" class="my-4 rounded-lg"></ion-progress-bar>
+            <ion-text class="text-white font-semibold">{{ progress | number: '1.0-0' }}%</ion-text>
+          </div>
+      
+          <!-- Acquired Status -->
+          <div *ngIf="achievement?.acquired" class="acquired-status text-green-200 font-semibold flex items-center justify-center mb-4">
+            <ion-icon name="checkmark-circle-outline" class="mr-2 text-2xl"></ion-icon> Conquista Adquirida!
+          </div>
+      
+          <!-- Date Acquired -->
+          <div *ngIf="achievement?.acquired && achievement?.acquiredAt" class="text-gray-300 text-xs mt-2 text-center">
+            Adquirido em: {{ achievement?.acquiredAt | date:'mediumDate' }}
+          </div>
+      </div>
+    </div>
+  </ion-content>
+  

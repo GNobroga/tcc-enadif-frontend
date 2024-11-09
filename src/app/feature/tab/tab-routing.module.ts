@@ -13,6 +13,7 @@ import { CreateNotePageComponent } from './pages/notepad-page/create-note-page/c
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { CommunityPage } from './pages/community-page/community-page.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import AchievementViewComponent from './pages/achievement-page/components/achievement-view/achievement-view.component';
 
 
 const routes: Routes = [
@@ -77,6 +78,10 @@ const routes: Routes = [
   {
     path: 'achievement',
     component: AchievementPageComponent,
+  },
+  {
+    path: 'achievement-view/:achievementId',
+    component: AchievementViewComponent,
   },
   {
     path: 'profile/:id',

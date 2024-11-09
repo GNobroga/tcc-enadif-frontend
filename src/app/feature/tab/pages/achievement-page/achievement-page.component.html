@@ -1,12 +1,15 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-back-button slot="start" defaultHref="/tabs"></ion-back-button>
-    <ion-title>Conquistas</ion-title>
+  <ion-toolbar color="primary">
+    <ion-back-button color="light" slot="start" defaultHref="/tabs"></ion-back-button>
+    <ion-title color="light" class="text-lg font-medium">⭐ Conquistas</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <div class="p-4 h-full">
-    <ion-segment (ionChange)="onChange($event)" mode="ios" value="default">
+    
+    <!-- Segment Control -->
+    <ion-segment (ionChange)="onChange($event)"  value="default" class="mb-4 rounded-md bg-white shadow-sm">
       <ion-segment-button value="default">
         <ion-label>Todas</ion-label>
       </ion-segment-button>
@@ -14,38 +17,40 @@
         <ion-label>Adquiridas</ion-label>
       </ion-segment-button>
     </ion-segment>
-    
-    <ion-grid class="mt-2" *ngIf="cacheAchievements().length">
-      <ion-row>
-        <ion-col size="6" *ngFor="let achievement of cacheAchievements()">
 
-          <div class="relative h-48">
-            <div [ngStyle]="{ backgroundColor: achievement.color || '#b79d5c'}" class="flex flex-col text-white rounded-lg shadow-md p-3 h-full">
-              <div class="item-hidden" *ngIf="!achievement.acquired">
-                <ion-img src="assets/image/trancar.png" class="w-16 h-16 hover:scale-125 transition-all"></ion-img>
-              </div>
-              <ion-img [src]="achievement.imageUrl" class="w-20 h-20 mb-2 mx-auto"></ion-img>
-            <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>
-            <ion-text class="text-xs opacity-80">{{ achievement.detail }}</ion-text>
-            </div>
-         </div>
-        </ion-col>
-        <!-- <ion-col size="6">
-         <div class="relative h-48" >
-            <div class="flex flex-col bg-[#b79d5c] text-white rounded-lg shadow-md p-3 h-full">
-              <div class="item-hidden">
-                <ion-img src="assets/image/trancar.png" class="w-16 h-16"></ion-img>
-              </div>
-              <ion-img src="assets/image/livro-de-feiticos.png" class="w-20 h-20 mb-2 mx-auto"></ion-img>
-              <ion-text class="font-medium text-sm">Estudioso</ion-text>
-              <ion-text class="text-xs opacity-80">Você fez completou 10 quizz</ion-text>
-            </div>
-         </div>
-        </ion-col> -->
-      </ion-row>
-    </ion-grid>
-    <span *ngIf="!cacheAchievements().length" class="flex items-center justify-center text-center h-full">
-      <ion-text class="text-lg opacity-60 font-semibold">No momento não há nenhuma conquista</ion-text>
-    </span>
+    <!-- Achievements Grid -->
+    <ng-container *ngIf="cacheAchievements().length">
+      <section class="grid grid-cols-2 gap-3">
+        <div [routerLink]="['/tabs/achievement-view', achievement._id]" *ngFor="let achievement of cacheAchievements(); let i = index" 
+             [ngClass]="{
+               'from-yellow-500 to-yellow-700': i % 3 === 0,
+               'from-blue-500 to-blue-700': i % 3 === 1,
+               'from-purple-500 to-pink-500': i % 3 === 2
+             }"
+             class="text-white relative rounded-lg bg-gradient-to-br shadow-lg p-3 pb-5 transform hover:scale-105 transition-transform">
+          
+          <!-- Locked State Overlay -->
+          <div class="item-hidden absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg" *ngIf="!achievement.acquired">
+            <ion-img src="assets/image/trancar.png" class="w-10 h-10 opacity-80 hover:opacity-100 transition-opacity"></ion-img>
+          </div>
+    
+          <!-- Achievement Image and Content -->
+          <div class="achievement-img-wrapper flex items-center justify-center w-16 h-16 mx-auto mb-2 rounded-full shadow-inner bg-gray-50 p-1">
+            <ion-img [src]="achievement.imageUrl" class="w-10 h-10 rounded-full object-cover"></ion-img>
+          </div>
+          
+          <!-- Achievement Header and Detail -->
+          <ion-text class="block font-semibold text-center text-sm">{{ achievement.header }}</ion-text>
+          <ion-text class="block text-xs text-center mt-1 leading-tight">{{ achievement.detail }}</ion-text>
+        </div>
+      </section>
+    </ng-container>
+    
+  
+
+    <!-- No Achievements Message -->
+    <div *ngIf="!cacheAchievements().length" class="flex items-center justify-center h-full text-center text-gray-500">
+      <ion-text class="text-base font-medium">No momento não há nenhuma conquista</ion-text>
+    </div>
   </div>
 </ion-content>

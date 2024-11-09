@@ -21,24 +21,24 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginPageComponent,
-        canActivate: [authGuestGuard],
+        canActivate: [],
       },
       {
         path: 'register',
         component: CreateAccountPageComponent,
-        canActivate: [authGuestGuard],
+        canActivate: [],
       },
       {
         path: 'recover',
         component: RecoverAccountPageComponent,
-        canActivate: [authGuestGuard],
+        canActivate: [],
       }
     ],
   },
   {
     path: 'created',
     component: AccountCreatedComponent,
-    canActivate: [authGuard],
+    canActivate: [],
   }
 ];
 

@@ -24,10 +24,14 @@ import { UserStatsComponent } from './pages/user-profile/components/user-stats/u
 import { UserAchievementComponent } from './pages/user-profile/components/user-achievement/user-achievement.component';
 import ChatMenuComponent from './pages/chat-page/components/chat-menu/chat-menu.component';
 import ConfirmPasswordComponent from './components/confirm-password/confirm-password.component';
+import AcquiredAchievementComponent from './pages/achievement-page/components/acquired-achievement/acquired-achievement.component';
+import AchievementViewComponent from './pages/achievement-page/components/achievement-view/achievement-view.component';
 
 
 @NgModule({
   declarations: [
+    AchievementViewComponent,
+    AcquiredAchievementComponent,
     ChatMenuComponent,
     TabComponent,
     HomePageComponent,

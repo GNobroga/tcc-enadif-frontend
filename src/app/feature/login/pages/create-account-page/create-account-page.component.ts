@@ -4,6 +4,7 @@ import { Auth, user } from '@angular/fire/auth';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createUserWithEmailAndPassword, signOut, updateProfile } from '@firebase/auth';
+import { LoadingController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import UserService from 'src/app/core/services/user.service';
 import CustomValidators from 'src/app/core/validators/custom-validators';
@@ -30,6 +31,7 @@ export class CreateAccountPageComponent implements OnInit {
     readonly auth: Auth,
     readonly router: Router,
     readonly userService: UserService,
+    readonly loadingController: LoadingController,
   ) {}
  
   ngOnInit() {
@@ -40,9 +42,16 @@ export class CreateAccountPageComponent implements OnInit {
   }
 
   async register() {
+    const loading = await this.loadingController.create({
+      animated: true,
+      mode: 'ios',
+      spinner: 'crescent',
+    });
+
+    await loading.present();
+
     try {
       if (!this.validateControls()) return;
-
       const { name, email, password } = this.form.value;
       const { user } = await createUserWithEmailAndPassword(
         this.auth,
@@ -51,7 +60,10 @@ export class CreateAccountPageComponent implements OnInit {
       );
       this.userService.initializeProgress();
       await updateProfile(user, { displayName: name });
-      this.router.navigate(["/account/created"]);
+      await signOut(this.auth);
+      setTimeout(() => {
+        this.router.navigate(["/account/created"]);
+      });
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.log(error);
@@ -59,6 +71,7 @@ export class CreateAccountPageComponent implements OnInit {
       }
     } finally {
       this.loading.set(false);
+      await loading.dismiss();
     }
   }
 

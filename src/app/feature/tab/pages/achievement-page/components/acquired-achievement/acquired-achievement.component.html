@@ -1,0 +1,32 @@
+<div class="p-6 bg-white max-w-xs mx-auto text-center rounded-lg space-y-4">
+    
+    <!-- Ícone de Conquista (Estrela Preenchida) -->
+    <div class="flex items-center justify-center mb-4">
+        <i class="pi pi-star-fill text-5xl text-yellow-500 drop-shadow-sm"></i>
+    </div>
+
+    <!-- Título de Parabéns -->
+    <ion-text class="text-xl font-semibold text-[var(--ion-color-primary)]">
+        Conquista Desbloqueada! 🎉
+    </ion-text>
+
+    <!-- Mensagem de Conquista -->
+    <ion-text class="text-base text-gray-700 px-5 leading-relaxed">
+        Parabéns! Você acaba de desbloquear novas conquistas em sua jornada. Continue assim!
+    </ion-text>
+
+    <!-- Imagem de Confete -->
+    <div class="flex justify-center">
+        <img src="assets/image/confetti.gif" class="w-14 h-14 opacity-80" alt="Confetti Celebration" />
+    </div>
+
+    <!-- Botão de Ver Conquistas -->
+    <button
+        (click)="redirectToAchievements()"
+        pButton
+        type="button"
+        label="Ver Conquistas"
+        icon="pi pi-trophy"
+        class="p-button-primary p-button-rounded p-button-sm w-full mt-3"
+    ></button>
+</div>

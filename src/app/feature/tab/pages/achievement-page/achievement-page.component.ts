@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { SegmentCustomEvent } from '@ionic/angular';
 import AchievementService, { Achievement } from 'src/app/core/services/achievement.service';
 
@@ -8,17 +9,19 @@ import AchievementService, { Achievement } from 'src/app/core/services/achieveme
   styleUrls: ['./achievement-page.component.scss'],
 })
 export class AchievementPageComponent  implements OnInit {
-  
-  
+
   constructor(
-    public readonly achievementService: AchievementService,
+    readonly achievementService: AchievementService,
+    readonly auth: Auth,
   ) { }
+
+  currentUser = signal(this.auth.currentUser!);
   
   achievements = this.achievementService.achievements;
   cacheAchievements = signal<Achievement[]>([]);
 
   ngOnInit() {
-    this.achievementService.listAll().subscribe(() => {
+    this.achievementService.listAll(this.currentUser().uid).subscribe(() => {
       this.cacheAchievements.set(this.achievements());
     });
   }

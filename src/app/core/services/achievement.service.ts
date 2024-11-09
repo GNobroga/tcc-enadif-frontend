@@ -18,18 +18,15 @@ import { tap } from "rxjs";
 //     },
 
 export type Achievement = {
-    id: string;
+    _id: string;
     header: string;
     detail: string;
-    type: 'ranking' | 'social' | 'learning';
-    goal: {
-        description: string;
-        count: number;
-    },
+    type: string;
+    goal: number;
     imageUrl: string;
-    createdAt: Date;
+    createdAt?: Date;
     acquired: boolean;
-    color: string;
+    acquiredAt?: Date;
 }
 
 @Injectable({
@@ -43,12 +40,20 @@ export default class AchievementService extends BaseService {
         super('achievements');
     }
 
-    listAll() {
-        return this.httpClient.get<Achievement[]>(this.getApiEndpoint())
+    listAll(ownerId: string) {
+        return this.httpClient.get<Achievement[]>(this.getApiEndpoint(`user/${ownerId}`))
             .pipe(tap(response => this.achievements.set(response)));
     }
 
     countAcquired() {
         return this.httpClient.get<{ count: number; }>(this.getApiEndpoint('count'));
+    }
+
+    check() {
+        return this.httpClient.get<{ hasNew: boolean; }>(this.getApiEndpoint('check/user'));
+    }
+
+    findById(achievementId: string) {
+        return this.httpClient.get<Achievement>(this.getApiEndpoint(`${achievementId}`));
     }
 }
