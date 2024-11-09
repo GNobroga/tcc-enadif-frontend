@@ -7,6 +7,30 @@
         <i slot="icon-only"  class="fa-solid fa-trash text-xl"></i>
       </ion-button>
     </ion-item>
+   <!-- Ícone de Alerta -->
+  <div 
+    slot="end" 
+    (click)="op.toggle($event)" 
+    matRipple 
+    class="w-8 h-8 me-2 bg-white rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition duration-300"
+    aria-label="Informações sobre o título e descrição"
+    >
+    <i class="fa-solid fa-exclamation text-black"></i>
+    </div>
+
+    <!-- Tooltip (p-overlayPanel) -->
+    <p-overlayPanel #op styleClass="w-[90vw]">
+      <div class="p-4 bg-white  max-w-xs">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-semibold text-gray-800">Atenção!</span>
+          <ion-icon name="close-circle-outline" (click)="op.hide()" class="text-gray-500 cursor-pointer"></ion-icon>
+        </div>
+        <p class="text-sm text-gray-600">
+          Para salvar automaticamente a nota, você precisa preencher tanto o título quanto a descrição.
+        </p>
+      </div>
+    </p-overlayPanel>
+
   </ion-toolbar>
   <div class="p-2">
     <swiper-container [slidesPerView]="7" [loop]="true" [speed]="300">

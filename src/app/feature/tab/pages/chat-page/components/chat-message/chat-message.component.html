@@ -24,7 +24,7 @@
       class="p-3 rounded-lg mt-2 text-sm break-words relative"
       [ngClass]="{
         'bg-[#F1F1F1] text-black shadow-md': !isOwnMessage,
-        'bg-[var(--ion-color-primary)] text-white shadow-lg': isOwnMessage
+        'bg-[var(--ion-color-primary)] shadow-md text-white': isOwnMessage
       }"
     >
       {{ payload.message }}
