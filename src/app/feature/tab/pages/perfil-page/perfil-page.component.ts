@@ -74,7 +74,7 @@ export class PerfilPageComponent {
     if (role === 'no') return;
 
     const dialog = this.dialogService.open(ConfirmPasswordComponent, {
-      header: 'Confirmar Identidade',
+      header: 'Confirmar',
       modal: true,
       width: '90vw',
       position: 'center',
