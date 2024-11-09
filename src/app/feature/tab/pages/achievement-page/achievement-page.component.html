@@ -6,7 +6,10 @@
 </ion-header>
 
 <ion-content>
-  <div class="p-4 h-full">
+  <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+  </div>
+  <div class="p-4 h-full" *ngIf="!isLoading()">
     
     <!-- Segment Control -->
     <ion-segment (ionChange)="onChange($event)"  value="default" class="mb-4 rounded-md bg-white shadow-sm">

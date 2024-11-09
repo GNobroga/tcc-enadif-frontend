@@ -19,10 +19,13 @@ export class AchievementPageComponent  implements OnInit {
   
   achievements = this.achievementService.achievements;
   cacheAchievements = signal<Achievement[]>([]);
+  isLoading = signal(false);
 
   ngOnInit() {
+    this.isLoading.set(true);
     this.achievementService.listAll(this.currentUser().uid).subscribe(() => {
       this.cacheAchievements.set(this.achievements());
+      this.isLoading.set(false);
     });
   }
 

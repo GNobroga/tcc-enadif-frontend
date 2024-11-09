@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, Query, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -71,6 +71,7 @@ export class HomePageComponent implements OnInit {
             styleClass: 'w-[90vw] !m-0 !p-0',
             modal: true,
           });
+          this.ngOnInit();
         });
         
 
