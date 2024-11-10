@@ -11,13 +11,38 @@
       </div>
     </ion-item>
   </ion-toolbar>
-  <div class="px-5 py-3 rounded-lg">
-    <ion-progress-bar mode="ios" [value]="currentPercentage()" color="primary" class="rounded"></ion-progress-bar>
-    <ion-text class="text-sm font-medium mt-2 block text-center text-gray-600">
-      Questão <span class="text-primary">{{ isReview() ? (currentQuestionIndex()! + 1) : currentQuestionIndex() }}</span> de 
-      <span class="text-primary">{{ questions().length }}</span>
-    </ion-text>
-</div>
+  <div class="px-5 py-2 bg-white ">
+    <!-- Barra de Progresso com label de Questão -->
+    <div class="flex flex-col items-center">
+      <ion-progress-bar 
+        mode="ios" 
+        [value]="currentPercentage()" 
+        color="primary" 
+        class="w-full rounded-lg mb-2"
+      ></ion-progress-bar>
+  
+      <ion-text class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+        <!-- Número da Questão e Total -->
+        <span class="text-gray-700">Questão</span> 
+        <span class="text-primary text-lg">{{ isReview() ? (currentQuestionIndex()! + 1) : currentQuestionIndex() }}</span> 
+        <span class="text-gray-500">de</span> 
+        <span class="text-primary text-lg">{{ questions().length }}</span>
+        
+        <!-- Label de Dificuldade -->
+        <span 
+          class="text-xs font-semibold text-white px-3 py-1 rounded-full shadow-md"
+          [ngClass]="{
+            'bg-green-500': difficulty === 'Fácil',
+            'bg-yellow-500': difficulty === 'Médio',
+            'bg-red-500': difficulty === 'Difícil'
+          }"
+        >
+          {{ difficulty | titlecase }}
+        </span>
+      </ion-text>
+    </div>
+  </div>
+  
 
 </ion-header>
 <ion-content class="ion-padding" [scrollX]="true" [scrollEvents]="true">

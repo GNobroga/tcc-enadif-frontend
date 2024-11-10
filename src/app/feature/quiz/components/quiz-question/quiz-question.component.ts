@@ -22,6 +22,7 @@ export type Question = {
   correctId: number;
   category: 'logic' | 'computing' | 'software' | 'security' | 'infrastructure',
   done?: boolean;
+  difficulty: 'easy' | 'medium'  | 'hard';
 };
 
 const ALPHABET = [

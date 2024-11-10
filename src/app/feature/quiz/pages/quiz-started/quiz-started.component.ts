@@ -225,6 +225,15 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         }
    }
 
+  get difficulty() {
+    const currentQuestion = this.currentQuestion();
+    if (!currentQuestion) return '';
+    const { difficulty } = currentQuestion;
+    if (difficulty === 'easy') return 'Fácil';
+    if (difficulty === 'medium') return 'Médio';
+    return 'Difícil';
+  }
+
   showBellSwinging() {
     if (this.remainingChances() <= 0) return;
     this.isBellSwinging.set(false);
