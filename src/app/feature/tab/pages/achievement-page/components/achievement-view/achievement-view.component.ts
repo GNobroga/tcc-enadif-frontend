@@ -10,7 +10,7 @@ import UserService, { UserDaysSequence, UserStats } from 'src/app/core/services/
 })
 export default class AchievementViewComponent implements OnInit {
   
-  achievement!: Achievement;
+  achievement: Achievement = null as any
   stats!: UserStats & UserDaysSequence;
   progress: number = 0;  // Variável para armazenar o progresso da conquista
 
