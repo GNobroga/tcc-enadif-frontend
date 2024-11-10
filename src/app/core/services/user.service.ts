@@ -6,7 +6,7 @@ export interface UserStats {
     totalAnsweredQuestions: number;
     incorrectAnswersCount: number;
     correctAnswersCount: number;
-    currentUserRanking: number;
+    score: number;
     averageResponseTime: number;
     countFriends: number;
     correctAnswersByCategory: Record<string, number>;

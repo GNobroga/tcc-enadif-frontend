@@ -8,6 +8,7 @@ import { AppState, selectQuizResultData } from 'src/app/store';
 import { resetQuizResultData, setQuizResultData } from 'src/app/store/actions/quiz-result.actions';
 import { Question } from '../../components/quiz-question/quiz-question.component';
 import { QuizResultDialogComponent } from '../../components/quiz-result-dialog/quiz-result-dialog.component';
+import QuizService from 'src/app/core/services/quiz.service';
 
 export const QUIZ_RESULT_STATE_KEY = 'quiz_result_state';
 
@@ -48,7 +49,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     readonly route: ActivatedRoute,
     readonly router: Router,
     readonly dialog: MatDialog,
-    readonly store: Store<AppState>
+    readonly store: Store<AppState>,
+    readonly quizService: QuizService,
   ) { }
 
   ionViewDidEnter() {
@@ -87,7 +89,14 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
         }
       });
     }
-
+    
+    this.quizService.finishQuiz({
+      quizId: this.quizId()!,
+      correctQuestionIds: this.correctQuestionsId(),
+      timeSpent: this.timer(),
+      category: this.category()!,
+      excludeCategories: this.excludeCategories(),
+    }).subscribe();
   }
 
   ngAfterViewInit() {

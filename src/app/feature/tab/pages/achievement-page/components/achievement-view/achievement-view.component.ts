@@ -57,7 +57,7 @@ export default class AchievementViewComponent implements OnInit {
         break;
 
       case 'ranking':
-        this.progress = (this.stats.currentUserRanking / goal) * 100;
+        this.progress = (this.stats.score / goal) * 100;
         break;
 
       case 'no-error':

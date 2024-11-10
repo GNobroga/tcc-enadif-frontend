@@ -53,10 +53,6 @@ const routes: Routes = [
     component: StatisticPageComponent,
   },
   {
-    path: 'search',
-    component: SearchPageComponent,
-  },
-  {
     path: 'notes',
     component: NotepadPageComponent,
   },

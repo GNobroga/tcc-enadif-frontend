@@ -10,6 +10,16 @@ export interface Quiz {
     completed: boolean;
 }
 
+export interface QuizHistory {
+    year: number;
+    quizId: string;
+    totalQuestions: number;
+    correctAnswers: number;
+    incorrectAnswers: number;
+    startTime: [number, number, number];
+    timeSpent: [number, number, number];
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -17,6 +27,15 @@ export default class QuizService extends BaseService {
 
     constructor() {
         super('quizzes');
+    }
+
+    finishQuiz({ quizId, correctQuestionIds, timeSpent, category, excludeCategories }: { excludeCategories: string[], category: string, quizId: string; correctQuestionIds: string[], timeSpent: number[] }) {
+        return this.httpClient.post<{ created: boolean; }>(this.getApiEndpoint(`finish/${quizId}`), {
+            correctQuestionIds,
+            timeSpent,
+            category,
+            excludeCategories,
+        });
     }
 
     listByCategoryName(name: string) {
@@ -34,5 +53,9 @@ export default class QuizService extends BaseService {
     findById(id: string, excludeCategories: string[] = []) {
         const queryParam = excludeCategories?.length ?  `?excludeCategories=[${excludeCategories.map(category => `"${category}"`)}]` : '';
         return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}${queryParam}`));
+    }
+
+    listHistory() {
+        return this.httpClient.get<QuizHistory[]>(this.getApiEndpoint('user/history'));
     }
 }

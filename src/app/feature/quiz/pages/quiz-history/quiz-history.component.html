@@ -3,17 +3,74 @@
     <ion-back-button slot="start" defaultHref="/tabs/study"></ion-back-button>
     <ion-title>Simulados do Enade</ion-title>
   </ion-toolbar>
+
   <ion-toolbar>
-    <div class="flex  border mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md bg-gradient-to-l from-[#5eb0ef] to-[#1350c0] text-white">
-      <ion-text class="font-bold  text-xl">Histórico de Provas</ion-text>
+    <div class="flex border mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md bg-gradient-to-l from-[#5eb0ef] to-[#1350c0] text-white">
+      <ion-text class="font-bold text-xl">Histórico de Provas</ion-text>
       <ion-text class="text-sm">Acompanhe seu progresso</ion-text>
     </div>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
-  <section class="p-5 h-full ">
-    <div class="bg-white h-full rounded-lg shadow-lg border border-black border-opacity-10 p-5 flex items-center justify-center">
-      <ion-text class="text-lg font-thin text-center">Os históricos dos seus simulados aparecerão aqui!</ion-text>
+  <section class="p-5 h-full">
+    <!-- Display if no quizzes found -->
+    <div *ngIf="!isLoading && !quizzes.length" class="bg-white h-full rounded-lg shadow-lg border border-black border-opacity-10 p-5 flex items-center justify-center">
+      <ion-icon name="sad-outline" class="text-6xl text-gray-500"></ion-icon>
+      <ion-text class="text-lg font-thin text-center text-gray-600">Os históricos dos seus simulados aparecerão aqui!</ion-text>
     </div>
+
+    <!-- Display quiz history -->
+    <div *ngIf="isLoading" class="flex items-center justify-center h-full">
+      <ion-spinner color="primary" name="bubbles" class="w-16 h-16"></ion-spinner>
+    </div>
+
+    <section *ngIf="quizzes.length && !isLoading">
+      <div class="space-y-6">
+        <div *ngFor="let quiz of quizzes" class="bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
+          <!-- Quiz Year and Statistics -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
+            <div class="flex items-center space-x-2">
+              <ion-icon name="calendar" class="text-gray-600"></ion-icon>
+              <p class="font-semibold text-lg sm:text-xl text-gray-800">Ano: {{ quiz.year }}</p>
+            </div>
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-2">
+                <ion-icon name="checkbox-outline" class="text-gray-600"></ion-icon>
+                <p class="text-sm text-gray-600">Total de Questões: <span class="font-medium">{{ quiz.totalQuestions }}</span></p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <ion-icon name="checkmark-circle-outline" class="text-green-500"></ion-icon>
+                <p class="text-sm text-gray-600">Corretas: <span class="font-medium text-green-500">{{ quiz.correctAnswers }}</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Information -->
+          <div class="mt-4 text-sm text-gray-600">
+            <div class="flex items-center space-x-2">
+              <ion-icon name="alarm" class="text-gray-600"></ion-icon>
+              <p><strong>Tempo Inicial:</strong> <span class="font-semibold">{{ formatTime(quiz.startTime) }}</span></p>
+            </div>
+            <div class="flex items-center space-x-2 mt-2">
+              <ion-icon name="timer" class="text-gray-600"></ion-icon>
+              <p><strong>Tempo Total:</strong> <span class="font-semibold">{{ formatTime(quiz.timeSpent) }}</span></p>
+            </div>
+          </div>
+
+          <!-- Progress Information (optional) -->
+          <div *ngIf="quiz.correctAnswers || quiz.incorrectAnswers" class="mt-4">
+            <div class="flex items-center gap-2">
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              <span class="text-sm">Corretas: {{ quiz.correctAnswers }}</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <ion-icon name="close-circle" color="danger"></ion-icon>
+              <span class="text-sm">Incorretas: {{ quiz.incorrectAnswers }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </section>
 </ion-content>

@@ -12,10 +12,11 @@
     slot="end" 
     (click)="op.toggle($event)" 
     matRipple 
-    class="w-8 h-8 me-2 bg-white rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition duration-300"
+    *ngIf="!notepad()"
+    class="w-8 h-8 me-4 !scale-90 bg-white rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-200 transition duration-300"
     aria-label="Informações sobre o título e descrição"
     >
-    <i class="fa-solid fa-exclamation text-black"></i>
+    <i class="fa-solid fa-exclamation text-[var(--ion-color-primary)]"></i>
     </div>
 
     <!-- Tooltip (p-overlayPanel) -->
