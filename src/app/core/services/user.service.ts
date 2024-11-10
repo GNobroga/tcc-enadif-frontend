@@ -11,6 +11,7 @@ export interface UserStats {
     countFriends: number;
     correctAnswersByCategory: Record<string, number>;
     trialPeriod: boolean;
+    dailyHintCount: number;
 }
 
 export interface UserDaysSequence {
@@ -44,5 +45,9 @@ export default class UserService extends BaseService {
 
     deleteUser() {
         return this.httpClient.delete(this.getApiEndpoint());
+    }
+
+    decreaseDailyHint() {
+        return this.httpClient.get(this.getApiEndpoint('decrease-daily-hint'));
     }
 }

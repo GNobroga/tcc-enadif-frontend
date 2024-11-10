@@ -76,9 +76,10 @@
   </section>
 
   <ion-fab vertical="top" horizontal="end" slot="fixed" class="me-2" *ngIf="isBellSwinging()" (click)="onClickBell()">
-    <ion-fab-button color="warning">
-      <i class="fa-solid fa-bell text-xl text-white"></i>
+    <ion-fab-button color="warning" class="shadow-lg rounded-full transition-all hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-yellow-400">
+      <i class="fa-solid fa-bell text-xl text-white transform transition-all duration-300 hover:rotate-12"></i>
     </ion-fab-button>
   </ion-fab>
+  
 
 </ion-content>

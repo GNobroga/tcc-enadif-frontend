@@ -8,6 +8,7 @@ import { setQuizResultData } from 'src/app/store/actions/quiz-result.actions';
 import { Question, QuizQuestionComponent } from '../../components/quiz-question/quiz-question.component';
 import { QuizResultState } from '../quiz-result/quiz-result.component';
 import QuizService from 'src/app/core/services/quiz.service';
+import UserService, { UserStats } from 'src/app/core/services/user.service';
 
 export type ReviewState = {
   review: boolean;
@@ -72,11 +73,15 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       readonly store: Store<AppState>,
       readonly quizService: QuizService,
       readonly navController: NavController,
+      readonly userService: UserService,
     ) {
     }
 
     async ionViewDidEnter() {
       this.timerSubscription.unsubscribe();
+      this.userService.getStats().subscribe(stats => {
+        this.remainingChances.set(stats.dailyHintCount);
+      });
       const quizId = this.route.snapshot.params['id'];
       if (!quizId) {
         this.router.navigate(['/quiz']);
@@ -179,11 +184,11 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
    }
 
    onClickBell() {
-      // Pego a alternativa correta
+      if (this.remainingChances() <= 0) return;
       const correctId = this.currentQuestion()?.correctId!;
-      // Atualizo a quantidade de corações disponíveis.
       this.remainingChances.update(oldRemainingChances => oldRemainingChances - 1);
       this.quizQuestionComponent.markAnswer(correctId);
+      this.userService.decreaseDailyHint().subscribe();
    }
 
    goToNext() {
@@ -239,7 +244,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
     this.isBellSwinging.set(false);
     setTimeout(() => {
       this.isBellSwinging.set(true);
-    }, 30000);
+    }, 10000);
   }
 
    seeNextQuestion() {
