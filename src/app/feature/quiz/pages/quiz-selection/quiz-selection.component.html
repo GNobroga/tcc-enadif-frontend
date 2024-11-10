@@ -1,7 +1,10 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-back-button slot="start" defaultHref="/tabs/study"></ion-back-button>
-    <ion-title>Simulados do Enade</ion-title>
+    <ion-title class="text-xl font-medium text-gray-900">Simulados do Enade</ion-title>
+    <ion-button class="reset-button me-4" slot="end">
+      <i slot="icon-only" class="fa-solid fa-graduation-cap text-3xl text-[var(--ion-color-secondary)]"></i>
+    </ion-button>
   </ion-toolbar>
   <ion-toolbar>
     <div class="flex border border-black border-opacity-5 mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md {{ cssClass }} text-white">

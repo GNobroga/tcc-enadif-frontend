@@ -47,3 +47,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.reset-button {
+    --box-shadow: none;
+    --ripple-color: transparent;
+    --background-hover: transparent;
+    --background: transparent;
+}
