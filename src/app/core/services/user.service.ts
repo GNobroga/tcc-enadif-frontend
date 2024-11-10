@@ -15,9 +15,9 @@ export interface UserStats {
 }
 
 export interface UserDaysSequence {
-    id: string;
+    _id: string;
     days: boolean[];
-    startDate: Date;
+    numberOfOffensives: number;
 }
 
 
