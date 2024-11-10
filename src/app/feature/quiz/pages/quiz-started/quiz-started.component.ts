@@ -9,6 +9,7 @@ import { Question, QuizQuestionComponent } from '../../components/quiz-question/
 import { QuizResultState } from '../quiz-result/quiz-result.component';
 import QuizService from 'src/app/core/services/quiz.service';
 import UserService, { UserStats } from 'src/app/core/services/user.service';
+import GeminiAPIService from 'src/app/core/services/gemeniAPI.service';
 
 export type ReviewState = {
   review: boolean;
@@ -67,6 +68,12 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     isLoading = signal(false);
 
+    questionExplanation = signal<string | null>(null);
+
+    disableAlternatives = signal(false);
+
+    disableClickBell = signal(false);
+
     constructor(
       readonly router: Router,
       readonly route: ActivatedRoute,
@@ -74,6 +81,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       readonly quizService: QuizService,
       readonly navController: NavController,
       readonly userService: UserService,
+      readonly geminiAPIService: GeminiAPIService,
     ) {
     }
 
@@ -129,11 +137,15 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         this.currentPercentage.set(1);
         this.isReview.set(true);
         this.isBellSwinging.set(false);
+        this.disableAlternatives.set(false);
+        this.disableClickBell.set(false);
       } else {
         this.timer.set([0, 0, 0]);
         this.listCorrectQuestionsId.set([]);
         this.currentPercentage.set(0);
         this.disableButton.set(true);
+        this.disableAlternatives.set(false);
+        this.disableClickBell.set(false);
         this.timerSubscription = new Subscription();
         this.isReview.set(false);
         this.startTimer();
@@ -183,12 +195,21 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
     return this.timer()[0] > QuizStartedComponent.HOUR_LIMIT;
    }
 
-   onClickBell() {
-      if (this.remainingChances() <= 0) return;
+   async onClickBell() {
+      if (this.remainingChances() <= 0 || this.disableClickBell()) return;
       const correctId = this.currentQuestion()?.correctId!;
       this.remainingChances.update(oldRemainingChances => oldRemainingChances - 1);
       this.quizQuestionComponent.markAnswer(correctId);
+      const question = this.currentQuestion()!;
+      const message = `
+          Pergunta: ${question?.title || 'Desconhecida'}
+          Detalhes da Pergunta: ${JSON.stringify(question, null, 2)}  
+          Me explique do porque a 'correctId' é a correta? Resuma.
+      `;
+      this.questionExplanation.set(await this.geminiAPIService.sendMessage(message));
       this.userService.decreaseDailyHint().subscribe();
+      this.disableAlternatives.set(true);
+      this.disableClickBell.set(true);
    }
 
    goToNext() {
@@ -210,6 +231,8 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
             this.disableButton.set(true);
             this.quizQuestionComponent.scrollEnd.set(false);
             this.quizQuestionComponent.scrollEndSize.set(-1);
+            this.disableAlternatives.set(false);
+            this.disableClickBell.set(false);
             this.showBellSwinging();
             this.ionContent.scrollToTop(200);
         } else {

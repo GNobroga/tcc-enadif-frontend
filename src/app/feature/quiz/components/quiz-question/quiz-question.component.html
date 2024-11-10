@@ -40,7 +40,7 @@
 
   <!-- Alternativas -->
   <div class="question__footer [&>div]:bg-white  [&>div]:cursor-pointer">
-    <div *ngFor="let alternative of data.alternatives; let index = index" (click)="markAnswer(alternative.id)" [ngClass]="getAlternativeStatusClass(alternative.id)">
+    <div *ngFor="let alternative of data.alternatives; let index = index" (click)="this.parent.disableAlternatives() ? null : markAnswer(alternative.id)" [ngClass]="getAlternativeStatusClass(alternative.id)">
       <div class="p-4 flex items-center gap-4 cursor-pointer  rounded-lg">
         <div class="bg-black min-w-8 min-h-8 rounded-full text-white flex items-center justify-center">
           <strong class="text-xl">{{ getOrder(index) }}</strong>

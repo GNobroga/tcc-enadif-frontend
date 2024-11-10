@@ -75,11 +75,68 @@
     }
   </section>
 
-  <ion-fab vertical="top" horizontal="end" slot="fixed" class="me-2" *ngIf="isBellSwinging()" (click)="onClickBell()">
+  <ion-fab (click)="modal.present()" vertical="top" horizontal="end" slot="fixed" class="me-2" *ngIf="isBellSwinging()" (click)="onClickBell()">
     <ion-fab-button color="warning" class="shadow-lg rounded-full transition-all hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-yellow-400">
       <i class="fa-solid fa-bell text-xl text-white transform transition-all duration-300 hover:rotate-12"></i>
     </ion-fab-button>
   </ion-fab>
+  
+  <ion-modal #modal [animated]="true">
+    <ng-template>
+      <ion-content>
+        <div class="modal-content p-6 bg-white rounded-lg shadow-xl max-w-3xl mx-auto space-y-6">
+          <!-- Título do Modal -->
+          <div class="modal-header flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold text-blue-600">Explicação da Questão</h2>
+            <!-- Botão de Fechar -->
+            <ion-button 
+              color="primary" 
+              fill="clear" 
+              (click)="modal.dismiss()" 
+              class="text-gray-600 hover:text-gray-800 focus:outline-none"
+              aria-label="Fechar explicação">
+              <i class="fa-solid fa-times text-lg"></i>
+            </ion-button>
+          </div>
+  
+          <!-- Conteúdo da explicação -->
+          <div class="modal-body text-base text-gray-800 space-y-4">
+            <p *ngIf="this.questionExplanation()" class="leading-relaxed bg-gray-50 p-4 rounded-lg shadow-inner text-gray-700">
+              {{ this.questionExplanation() }}
+            </p>
+
+            <div *ngIf="!this.questionExplanation()" class="h-full flex flex-col items-center justify-center">
+              <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+              <span>Buscando resposta...</span>
+            </div>
+
+
+  
+            <!-- Exemplo de destaque importante -->
+            <div class="highlight bg-yellow-100 p-4 rounded-lg border-l-4 border-yellow-500">
+              <strong class="text-lg text-yellow-800">Ponto importante:</strong>
+              <p class="text-sm text-gray-700">
+                Aqui está um detalhe crucial para entender a resposta. Vale lembrar que esta explicação foi gerada por IA, então pode não ser a resposta 100% correta, mas serve como um guia útil para sua compreensão.
+              </p>              
+            </div>
+          </div>
+  
+          <!-- Rodapé com ação adicional -->
+          <div class="modal-footer mt-6 text-center">
+            <ion-button 
+              expand="block" 
+              color="primary" 
+              (click)="modal.dismiss()" 
+              class="transition-colors duration-300 hover:bg-blue-600">
+              <span class="text-white">Fechar Explicação</span>
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  
+  
   
 
 </ion-content>

@@ -4,8 +4,8 @@
     <ion-title>Simulados do Enade</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <div class="flex  border border-black border-opacity-5 mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md {{ cssClass }} text-white">
-      <ion-text class="font-bold  text-xl">{{ title }}</ion-text>
+    <div class="flex border border-black border-opacity-5 mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md {{ cssClass }} text-white">
+      <ion-text class="font-bold text-xl">{{ title }}</ion-text>
       <ion-text class="text-sm">{{ quizzes().length }} provas</ion-text>
     </div>
   </ion-toolbar>
@@ -23,7 +23,11 @@
     <section class="p-6" *ngIf="quizzes().length">
       <ul class="flex flex-col gap-6">
         @for (quiz of quizzes(); track quiz._id) {
-          <li [routerLink]="['/quiz/started', quiz._id]" [queryParams]="{ category }" class="flex flex-col sm:flex-row w-full border border-solid border-gray-300 shadow-lg rounded-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300">
+          <li 
+            [routerLink]="['/quiz/started', quiz._id]" 
+            [queryParams]="{ category }" 
+            class="flex flex-col sm:flex-row w-full border border-solid border-gray-300 shadow-lg rounded-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300"
+            [ngClass]="{'border-green-500': (getCountQuestionsDone(quiz.questions) / quiz.questions.length) === 1}">
             
             <!-- Quiz Image Header -->
             <div style="background-image: url('../../../../../assets/enade/enade-bg.jpg'); background-size: cover;" class="bg-[#D1DDF7] flex items-center justify-center bg-center py-4 h-32 rounded-tl-xl rounded-tr-xl">
