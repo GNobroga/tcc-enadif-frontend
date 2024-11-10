@@ -10,6 +10,7 @@ import { QuizResultState } from '../quiz-result/quiz-result.component';
 import QuizService from 'src/app/core/services/quiz.service';
 import UserService, { UserStats } from 'src/app/core/services/user.service';
 import GeminiAPIService from 'src/app/core/services/gemeniAPI.service';
+import { IonModal } from '@ionic/angular/common';
 
 export type ReviewState = {
   review: boolean;
@@ -139,6 +140,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         this.isBellSwinging.set(false);
         this.disableAlternatives.set(false);
         this.disableClickBell.set(false);
+        this.questionExplanation.set(null);
       } else {
         this.timer.set([0, 0, 0]);
         this.listCorrectQuestionsId.set([]);
@@ -147,6 +149,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
         this.disableAlternatives.set(false);
         this.disableClickBell.set(false);
         this.timerSubscription = new Subscription();
+        this.questionExplanation.set(null);
         this.isReview.set(false);
         this.startTimer();
         this.showBellSwinging();
@@ -159,7 +162,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
       this.isLoading.set(false);
     }
-
+    
 
     startTimer() {
       const subscription = interval(1000)
@@ -185,7 +188,20 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       subscription.add(subscription);
     }
 
-   get timerFormatted() {
+
+  async showAnswer(modal: IonModal) {
+    const question = this.currentQuestion()!;
+    if (!question) return;
+    const message = `
+        Pergunta: ${question?.title || 'Desconhecida'}
+        Detalhes da Pergunta: ${JSON.stringify(question, null, 2)}  
+        Me explique do porque a 'correctId' é a correta? Resuma.
+    `;
+    this.questionExplanation.set(await this.geminiAPIService.sendMessage(message));
+    modal.present();
+  }
+
+  get timerFormatted() {
         const [hours, minutes, seconds] = this.timer();
         const hoursString = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
         return `${hoursString}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -232,6 +248,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
             this.quizQuestionComponent.scrollEnd.set(false);
             this.quizQuestionComponent.scrollEndSize.set(-1);
             this.disableAlternatives.set(false);
+            this.questionExplanation.set(null);
             this.disableClickBell.set(false);
             this.showBellSwinging();
             this.ionContent.scrollToTop(200);
@@ -275,6 +292,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       if (currentQuestionIndex < this.questions().length) {
         this.currentQuestion.set(this.questions()[currentQuestionIndex]);
         this.currentQuestionIndex.set(currentQuestionIndex);
+        this.questionExplanation.set(null);
       } else {
         this.store.dispatch(setQuizResultData({
           showDialog: false
@@ -296,6 +314,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       if (currentQuestionIndex >= 0) {
         this.currentQuestion.set(this.questions()[currentQuestionIndex]);
         this.currentQuestionIndex.set(currentQuestionIndex);
+        this.questionExplanation.set(null);
       }
    }
 
