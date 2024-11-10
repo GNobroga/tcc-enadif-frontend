@@ -6,13 +6,13 @@
     </div>
     <div *ngIf="achievement" class="min-h-screen" 
          [ngClass]="{
-              'bg-blue-500': achievement?.type === 'social',
-              'bg-yellow-500': achievement?.type === 'learning',
-              'bg-red-500': achievement?.type === 'ranking',
-              'bg-green-500': achievement?.type === 'no-error',
-              'bg-purple-500': achievement?.type === 'no-wrong',
-              'bg-orange-500': achievement?.type === 'trial-period',
-              'bg-teal-500': achievement?.type === 'consecutive-days'
+              'bg-blue-500': achievement.type === 'social',
+              'bg-yellow-500': achievement.type === 'learning',
+              'bg-red-500': achievement.type === 'ranking',
+              'bg-green-500': achievement.type === 'no-error',
+              'bg-purple-500': achievement.type === 'no-wrong',
+              'bg-orange-500': achievement.type === 'trial-period',
+              'bg-teal-500': achievement.type === 'consecutive-days'
           }">
       
       <!-- Toolbar -->
@@ -24,14 +24,14 @@
     
           <!-- Achievement Image -->
           <div class="achievement-img-wrapper w-40 h-40 mb-8 rounded-full bg-white shadow-xl overflow-hidden mx-auto">
-            <ion-img [src]="achievement?.imageUrl" class="w-full h-full object-cover"></ion-img>
+            <ion-img [src]="achievement.imageUrl" class="w-full h-full object-cover"></ion-img>
           </div>
       
           <!-- Achievement Header -->
-          <ion-text class="text-3xl font-semibold text-white mb-6">{{ achievement?.header }}</ion-text>
+          <ion-text class="text-3xl font-semibold text-white mb-6">{{ achievement.header }}</ion-text>
       
           <!-- Achievement Detail -->
-          <ion-text class="text-lg text-white mb-6 px-6">{{ achievement?.detail }}</ion-text>
+          <ion-text class="text-lg text-white mb-6 px-6">{{ achievement.detail }}</ion-text>
       
           <!-- Achievement Type Icon or Label -->
           <div class="type-label w-full mb-6 text-center">
@@ -49,7 +49,7 @@
       
           <!-- Goal and Progress -->
           <div class="goal-info w-full mb-8">
-            <ion-text class="text-white text-lg">Meta: <span class="font-semibold">{{ achievement?.goal }}</span> pontos</ion-text>
+            <ion-text class="text-white text-lg">Meta: <span class="font-semibold">{{ achievement.goal }}</span> pontos</ion-text>
             <ion-progress-bar [value]="progress / 100" color="light" class="my-4 rounded-lg"></ion-progress-bar>
             <ion-text class="text-white font-semibold">{{ progress | number: '1.0-0' }}%</ion-text>
           </div>
@@ -61,7 +61,7 @@
       
           <!-- Date Acquired -->
           <div *ngIf="achievement?.acquired && achievement?.acquiredAt" class="text-gray-300 text-xs mt-2 text-center">
-            Adquirido em: {{ achievement?.acquiredAt | date:'mediumDate' }}
+            Adquirido em: {{ achievement.acquiredAt | date:'mediumDate' }}
           </div>
       </div>
     </div>
