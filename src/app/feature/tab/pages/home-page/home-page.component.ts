@@ -68,9 +68,15 @@ export class HomePageComponent implements OnInit {
         .subscribe(({ hasNew }) => {
           if (!hasNew) return;
           this.dialogService.open(AcquiredAchievementComponent, {
-            styleClass: 'w-[90vw] !m-0 !p-0',
+            contentStyle: {
+                backgroundImage: 'linear-gradient(to bottom right, #ebf8ff, #c3dafe)',
+                borderRadius: '0.5rem',
+                width: '95vw',
+            },
             modal: true,
-          });
+            showHeader: false,
+        });
+        
           this.ngOnInit();
         });
         

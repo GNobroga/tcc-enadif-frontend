@@ -1,24 +1,21 @@
-<div class="p-6 bg-white max-w-xs mx-auto text-center rounded-lg space-y-4">
-    
+<div class="p-8 bg-transparent max-w-md mx-auto text-center space-y-5">
+  
     <!-- Ícone de Conquista (Estrela Preenchida) -->
-    <div class="flex items-center justify-center mb-4">
-        <i class="pi pi-star-fill text-5xl text-yellow-500 drop-shadow-sm"></i>
+    <div class="flex justify-center mb-2">
+        <i class="pi pi-star-fill text-6xl text-yellow-400 drop-shadow-lg"></i>
     </div>
 
     <!-- Título de Parabéns -->
-    <ion-text class="text-xl font-semibold text-[var(--ion-color-primary)]">
-        Conquista Desbloqueada! 🎉
+    <ion-text class="text-2xl font-bold text-blue-800">
+        🎉 Conquista Desbloqueada!
     </ion-text>
 
     <!-- Mensagem de Conquista -->
-    <ion-text class="text-base text-gray-700 px-5 leading-relaxed">
-        Parabéns! Você acaba de desbloquear novas conquistas em sua jornada. Continue assim!
-    </ion-text>
+    <p class="text-base text-gray-700 px-6 leading-relaxed">
+        Parabéns! Você alcançou uma nova etapa em sua jornada. Continue com seu ótimo trabalho e acumule ainda mais conquistas!
+    </p>
 
     <!-- Imagem de Confete -->
-    <div class="flex justify-center">
-        <img src="assets/image/confetti.gif" class="w-14 h-14 opacity-80" alt="Confetti Celebration" />
-    </div>
 
     <!-- Botão de Ver Conquistas -->
     <button
@@ -27,6 +24,17 @@
         type="button"
         label="Ver Conquistas"
         icon="pi pi-trophy"
-        class="p-button-primary p-button-rounded p-button-sm w-full mt-3"
+        class="p-button-rounded p-button-lg  text-base w-full mt-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105"
     ></button>
+
+    <button
+        (click)="closeDialog()"
+        pButton
+        type="button"
+        label="Fechar"
+        icon="pi pi-times"
+        class="p-button-rounded p-button-lg  text-base w-full mt-4 bg-gradient-to-r from-red-400 to-red-600 text-white font-semibold shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105"
+    ></button>
+
+
 </div>

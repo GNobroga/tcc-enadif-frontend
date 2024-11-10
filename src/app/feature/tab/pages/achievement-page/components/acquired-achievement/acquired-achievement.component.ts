@@ -17,4 +17,8 @@ export default class AcquiredAchievementComponent {
         this.dialogRef.close();
         this.router.navigate(['/tabs/achievement']);
     }
+
+    closeDialog() {
+        this.dialogRef.close();
+    }
 }
