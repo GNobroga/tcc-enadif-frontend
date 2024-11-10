@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-back-button slot="start" defaultHref="/tabs/study"></ion-back-button>
-    <ion-title class="text-xl font-medium text-gray-900">Simulados do Enade</ion-title>
+    <ion-title class="text-xl font-semibold text-gray-900">Simulados do Enade</ion-title>
     <ion-button class="reset-button me-4" slot="end">
       <i slot="icon-only" class="fa-solid fa-graduation-cap text-3xl text-[var(--ion-color-secondary)]"></i>
     </ion-button>
@@ -24,6 +24,16 @@
 
     <!-- Section for displaying quizzes -->
     <section class="p-6" *ngIf="quizzes().length">
+      <div class="mb-6">
+        <span class="font-semibold text-xl text-gray-800 mb-2 block">Filtrar por Ano:</span>
+        
+        <p-selectButton 
+          [formControl]="selectedYear"
+          [options]="stateOptions()"
+          optionLabel="label"
+          optionValue="value" />
+      </div>
+
       <ul class="flex flex-col gap-6">
         @for (quiz of quizzes(); track quiz._id) {
           <li 
@@ -71,7 +81,7 @@
                   [queryParams]="{ category }"
                   pButton 
                   class="w-full sm:w-auto px-6 py-3 flex justify-center bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 hover:border-green-800 hover:border-solid border-none hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105">
-                  Fazer
+                  {{ (getCountQuestionsDone(quiz.questions) / quiz.questions.length) === 1 ? 'Refazer' : 'Fazer' }}
                 </button>
 
   

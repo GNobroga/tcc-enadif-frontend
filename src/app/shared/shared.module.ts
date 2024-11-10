@@ -33,11 +33,13 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [],
   imports: [PickerComponent],
   exports: [
+    SelectButtonModule,
     SpeedDialModule,
     PickerComponent,
     InputGroupModule,

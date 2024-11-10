@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, OnInit, signal, SimpleChanges } from '@ang
 import QuizService, { Quiz } from 'src/app/core/services/quiz.service';
 import { Question } from '../../components/quiz-question/quiz-question.component';
 import { ActivatedRoute } from '@angular/router';
+import { Tag } from 'primeng/tag';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-quiz-selection',
@@ -21,8 +23,13 @@ export class QuizSelectionComponent implements OnChanges, OnInit {
 
   quizzes = signal([] as Quiz[]);
 
+  cacheQuizzes = signal([] as Quiz[]);
+
   isLoading = signal(false);
 
+  stateOptions = signal([] as any[]);
+
+  selectedYear = new FormControl('all');
 
   constructor(
     readonly quizService: QuizService,
@@ -30,35 +37,44 @@ export class QuizSelectionComponent implements OnChanges, OnInit {
   ) { }
 
   ngOnInit() {
-      this.route.url.subscribe(() => {
-        this.loadQuizzes();
-      });
+
+    this.selectedYear.valueChanges.subscribe(value => {
+      if (value === 'all') {
+        this.cacheQuizzes.set(this.quizzes());
+        return;
+      }
+      this.cacheQuizzes.set(this.quizzes().filter(({ year }) => year.toString() === value?.toString()));
+    });
+
+    this.route.url.subscribe(() => {
+      this.loadQuizzes();
+    });
   }
 
   ngOnChanges() {
-      this.loadQuizzes();
+    this.loadQuizzes();
   }
 
-  getBackground() {
-    if (this.category === 'logic') return 'bg-gradient-to-l from-[#ffb429] to-[#f15c17]';
-    return '';
+  getRandomColor() {
+    const colors: Array<'primary' | 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast'> = ['primary', 'success', 'secondary', 'info', 'warning', 'danger', 'contrast'];
+    return colors[Math.floor(Math.random() * colors.length)] as Tag['severity'];
   }
 
-  getProgressBarColor(completed: number, total: number): string {
-    const percentage = (completed / total) * 100;
-    if (percentage === 100) return 'bg-green-500';  
-    if (percentage >= 50) return 'bg-yellow-500';   
-    return 'bg-red-500';  
-  }
-
+  
   private loadQuizzes() {
     if (!this.category) return;
-      this.isLoading.set(true);
-      this.quizService.listByCategoryName(this.category)
-        .subscribe(quizzes => {
-          this.quizzes.set(quizzes);
-          this.isLoading.set(false);
-        });
+    this.isLoading.set(true);
+    this.quizService.listByCategoryName(this.category)
+      .subscribe(quizzes => {
+        this.quizzes.set(quizzes);
+        this.cacheQuizzes.set(quizzes);
+        this.isLoading.set(false);
+      });
+
+    this.quizService.listYears().subscribe(result => {
+      this.stateOptions.set(result.data.map(({ year }) => ({ label: year.toString(), value: year })));
+      this.stateOptions.update(oldValues => [{ label: 'Todos', value: 'all' }, ...oldValues]);
+    });
   }
 
   getCountQuestionsDone(questions: Question[]) {

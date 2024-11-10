@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-back-button slot="start" defaultHref="/tabs/study"></ion-back-button>
-    <ion-title class="text-xl font-medium text-gray-900">Simulados do Enade</ion-title>
+    <ion-title class="text-xl font-semibold text-gray-900">Simulados do Enade</ion-title>
     <ion-button class="reset-button me-2" slot="end">
       <i slot="icon-only" class="fa-solid fa-graduation-cap text-3xl text-[var(--ion-color-primary)]"></i>
     </ion-button>
@@ -30,8 +30,13 @@
 
     <section *ngIf="quizzes.length && !isLoading" class="pb-8 px-2">
       <div class="space-y-8">
+
+        <p-dropdown 
+          optionLabel="name" 
+          placeholder="Select a City" />
+
         <div *ngFor="let quiz of quizzes" 
-             class="bg-white shadow-md rounded-xl p-4 sm:p-6 transition-transform transform hover:scale-105 hover:shadow-xl border border-gray-200">
+             class="bg-white shadow-md rounded-xl p-4 sm:p-6 transition-transform transform hover:scale-105 hover:shadow-xl hover:border-[1px] border-[0.5px] border-solid border-[#5eb0ef]">
     
           <!-- Header Section -->
           <div class="flex  justify-between items-center  mb-4">
