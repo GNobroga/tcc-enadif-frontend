@@ -1,13 +1,16 @@
 <ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
     <ion-item lines="none" slot="start" class="w-full">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/tabs/study"></ion-back-button>
       <div class="flex items-center">
         <ion-title class="font-semibold">Enade 2021</ion-title>
         <i class="heart fa-solid relative -left-3 fa-heart text-2xl scale-75 text-red-600" pBadge *ngIf="remainingChances() > 0" [value]="remainingChances()"  severity="warning" badgeStyleClass="bg-red-800"></i>
       </div>
-      <div slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded {{ timeHasPassed ? 'bg-gray-300 text-gray-500' : 'bg-blue-200 text-blue-800' }}">
+      <div *ngIf="!isCompletedReview()" slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded {{ timeHasPassed ? 'bg-gray-300 text-gray-500' : 'bg-blue-200 text-blue-800' }}">
         <ion-text class="text-lg font-medium">{{ timerFormatted }}</ion-text>
+      </div>
+      <div *ngIf="isCompletedReview()" slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded bg-blue-200 text-blue-800">
+        <ion-text class="text-lg font-medium">Revisão</ion-text>
       </div>
     </ion-item>
   </ion-toolbar>
@@ -64,8 +67,12 @@
             <span class="text-white font-medium text-lg">Anterior</span>
           </ion-button>
         }
-        <ion-button class="mt-5 flex-1 !h-12 normal-case {{ currentQuestionIndex()! > 0 ? '' : 'w-full' }}" (click)="seeNextQuestion()">
+        <ion-button *ngIf="!((currentQuestionIndex()! + 1) >= this.questions().length)" class="mt-5 flex-1 !h-12 normal-case {{ currentQuestionIndex()! > 0 ? '' : 'w-full' }}" (click)="seeNextQuestion()">
           <span class="text-white font-medium text-lg">Próximo</span>
+        </ion-button>
+
+        <ion-button *ngIf="(currentQuestionIndex()! + 1) >= this.questions().length" class="mt-5 flex-1 !h-12 normal-case {{ currentQuestionIndex()! > 0 ? '' : 'w-full' }}" (click)="seeNextQuestion()">
+          <span class="text-white font-medium text-lg">Finalizar</span>
         </ion-button>
      </div>
     } @else {

@@ -27,8 +27,6 @@
       <ul class="flex flex-col gap-6">
         @for (quiz of quizzes(); track quiz._id) {
           <li 
-            [routerLink]="['/quiz/started', quiz._id]" 
-            [queryParams]="{ category }" 
             class="flex flex-col sm:flex-row w-full border border-solid border-gray-300 shadow-lg rounded-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300"
             [ngClass]="{'border-green-500': (getCountQuestionsDone(quiz.questions) / quiz.questions.length) === 1}">
             
@@ -65,6 +63,29 @@
                 </p-badge>
               
               </span>
+
+              <div class="flex items-center gap-2 [&>button]:flex-1 mt-2">
+               
+                <button 
+                  [routerLink]="['/quiz/started', quiz._id]"
+                  [queryParams]="{ category }"
+                  pButton 
+                  class="w-full sm:w-auto px-6 py-3 flex justify-center bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 hover:border-green-800 hover:border-solid border-none hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105">
+                  Fazer
+                </button>
+
+  
+                  <button 
+                  *ngIf="(getCountQuestionsDone(quiz.questions) / quiz.questions.length) === 1"
+                    [routerLink]="['/quiz/started', quiz._id]"
+                    [queryParams]="{ completedReview: true, category }"
+                    pButton 
+                    class="w-full sm:w-auto px-6 py-3 flex justify-center bg-yellow-500 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-600 hover:border-yellow-800 hover:border-solid border-none hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105">
+                    Revisar
+                  </button>
+            
+                
+              </div>
               
             </div>
           </li>

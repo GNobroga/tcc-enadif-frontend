@@ -75,6 +75,8 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     disableClickBell = signal(false);
 
+    isCompletedReview = signal(false);
+
     constructor(
       readonly router: Router,
       readonly route: ActivatedRoute,
@@ -100,12 +102,14 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       this.isLoading.set(true);
       this.quizId.set(quizId);
 
+      const isCompletedReview = this.route.snapshot.queryParams['completedReview'];
       const category = this.route.snapshot.queryParams['category'];
-      const isCustomized = this.route.snapshot.queryParams['customized'] as boolean;
+      const isCustomized = this.route.snapshot.queryParams['customized'];
       const excludeCategories = this.route.snapshot.queryParams['excludeCategories'] ?? [];
 
       this.isCustomized.set(isCustomized);
       this.excludeCategories.set(excludeCategories);
+      this.isCompletedReview.set(isCompletedReview);
  
       let fetchQuestions = isCustomized  ? 
         lastValueFrom(this.quizService.findById(quizId, excludeCategories)) :
@@ -131,15 +135,16 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       this.questions.set(questions);
 
       const data = this.store.selectSignal(selectQuizResultData)();
-
-      if (data.review) {
-        this.timer.set(data.timer);
-        this.listCorrectQuestionsId.set(data.correctQuestionsId);
+      if (data.review || isCompletedReview) {
+        if (data.review) {
+          this.timer.set(data.timer);
+          this.listCorrectQuestionsId.set(data.correctQuestionsId);
+        }
         this.currentPercentage.set(1);
         this.isReview.set(true);
         this.isBellSwinging.set(false);
-        this.disableAlternatives.set(false);
-        this.disableClickBell.set(false);
+        this.disableAlternatives.set(true);
+        this.disableClickBell.set(true);
         this.questionExplanation.set(null);
       } else {
         this.timer.set([0, 0, 0]);
@@ -287,13 +292,28 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
     }, 10000);
   }
 
-   seeNextQuestion() {
+  // Obtém a rota pra voltar para a rota de origem quando for opção revisar.
+  determineRedirectRouteByCategory() { 
+    const category = this.category()!;
+    if (!category) return '/taba/study';
+    if (category === 'logic') return '/quiz/programming-logic';
+    if (category === 'security') return '/quiz/information-security';
+    if (category === 'software') return '/quiz/software-development';
+    if (category === 'infrastructure') return '/quiz/infrastructure';
+    return '/quiz/fundamentals-of-computing';
+  }
+
+  seeNextQuestion() {
       const currentQuestionIndex = this.currentQuestionIndex()! + 1;
       if (currentQuestionIndex < this.questions().length) {
         this.currentQuestion.set(this.questions()[currentQuestionIndex]);
         this.currentQuestionIndex.set(currentQuestionIndex);
         this.questionExplanation.set(null);
       } else {
+        if (this.isCompletedReview()) {
+          this.router.navigate([this.determineRedirectRouteByCategory()]);
+          return;
+        }
         this.store.dispatch(setQuizResultData({
           showDialog: false
         } as QuizResultState));
