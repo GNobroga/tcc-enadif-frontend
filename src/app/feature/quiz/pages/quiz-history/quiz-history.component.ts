@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ViewDidEnter } from '@ionic/angular';
 import QuizService, { QuizHistory } from 'src/app/core/services/quiz.service';
 
@@ -7,21 +8,42 @@ import QuizService, { QuizHistory } from 'src/app/core/services/quiz.service';
   templateUrl: './quiz-history.component.html',
   styleUrls: ['./quiz-history.component.scss'],
 })
-export class QuizHistoryComponent implements ViewDidEnter {
+export class QuizHistoryComponent implements ViewDidEnter, OnInit {
 
   constructor(
     readonly quizService: QuizService,
   ) { }
 
   quizzes: QuizHistory[] = [];
+  cacheQuizzes: QuizHistory[] = [];
   isLoading = false;
+
+  optionsYears: { label: string, value: any }[] = [];
+
+  selectedYear = new FormControl({ label: 'all', value: 'Todos' });
+
+  ngOnInit() {
+      this.selectedYear.valueChanges.subscribe(data => {
+        const { label, value } = data as { label: string; value: any; };
+        if (label === 'all') {
+          this.cacheQuizzes = this.quizzes;
+          return;
+        }
+        this.cacheQuizzes = this.quizzes.filter(({ year }) => year === value);
+      })
+  }
 
   ionViewDidEnter() {
       this.isLoading = true;
       this.quizService.listHistory().subscribe(result => {
-        console.log(result)
         this.quizzes = result;
+        this.cacheQuizzes = result;
         this.isLoading = false;
+      });
+
+      this.quizService.listYears().subscribe(result => {
+        this.optionsYears = result.data.map(({ year }) => ({ label: year.toString(), value: year, }));
+        this.optionsYears = [{ label: 'all', value: 'Todos', }, ...this.optionsYears];
       });
   }
 

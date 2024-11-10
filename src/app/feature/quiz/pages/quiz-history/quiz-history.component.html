@@ -32,8 +32,11 @@
       <div class="space-y-8">
 
         <p-dropdown 
-          optionLabel="name" 
-          placeholder="Select a City" />
+          styleClass="w-full"
+          [options]="optionsYears"
+          [formControl]="selectedYear"
+          optionLabel="value" 
+          placeholder="Selecione um Ano" />
 
         <div *ngFor="let quiz of quizzes" 
              class="bg-white shadow-md rounded-xl p-4 sm:p-6 transition-transform transform hover:scale-105 hover:shadow-xl hover:border-[1px] border-[0.5px] border-solid border-[#5eb0ef]">
