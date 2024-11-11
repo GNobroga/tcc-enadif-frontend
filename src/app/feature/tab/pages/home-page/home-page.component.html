@@ -15,9 +15,10 @@
         <ion-icon class="text-[#bba741] text-xl" name="trophy"></ion-icon>
         <span class="font-semibold">{{ achievementAcquiredCount() }}</span>
       </p-chip>
-      <p-chip pTooltip="Sequência atual" (click)="openWeekdaySequenceDialog()" styleClass="flex items-center  gap-1 min-w-14 h-8 ms-2" matRipple>
-        <ion-icon class="text-[#bba741] text-xl" color="primary" name="flame"></ion-icon>
-        <span class="font-semibold">1</span>
+      <p-chip pTooltip="Ofensivas" (click)="openWeekdaySequenceDialog()" styleClass="flex items-center  gap-1 min-w-14 h-8 ms-2" matRipple>
+        <ion-icon *ngIf="numberOfOffensives() === 0" class="text-[#bba741] text-xl" color="primary" name="flame"></ion-icon>
+        <ion-icon *ngIf="numberOfOffensives() > 0" class="text-red-600 text-xl animate-fire" name="flame"></ion-icon>
+        <span class="font-semibold">{{ numberOfOffensives()  }}</span>
       </p-chip>
      <ng-container *ngIf="listFriendNotification().length">
       <div (click)="op.toggle($event)" pBadge [value]="listFriendNotification().length!" badgeStyleClass="bg-white text-orange-600" class="w-8 me-2 rounded-full h-8 flex items-center justify-center p-0 ms-2 bg-orange-600">

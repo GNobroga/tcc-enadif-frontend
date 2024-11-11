@@ -42,6 +42,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   achievementAcquiredCount = signal(0);
 
+  numberOfOffensives = signal(0);
+
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
@@ -63,6 +65,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(async () => {
+
+        this.userService.getDaysSequence().subscribe(data => {
+          this.numberOfOffensives.set(data.numberOfOffensives);
+        });
 
         this.userService.checkDaySequence().subscribe();
 
