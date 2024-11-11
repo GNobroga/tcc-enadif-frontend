@@ -1,5 +1,11 @@
 ion-toolbar {
   --background: transparent;
+  ion-avatar {
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+  
 }
 ion-content {
   --background: linear-gradient(to right, #2693ff, #1ca5e9, #2076FF);
@@ -16,3 +22,5 @@ ion-list {
     }
   }
 }
+
+
