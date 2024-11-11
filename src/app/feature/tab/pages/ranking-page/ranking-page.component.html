@@ -17,7 +17,7 @@
             <ion-avatar matRipple [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(secondUserRanking?.userId!), 'border-4 border-white': !isLoggedUser(secondUserRanking?.userId!)}" class="w-20 h-20 border-4 border-white rounded-full" [routerLink]="isLoggedUser(secondUserRanking?.userId!) ? null : ['/tabs/profile/', secondUserRanking?.userId]">
               <img alt="Avatar" [src]="secondUserRanking?.photoUrl ? secondUserRanking?.photoUrl : 'assets/image/avatar.svg'" />
             </ion-avatar>
-            <ion-text class="text-lg font-semibold text-white">{{ getFirstName(secondUserRanking!.name!) }}</ion-text>
+            <ion-text class="text-lg font-semibold text-white">{{ getFirstName(secondUserRanking?.name!) }}</ion-text>
             <div class="flex items-center gap-1 text-white">
               <!-- <span class="text-lg font-medium">{{ firstUserRanking?.score }}P</span> -->
               <span class="flex items-center text-lg font-semibold">
@@ -35,7 +35,7 @@
             <ion-avatar matRipple [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(firstUserRanking?.userId!), 'border-4 border-white': !isLoggedUser(firstUserRanking?.userId!)}" class="w-24 h-24 border-4 border-yellow-300 rounded-full shadow-md" [routerLink]="isLoggedUser(firstUserRanking?.userId!) ? null : ['/tabs/profile/', firstUserRanking?.userId]">
               <img alt="Avatar" [src]="firstUserRanking?.photoUrl ? firstUserRanking?.photoUrl : 'assets/image/avatar.svg'" />
             </ion-avatar>
-            <ion-text class="text-xl font-semibold text-white">{{ getFirstName(firstUserRanking!.name!) }}</ion-text>
+            <ion-text class="text-xl font-semibold text-white">{{ getFirstName(firstUserRanking?.name!) }}</ion-text>
             <div class="flex items-center gap-1 text-white">
               <!-- <span class="text-lg font-medium">{{ firstUserRanking?.score }}P</span> -->
               <span class="flex items-center text-lg font-semibold">

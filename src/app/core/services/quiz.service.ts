@@ -43,7 +43,7 @@ export default class QuizService extends BaseService {
     }
 
     getByQuizIdAndCategory(id: string, category: string) {
-        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}/category/${category}`));
+        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}/category/${category}?limit=2`));
     }
 
     listYears() {
@@ -57,5 +57,9 @@ export default class QuizService extends BaseService {
 
     listHistory() {
         return this.httpClient.get<QuizHistory[]>(this.getApiEndpoint('user/history'));
+    }
+
+    hasQuestions(quizId: string) {
+        return this.httpClient.get<string[]>(this.getApiEndpoint(`has-questions/${quizId}`));
     }
 }
