@@ -14,7 +14,7 @@
       <ng-container *ngIf="hasTopRankings">
            <!-- Second Place -->
           <div class="flex flex-col items-center gap-3" [class.invisible]="!secondUserRanking">
-            <ion-avatar matRipple class="w-20 h-20 border-4 border-white rounded-full" [routerLink]="isLoggedUser(secondUserRanking?.userId!) ? null : ['/tabs/profile/', secondUserRanking?.userId]">
+            <ion-avatar matRipple [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(secondUserRanking?.userId!), 'border-4 border-white': !isLoggedUser(secondUserRanking?.userId!)}" class="w-20 h-20 border-4 border-white rounded-full" [routerLink]="isLoggedUser(secondUserRanking?.userId!) ? null : ['/tabs/profile/', secondUserRanking?.userId]">
               <img alt="Avatar" [src]="secondUserRanking?.photoUrl ? secondUserRanking?.photoUrl : 'assets/image/avatar.svg'" />
             </ion-avatar>
             <ion-text class="text-lg font-semibold text-white">{{ getFirstName(secondUserRanking!.name!) }}</ion-text>
@@ -31,8 +31,8 @@
           </div>
 
           <!-- First Place (Central) -->
-          <div class="flex flex-col items-center gap-3" [class.invisible]="!firstUserRanking">
-            <ion-avatar matRipple class="w-24 h-24 border-4 border-yellow-300 rounded-full shadow-md" [routerLink]="isLoggedUser(firstUserRanking?.userId!) ? null : ['/tabs/profile/', firstUserRanking?.userId]">
+          <div class="flex flex-col items-center gap-3" [class.invisible]="!firstUserRanking"  >
+            <ion-avatar matRipple [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(firstUserRanking?.userId!), 'border-4 border-white': !isLoggedUser(firstUserRanking?.userId!)}" class="w-24 h-24 border-4 border-yellow-300 rounded-full shadow-md" [routerLink]="isLoggedUser(firstUserRanking?.userId!) ? null : ['/tabs/profile/', firstUserRanking?.userId]">
               <img alt="Avatar" [src]="firstUserRanking?.photoUrl ? firstUserRanking?.photoUrl : 'assets/image/avatar.svg'" />
             </ion-avatar>
             <ion-text class="text-xl font-semibold text-white">{{ getFirstName(firstUserRanking!.name!) }}</ion-text>
@@ -49,8 +49,8 @@
           </div>
 
           <!-- Third Place -->
-          <div class="flex flex-col items-center gap-3" [class.invisible]="!thirdUserRanking">
-            <ion-avatar matRipple class="w-20 h-20 border-4 border-white rounded-full" [routerLink]="isLoggedUser(thirdUserRanking?.userId!) ? null : ['/tabs/profile/', thirdUserRanking?.userId]">
+          <div class="flex flex-col items-center gap-3" [class.invisible]="!thirdUserRanking"  >
+            <ion-avatar matRipple [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(thirdUserRanking?.userId!), 'border-4 border-white': !isLoggedUser(thirdUserRanking?.userId!)}" class="w-20 h-20 border-4 border-white rounded-full" [routerLink]="isLoggedUser(thirdUserRanking?.userId!) ? null : ['/tabs/profile/', thirdUserRanking?.userId]">
               <img alt="Avatar" [src]="thirdUserRanking?.photoUrl ? thirdUserRanking?.photoUrl : 'assets/image/avatar.svg'" />
             </ion-avatar>
             <ion-text class="text-lg font-semibold text-white">{{ getFirstName(thirdUserRanking?.name!) }}</ion-text>
@@ -80,7 +80,7 @@
           <ion-item [routerLink]="isLoggedUser(userRanking?.userId!) ? null : ['/tabs/profile/', userRanking?.userId]" *ngIf="position > 2" lines="none" class="bg-white rounded-lg mb-4 shadow-md hover:shadow-lg transition duration-300 p-4">
             <div slot="start" class="flex items-center">
               <span class="font-bold text-2xl text-[#e8d773] mr-4">{{ position  }}</span>
-              <ion-avatar matRipple class="w-12 h-12 mr-3">
+              <ion-avatar [ngClass]="{'border-4 border-yellow-500 border-solid': isLoggedUser(userRanking?.userId!), 'border-4 border-white': !isLoggedUser(userRanking?.userId!)}" matRipple class="w-12 h-12 mr-3">
                 <img alt="Avatar" [src]="userRanking?.photoUrl ? userRanking?.photoUrl : 'assets/image/avatar.svg'" />
               </ion-avatar>
               <div class="flex flex-col">
