@@ -1,18 +1,17 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, Query, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import { filter } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { environment } from 'src/environments/environment';
-import UserService from 'src/app/core/services/user.service';
-import UserFriendService from 'src/app/core/services/user-friend.service';
-import { MessageService } from 'primeng/api';
 import AchievementService from 'src/app/core/services/achievement.service';
-import { ViewDidEnter } from '@ionic/angular';
-import { DialogService } from 'primeng/dynamicdialog';
+import UserFriendService from 'src/app/core/services/user-friend.service';
+import UserService from 'src/app/core/services/user.service';
+import { environment } from 'src/environments/environment';
+import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import AcquiredAchievementComponent from '../achievement-page/components/acquired-achievement/acquired-achievement.component';
 
 
@@ -31,7 +30,7 @@ export type UserFriendNotification = {
   },
   providers: [MessageService, DialogService],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
 
   user = signal<User | null>(null);
 
@@ -52,6 +51,7 @@ export class HomePageComponent implements OnInit {
     readonly messageService: MessageService,
     readonly achievementService: AchievementService,
     readonly dialogService: DialogService,
+    readonly userService: UserService,
   ) {
       
   }  
@@ -63,6 +63,8 @@ export class HomePageComponent implements OnInit {
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(async () => {
+
+        this.userService.checkDaySequence().subscribe();
 
         this.achievementService.check()
         .subscribe(({ hasNew }) => {
@@ -151,6 +153,10 @@ export class HomePageComponent implements OnInit {
   
   get currentDay() {
     return new Date().getDate();
+  }
+
+  ngOnDestroy(): void {
+      this.socket()?.close();
   }
 
 }

@@ -50,4 +50,8 @@ export default class UserService extends BaseService {
     decreaseDailyHint() {
         return this.httpClient.get(this.getApiEndpoint('decrease-daily-hint'));
     }
+
+    checkDaySequence() {
+        return this.httpClient.get(this.getApiEndpoint('check/day-sequence'));
+    }
 }

@@ -1,9 +1,8 @@
-ion-content {
-  --background: url('../../../../../assets/image/background.png');
-}
-
 ion-toolbar {
   --background: transparent;
+}
+ion-content {
+  --background: linear-gradient(to right, #2693ff, #1ca5e9, #2076FF);
 }
 
 ion-list {
