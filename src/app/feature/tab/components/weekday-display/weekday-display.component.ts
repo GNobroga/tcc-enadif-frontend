@@ -1,10 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WeekdaySequenceDialogComponent } from '../weekday-sequence-dialog/weekday-sequence-dialog.component';
 import UserService, { UserDaysSequence } from 'src/app/core/services/user.service';
 import { ViewDidEnter } from '@ionic/angular';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-weekday-display',
@@ -13,18 +13,21 @@ import { filter } from 'rxjs';
 })
 export class WeekdayDisplayComponent implements OnInit  {
 
-  daysSequence = signal<UserDaysSequence>({} as UserDaysSequence);
+  daysSequence = signal<UserDaysSequence | null>(null);
 
   constructor(
     readonly dialog: MatDialog,
     readonly userService: UserService,
     readonly router: Router,
+    readonly cdRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)) 
       .subscribe(() => {
-        this.userService.getDaysSequence().subscribe(this.daysSequence.set);
+        this.userService.getDaysSequence().subscribe(data => {
+            this.daysSequence.set(data);
+        });
       })
   }
 
@@ -35,6 +38,24 @@ export class WeekdayDisplayComponent implements OnInit  {
     return sequence[day];
   }
 
+  canMarked(day: number) {
+    const isMarked = this.isMarked(day);
+    const previousDayIsMarked = this.isMarked(day - 1);
+    const nextDayIsMarked = this.isMarked(day + 1);
+    return isMarked && (previousDayIsMarked || nextDayIsMarked);
+  }
+
+  isStartWeek(day: number) {
+    const sequence = this.daysSequence()?.days;
+    if (!sequence) return false; 
+    
+    if (day < 0 || day >= sequence.length) return false;
+    
+  
+      return this.isMarked(day) && 
+            (day === 0 || !sequence[day - 1]); 
+    }
+  
 
   public openDialog() {
     this.dialog.open(WeekdaySequenceDialogComponent);

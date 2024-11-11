@@ -1,42 +1,42 @@
 <div class="bg-white rounded-2xl">
-  <ul class="flex [&_li]:flex [&_li]:flex-1 [&_li]:items-center [&_li]:justify-center">
-    <li>
+  <ul class="flex [&_li]:flex [&_li]:flex-1 [&_li]:items-center [&_li]:justify-around">
+    <li [class]="{ 'day-marked': canMarked(0), 'checked-left': isStartWeek(0), 'checked-right': !isStartWeek(0) }">
       <ion-button size="small" [class]="{ checked: isMarked(0) }" (click)="isMarked(0) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">D</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(1), 'checked-left': isStartWeek(1), 'checked-right': !isStartWeek(1) }">
       <ion-button size="small" [class]="{ checked: isMarked(1) }" (click)="isMarked(1) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(2), 'checked-left': isStartWeek(2), 'checked-right': !isStartWeek(2) }">
       <ion-button size="small" [class]="{ checked: isMarked(2) }" (click)="isMarked(2) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">T</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(3), 'checked-left': isStartWeek(3), 'checked-right': !isStartWeek(3) }">
       <ion-button size="small" [class]="{ checked: isMarked(3) }" (click)="isMarked(3) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">Q</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(4), 'checked-left': isStartWeek(4), 'checked-right': !isStartWeek(4) }">
       <ion-button size="small" [class]="{ checked: isMarked(4) }" (click)="isMarked(4) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">Q</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(5), 'checked-left': isStartWeek(5), 'checked-right': !isStartWeek(5) }">
       <ion-button size="small" [class]="{ checked: isMarked(5) }" (click)="isMarked(5) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
       </ion-button>
     </li>
-    <li>
+    <li [class]="{ 'day-marked': canMarked(6), 'checked-left': isStartWeek(6), 'checked-right': !isStartWeek(6) }">
       <ion-button size="small" [class]="{ checked: isMarked(6) }" (click)="isMarked(6) ? openDialog() : null">
         <span slot="icon-only" class="text-xs">S</span>
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>

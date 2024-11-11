@@ -31,3 +31,14 @@ ion-button {
 }
 
 
+.checked-left {
+  @apply rounded-l-2xl
+}
+
+.checked-right {
+  @apply rounded-r-2xl;
+}
+
+.day-marked {
+  background: #5dc9ffc1;
+}
