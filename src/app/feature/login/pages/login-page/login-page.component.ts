@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import AuthService from 'src/app/core/services/auth.service';
 import UserService from 'src/app/core/services/user.service';
@@ -45,13 +45,9 @@ export class LoginPageComponent {
 
       (await loading).present();
   
-      const { email, password } = this.form.value;
-
-      if (await this.authService.signInDefault(email!, password!)) {
-        this.userService.initializeProgress();
-        this.router.navigate(['tabs']);
-      }
-      
+      const { email, password } = this.form.value as { email: string, password: string };
+      await this.authService.signIn({ email, password })
+   
     } catch(error) {
       if (error instanceof FirebaseError) {
         this.handleFirebaseErrors(error);

@@ -3,7 +3,7 @@ import { FirebaseError } from '@angular/fire/app';
 import { Auth, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signOut, updateProfile, User } from '@angular/fire/auth';
 import { deleteObject, getDownloadURL, listAll, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { Router } from '@angular/router';
-import { ActionSheetController, AlertButton, LoadingController } from '@ionic/angular';
+import { ActionSheetController, AlertButton, LoadingController, NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { first } from 'rxjs';
@@ -11,7 +11,6 @@ import { isNullOrEmpty } from 'src/app/core/utils/is-null';
 import { ChangeNameComponent } from '../../components/change-name/change-name.component';
 import ConfirmPasswordComponent from '../../components/confirm-password/confirm-password.component';
 import UserService from 'src/app/core/services/user.service';
-
 
 @Component({
   selector: 'app-perfil-page',
@@ -47,7 +46,7 @@ export class PerfilPageComponent {
     if (role === 'no') return;
 
     await signOut(this.auth);
-    this.router.navigate(['account/login']);
+    this.navController.navigateRoot('/account/login');
   }
 
 
@@ -120,6 +119,7 @@ export class PerfilPageComponent {
     readonly storage: Storage,
     readonly loadingController: LoadingController,
     readonly actionSheetController: ActionSheetController,
+    readonly navController: NavController,
   ) {}
 
   public showDialog() {

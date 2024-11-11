@@ -11,16 +11,25 @@ ion-content {
   --background: linear-gradient(to right, #2693ff, #1ca5e9, #2076FF);
 }
 
-ion-list {
+
+
+.list-ranking {
+  --background: transperant !important;
+
   & ion-item {
     --background: transparent;
-     background: #eeeeeea6;
+    background: #eeeeeea6;
     border: 1px solid #33333348;
+    --background-hover: transparent;
 
     &:nth-child(2n + 1) {
-      background:  #78c1e037;
+      background: #78c1e037;
+    }
+
+    &.is-current-user {
+      @apply border-2 border-yellow-500 border-solid;
+      --background: transparent !important;
+      background: rgba(255, 255, 0, 0.365);
     }
   }
 }
-
-

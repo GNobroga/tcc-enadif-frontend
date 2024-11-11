@@ -5,7 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { filter } from 'rxjs';
+import { filter, lastValueFrom } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import AchievementService from 'src/app/core/services/achievement.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
@@ -13,6 +13,8 @@ import UserService from 'src/app/core/services/user.service';
 import { environment } from 'src/environments/environment';
 import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import AcquiredAchievementComponent from '../achievement-page/components/acquired-achievement/acquired-achievement.component';
+import QuizService from 'src/app/core/services/quiz.service';
+import { AlertController } from '@ionic/angular';
 
 
 export type UserFriendNotification = {
@@ -54,6 +56,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
     readonly achievementService: AchievementService,
     readonly dialogService: DialogService,
     readonly userService: UserService,
+    readonly quizService: QuizService,
+    readonly alertController: AlertController,
   ) {
       
   }  
@@ -107,8 +111,37 @@ export class HomePageComponent implements OnInit, OnDestroy {
           socket.on('receive-friend-notification', this.listFriendNotification.set);
         });
       });
-  }
 
+    }
+
+    async redirectToRandomQuestion() {
+      const listQuizIds = (await lastValueFrom(this.quizService.listYears())).data.map(({ id }) => id);
+  
+      // Verifica se a lista de IDs está vazia
+      if (listQuizIds.length === 0) {
+          const alert = await this.alertController.create({
+            animated: true,
+            backdropDismiss: true,
+            header: 'Atenção',
+            subHeader: 'Sistema indisponível',
+            message: 'Não há nenhuma questão disponível',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    cssClass: 'alert-button-confirm',
+                }
+            ]
+        });
+        await alert.present();
+      }
+ 
+      const randomQuizId = listQuizIds[Math.floor(Math.random() * listQuizIds.length)];
+  
+      console.log("Random Quiz ID:", randomQuizId);
+      // const categories = await lastValueFrom(this.quizService.hasQuestions(randomQuizId));
+  }
+  
   sendFriendRequest(requestId: string) {
     this.userFriendService.acceptRequest(requestId).subscribe(() => {
       this.overlayPanel?.hide();

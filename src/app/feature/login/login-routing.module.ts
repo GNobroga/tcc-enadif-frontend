@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { CreateAccountPageComponent } from './pages/create-account-page/create-account-page.component';
 import { AccountCreatedComponent } from './pages/account-created/account-created.component';
+import { CreateAccountPageComponent } from './pages/create-account-page/create-account-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 import RecoverAccountPageComponent from './pages/recover-account-page/recover-account.component';
-import { authGuestGuard } from 'src/app/core/guards/auth-guest.guard';
-import { authGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
   {
