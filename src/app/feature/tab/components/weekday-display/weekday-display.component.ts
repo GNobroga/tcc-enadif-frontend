@@ -48,13 +48,20 @@ export class WeekdayDisplayComponent implements OnInit  {
   isStartWeek(day: number) {
     const sequence = this.daysSequence()?.days;
     if (!sequence) return false; 
-    
     if (day < 0 || day >= sequence.length) return false;
-    
-  
-      return this.isMarked(day) && 
-            (day === 0 || !sequence[day - 1]); 
-    }
+    if (!this.isMarked(day)) return false;
+    if (day === 0) return true;
+    return !sequence[day - 1]; 
+  }
+
+  isBorderRemovable(day: number) {
+    const sequence = this.daysSequence()?.days;
+    if (!sequence) return false; 
+    if (day < 0 || day >= sequence.length) return false;
+    if (!this.isMarked(day)) return false;
+    if (day >= 6) return false;
+    return sequence[day + 1];
+  }
   
 
   public openDialog() {

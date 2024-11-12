@@ -37,6 +37,9 @@ ion-button {
 
 .checked-right {
   @apply rounded-r-2xl;
+  &.no-border {
+    @apply rounded-none;
+  }
 }
 
 .day-marked {

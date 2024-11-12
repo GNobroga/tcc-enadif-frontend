@@ -2,7 +2,7 @@
   <div>
     <div class="flex flex-col items-center justify-center">
       <ion-img src="assets/image/book.gif" class="w-24"></ion-img>
-      <ion-text class="font-bold text-lg">Sequência de 1 dia!</ion-text>
+      <ion-text class="font-bold text-lg">Sequência de {{ numberOfOffensives }} dia!</ion-text>
       <ion-text class="text-center text-sm">Continue estudando diariamente para aumentar sua sequência!</ion-text>
     </div>
     <div class="flex flex-col justify-center items-center mt-4">
@@ -10,7 +10,7 @@
       <ul class="flex [&_li]:flex [&_li]:flex-1 [&_li]:items-center [&_li]:justify-center w-full mt-4">
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" disabled>
+            <ion-button size="small" [disabled]="!isDayMarked(0)" [class.checked]="isDayMarked(0)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">D</span>
@@ -18,7 +18,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" disabled>
+            <ion-button size="small" [disabled]="!isDayMarked(1)" [class.checked]="isDayMarked(1)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">S</span>
@@ -26,7 +26,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" disabled>
+            <ion-button size="small" [disabled]="!isDayMarked(2)" [class.checked]="isDayMarked(2)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">T</span>
@@ -34,7 +34,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" disabled>
+            <ion-button size="small" [disabled]="!isDayMarked(3)" [class.checked]="isDayMarked(3)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">Q</span>
@@ -42,7 +42,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" disabled>
+            <ion-button size="small" [disabled]="!isDayMarked(4)" [class.checked]="isDayMarked(4)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">Q</span>
@@ -50,7 +50,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" class="checked">
+            <ion-button size="small" [disabled]="!isDayMarked(5)" [class.checked]="isDayMarked(5)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">S</span>
@@ -58,7 +58,7 @@
         </li>
         <li>
           <div class="flex flex-col items-center">
-            <ion-button size="small" class="checked">
+            <ion-button size="small" [disabled]="!isDayMarked(6)" [class.checked]="isDayMarked(6)">
               <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
             </ion-button>
             <span class="font-extrabold opacity-70">S</span>
