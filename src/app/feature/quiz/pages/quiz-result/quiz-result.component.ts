@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimationController, ViewDidEnter } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { interval, Subscription } from 'rxjs';
+import { interval, lastValueFrom, Subscription } from 'rxjs';
 import { AppState, selectQuizResultData } from 'src/app/store';
 import { resetQuizResultData, setQuizResultData } from 'src/app/store/actions/quiz-result.actions';
 import { Question } from '../../components/quiz-question/quiz-question.component';
@@ -55,7 +55,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     readonly quizService: QuizService,
   ) { }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     this.quizId.set(this.route.snapshot.queryParams['quizId'] as string);
     this.category.set(this.route.snapshot.queryParams['category'] as string);
     this.isCustomized.set(this.route.snapshot.queryParams['customized'] as boolean);
@@ -74,34 +74,38 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       return;
     }
 
-    if (correctQuestionsId.length === questions.length) {
-      this.dialog.open(QuizResultDialogComponent, {
-        data: {
-          type: 'good-job',
-        }
-      });
-    } else if (correctQuestionsId.length >= questions.length / 2) {
-      this.dialog.open(QuizResultDialogComponent, {
-        data: {
-          type: 'good-effort',
-        }
-      });
-    } else {
-      this.dialog.open(QuizResultDialogComponent, {
-        data: {
-          type: 'failure',
-        }
-      });
-    }
-    
-    this.quizService.finishQuiz({
+    const { score } = await lastValueFrom(this.quizService.finishQuiz({
       quizId: this.quizId()!,
       correctQuestionIds: this.correctQuestionsId(),
       timeSpent: this.timer(),
       category: this.category()!,
       excludeCategories: this.excludeCategories(),
       randomize,
-    }).subscribe();
+    }));
+
+    if (correctQuestionsId.length === questions.length) {
+      this.dialog.open(QuizResultDialogComponent, {
+        data: {
+          type: 'good-job',
+          score,
+        }
+      });
+    } else if (correctQuestionsId.length >= questions.length / 2) {
+      this.dialog.open(QuizResultDialogComponent, {
+        data: {
+          type: 'good-effort',
+          score,
+        }
+      });
+    } else {
+      this.dialog.open(QuizResultDialogComponent, {
+        data: {
+          type: 'failure',
+          score
+        }
+      });
+    }
+    
   }
 
   ngAfterViewInit() {

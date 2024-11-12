@@ -28,9 +28,11 @@ export class QuizResultDialogComponent implements OnInit {
 
   selectedItem = signal<typeof this.items[0] | null>(null);
 
+  score = 0;
+
   constructor(
     readonly matDialogRef: MatDialogRef<QuizResultDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) readonly data: { type: 'good-job' | 'good-effort' | 'failure' }
+    @Inject(MAT_DIALOG_DATA) readonly data: { type: 'good-job' | 'good-effort' | 'failure', score: number; }
   ) { }
 
   ngOnInit(): void {
@@ -41,5 +43,6 @@ export class QuizResultDialogComponent implements OnInit {
     };
 
     this.selectedItem.set(choices[this.data.type] ?? this.items[0]);
+    this.score = this.data.score;
   }
 }

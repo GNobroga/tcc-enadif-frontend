@@ -32,7 +32,7 @@ export default class QuizService extends BaseService {
     }
 
     finishQuiz({ quizId, correctQuestionIds, timeSpent, category, excludeCategories, randomize }: { randomize: boolean; excludeCategories: string[]; category: string; quizId: string; correctQuestionIds: string[]; timeSpent: number[]; }) {
-        return this.httpClient.post<{ created: boolean; }>(this.getApiEndpoint(`finish/${quizId}`), {
+        return this.httpClient.post<{ created: boolean; score: number; }>(this.getApiEndpoint(`finish/${quizId}`), {
             correctQuestionIds,
             timeSpent,
             category,

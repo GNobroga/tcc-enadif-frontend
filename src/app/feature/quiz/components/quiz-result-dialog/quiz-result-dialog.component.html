@@ -5,6 +5,12 @@
       <ion-text class="font-bold text-lg">{{ selectedItem()?.title }}</ion-text>
       <ion-text class="text-center text-sm">{{  selectedItem()?.description }}</ion-text>
     </div>
+    <div class="flex flex-col items-center justify-center pt-3">
+      <p-knob [(ngModel)]="score" [readonly]="true" size="100"/>
+      <div *ngIf="score > 0" class="text-center text-gray-700 font-medium mt-2">
+        Você ganhou <span class="text-primary font-bold">{{ score }}</span> pontos!
+      </div>
+    </div>
     <div class="flex flex-col justify-center items-center mt-4">
       <ion-button matDialogClose expand="full" color="primary" class="w-full mt-4 normal-case">
         <span class="text-white">Continuar</span>
