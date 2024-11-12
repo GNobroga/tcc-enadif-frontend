@@ -18,6 +18,7 @@ export interface QuizHistory {
     incorrectAnswers: number;
     startTime: [number, number, number];
     timeSpent: [number, number, number];
+    score: number;
 }
 
 @Injectable({
@@ -29,12 +30,13 @@ export default class QuizService extends BaseService {
         super('quizzes');
     }
 
-    finishQuiz({ quizId, correctQuestionIds, timeSpent, category, excludeCategories }: { excludeCategories: string[], category: string, quizId: string; correctQuestionIds: string[], timeSpent: number[] }) {
+    finishQuiz({ quizId, correctQuestionIds, timeSpent, category, excludeCategories, randomize }: { randomize: boolean; excludeCategories: string[]; category: string; quizId: string; correctQuestionIds: string[]; timeSpent: number[]; }) {
         return this.httpClient.post<{ created: boolean; }>(this.getApiEndpoint(`finish/${quizId}`), {
             correctQuestionIds,
             timeSpent,
             category,
             excludeCategories,
+            randomize
         });
     }
 
@@ -42,8 +44,9 @@ export default class QuizService extends BaseService {
         return this.httpClient.get<Quiz[]>(this.getApiEndpoint(`category/${name}`));
     }
 
-    getByQuizIdAndCategory(id: string, category: string) {
-        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}/category/${category}?limit=2`));
+    getByQuizIdAndCategory(id: string, category: string, limit: number | null = null) {
+        const additionalParameters = limit ? `?limit=${limit}` : '';
+        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}/category/${category}${additionalParameters}`));
     }
 
     listYears() {

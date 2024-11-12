@@ -44,6 +44,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
   isCustomized = signal(false);
 
+  isRandomize = signal(false);
+
   constructor(
     readonly animationController: AnimationController,
     readonly route: ActivatedRoute,
@@ -58,6 +60,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     this.category.set(this.route.snapshot.queryParams['category'] as string);
     this.isCustomized.set(this.route.snapshot.queryParams['customized'] as boolean);
     this.excludeCategories.set(this.route.snapshot.queryParams['excludeCategories'] as string[]);
+    const randomize = this.route.snapshot.queryParams['randomize'] === 'true';
+    this.isRandomize.set(randomize);
 
     const data = this.store.selectSignal(selectQuizResultData)();
     if (!data) return;
@@ -96,6 +100,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       timeSpent: this.timer(),
       category: this.category()!,
       excludeCategories: this.excludeCategories(),
+      randomize,
     }).subscribe();
   }
 
@@ -129,13 +134,15 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       review: true,
       timer: this.timer(),
       correctQuestionsId: this.correctQuestionsId(),
-    } as QuizResultState))
+    } as QuizResultState));
+
     if (!this.isCustomized()) {
       this.router.navigate(['/quiz/started', this.quizId()], {
-        queryParams: { category: this.category() },
+        queryParams: { category: this.category(),  randomize: this.isRandomize(),},
       });
       return;
     }
+
     this.router.navigate(['/quiz/started', this.quizId()], {
       queryParams: { 
         customized: this.isCustomized(), 
@@ -168,7 +175,11 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
   async goToStudyPage() {
     this.store.dispatch(resetQuizResultData());
-    await this.router.navigate(['/tabs/study']);
+    if (this.isRandomize()) {
+      this.router.navigate(['/tabs']);
+      return;
+    }
+    this.router.navigate(['/tabs/study']);
   }
 
   ngOnDestroy(): void {

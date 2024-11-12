@@ -9,21 +9,21 @@
   <ion-toolbar>
     <div class="flex border border-black border-opacity-5 mx-3 rounded-lg py-8 flex-col items-center p-4 pt-8 shadow-md {{ cssClass }} text-white">
       <ion-text class="font-bold text-xl">{{ title }}</ion-text>
-      <ion-text class="text-sm">{{ quizzes().length }} provas</ion-text>
+      <ion-text class="text-sm">{{ cacheQuizzes().length }} provas</ion-text>
     </div>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ng-container *ngIf="!isLoading()">
     <!-- Section for when no quizzes are available -->
-    <div *ngIf="!quizzes().length" class="h-full flex flex-col items-center justify-center space-y-6 p-6 bg-gradient-to-t from-gray-100 to-white border border-gray-300 rounded-lg shadow-lg">
+    <div *ngIf="!cacheQuizzes().length" class="h-full flex flex-col items-center justify-center space-y-6 p-6 bg-gradient-to-t from-gray-100 to-white border border-gray-300 rounded-lg shadow-lg">
       <ion-icon name="sad-outline" class="text-7xl text-gray-400"></ion-icon>
       <p class="text-xl text-center text-gray-600 font-semibold">Não há simulados disponíveis para essa categoria.</p>
       <p class="text-center text-sm text-gray-500">Tente novamente mais tarde ou explore outras categorias.</p>
     </div>
 
     <!-- Section for displaying quizzes -->
-    <section class="p-6" *ngIf="quizzes().length">
+    <section class="p-6" *ngIf="cacheQuizzes().length">
       <div class="mb-6">
         <span class="font-semibold text-xl text-gray-800 mb-2 block">Filtrar por Ano:</span>
         
@@ -35,7 +35,7 @@
       </div>
 
       <ul class="flex flex-col gap-6">
-        @for (quiz of quizzes(); track quiz._id) {
+        @for (quiz of cacheQuizzes(); track quiz._id) {
           <li 
             class="flex flex-col sm:flex-row w-full border border-solid border-gray-300 shadow-lg rounded-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300"
             [ngClass]="{'border-green-500': (getCountQuestionsDone(quiz.questions) / quiz.questions.length) === 1}">

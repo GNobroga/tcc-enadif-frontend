@@ -55,7 +55,7 @@
       <span class="normal-case text-white text-lg">Revisar</span>
     </ion-button>
   </div>
-  <ion-button expand="block" class="mt-5 !h-12" (click)="restart()">
+  <ion-button *ngIf="!isRandomize()" expand="block" class="mt-5 !h-12" (click)="restart()">
     <span class="normal-case text-white text-lg">Reiniciar Simulado</span>
   </ion-button>
   <ion-fab horizontal="end" vertical="center" color="tertiary" (click)="goToStudyPage()">

@@ -31,26 +31,49 @@
     <section *ngIf="quizzes.length && !isLoading" class="pb-8 px-2">
       <div class="space-y-8">
 
-        <p-dropdown 
+       <div class="space-y-3">
+          <p-dropdown 
           styleClass="w-full"
           [options]="optionsYears"
           [formControl]="selectedYear"
           optionLabel="value" 
           placeholder="Selecione um Ano" />
 
-        <div *ngFor="let quiz of quizzes" 
+        <ion-segment (ionChange)="orderBy($event)" value="default" mode="ios">
+          <ion-segment-button value="default">
+            <ion-label>Normal</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="greater">
+            <ion-label>Maior</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="smaller">
+            <ion-label>Menor</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+       </div>
+
+        <div *ngFor="let quiz of cacheQuizzes" 
              class="bg-white shadow-md rounded-xl p-4 sm:p-6 transition-transform transform hover:scale-105 hover:shadow-xl hover:border-[1px] border-[0.5px] border-solid border-[#5eb0ef]">
     
           <!-- Header Section -->
-          <div class="flex  justify-between items-center  mb-4">
+          <div class="flex justify-between items-center mb-4">
             <div class="flex items-center space-x-2">
               <ion-icon name="calendar" class="text-gray-500 text-lg"></ion-icon>
-              <ion-text class="font-semibold text-xl text-gray-800">Ano: {{ quiz.year }}</ion-text>
+              <ion-text class="font-semibold text-lg text-gray-800">Ano: {{ quiz.year }}</ion-text>
             </div>
-            <span class="px-2 py-1 mt-2 sm:mt-0 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
-              Quiz
-            </span>
+          
+            <div 
+              [ngClass]="{
+                'bg-green-100 text-green-700': quiz.score > 0, 
+                'bg-blue-100 text-blue-700': quiz.score <= 0
+              }"
+              class="text-sm font-medium p-1 px-2 rounded-lg">
+              <ion-icon *ngIf="quiz.score > 0" name="thumbs-up" class="text-green-700 text-sm"></ion-icon>
+              <ion-icon *ngIf="quiz.score <= 0" name="thumbs-down" class="text-blue-700 text-sm  relative top-0.5"></ion-icon>
+              {{ quiz.score }} <span>Score</span>
+            </div>
           </div>
+          
     
           <!-- Statistics Section -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-4">

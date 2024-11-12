@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ViewDidEnter } from '@ionic/angular';
+import { IonSegment, ViewDidEnter } from '@ionic/angular';
 import QuizService, { QuizHistory } from 'src/app/core/services/quiz.service';
 
 @Component({
@@ -12,7 +12,11 @@ export class QuizHistoryComponent implements ViewDidEnter, OnInit {
 
   constructor(
     readonly quizService: QuizService,
+    readonly cdr: ChangeDetectorRef,
   ) { }
+
+  @ViewChild(IonSegment)
+  ionSegment!: IonSegment;
 
   quizzes: QuizHistory[] = [];
   cacheQuizzes: QuizHistory[] = [];
@@ -30,7 +34,8 @@ export class QuizHistoryComponent implements ViewDidEnter, OnInit {
           return;
         }
         this.cacheQuizzes = this.quizzes.filter(({ year }) => year === value);
-      })
+        this.ionSegment.value = 'default';
+      });
   }
 
   ionViewDidEnter() {
@@ -45,6 +50,18 @@ export class QuizHistoryComponent implements ViewDidEnter, OnInit {
         this.optionsYears = result.data.map(({ year }) => ({ label: year.toString(), value: year, }));
         this.optionsYears = [{ label: 'all', value: 'Todos', }, ...this.optionsYears];
       });
+  }
+
+  orderBy(event: any) {
+    const { detail: { value } } = event; 
+    let quizzes = [...this.quizzes];
+    if (value === 'smaller') {
+      quizzes = quizzes.sort((a, b) => b.score - a.score);
+    } else if (value === 'greater') {
+      quizzes = quizzes.sort((a, b) => a.score - b.score);
+    }
+    this.cacheQuizzes = quizzes;
+    this.cdr.detectChanges();
   }
 
   formatTime(timeArray: [number, number, number]): string {

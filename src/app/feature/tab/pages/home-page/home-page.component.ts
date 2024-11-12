@@ -5,7 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { filter, lastValueFrom } from 'rxjs';
+import { filter, lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import AchievementService from 'src/app/core/services/achievement.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
@@ -46,6 +46,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   numberOfOffensives = signal(0);
 
+  killAllObservers = new Subject();
+
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
@@ -67,7 +69,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       this.achievementAcquiredCount.set(count);
     });
     this.user.set(this.auth.currentUser);
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.killAllObservers))
       .subscribe(async () => {
 
         this.userService.getDaysSequence().subscribe(data => {
@@ -116,30 +118,47 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     async redirectToRandomQuestion() {
       const listQuizIds = (await lastValueFrom(this.quizService.listYears())).data.map(({ id }) => id);
-  
-      // Verifica se a lista de IDs está vazia
-      if (listQuizIds.length === 0) {
-          const alert = await this.alertController.create({
-            animated: true,
-            backdropDismiss: true,
-            header: 'Atenção',
-            subHeader: 'Sistema indisponível',
-            message: 'Não há nenhuma questão disponível',
-            buttons: [
-                {
-                    text: 'OK',
-                    role: 'cancel',
-                    cssClass: 'alert-button-confirm',
-                }
-            ]
+
+      const presentAlert = async (message: string) => {
+        const alert = await this.alertController.create({
+          animated: true,
+          backdropDismiss: true,
+          header: 'Atenção',
+          subHeader: 'Sistema indisponível',
+          message,
+          buttons: [
+            {
+              text: 'OK',
+              role: 'cancel',
+              cssClass: 'alert-button-confirm',
+            },
+          ],
         });
         await alert.present();
+      }
+  
+      if (listQuizIds.length === 0) {
+        await presentAlert('Não há nenhuma questão disponível');
+        return; 
       }
  
       const randomQuizId = listQuizIds[Math.floor(Math.random() * listQuizIds.length)];
   
-      console.log("Random Quiz ID:", randomQuizId);
-      // const categories = await lastValueFrom(this.quizService.hasQuestions(randomQuizId));
+      const listCategories = await lastValueFrom(this.quizService.hasQuestions(randomQuizId));
+      
+      if (!listCategories.length) {
+        await presentAlert('Não há nenhuma questão disponível');
+        return; 
+      }
+
+      const randomCategory = listCategories[Math.floor(Math.random() * listCategories.length)];
+
+      this.router.navigate(['/quiz/started', randomQuizId], {
+        queryParams: {
+          category: randomCategory,
+          randomize: true,
+        }
+      });
   }
   
   sendFriendRequest(requestId: string) {
@@ -196,6 +215,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       this.socket()?.close();
+      this.killAllObservers.unsubscribe();
   }
 
 }
