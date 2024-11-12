@@ -21,6 +21,7 @@ export interface QuizHistory {
     score: number;
 }
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -64,5 +65,9 @@ export default class QuizService extends BaseService {
 
     hasQuestions(quizId: string) {
         return this.httpClient.get<string[]>(this.getApiEndpoint(`has-questions/${quizId}`));
+    }
+
+    getCategoryQuizProgress(category: string) {
+        return this.httpClient.get<{ totalQuizzes: number; completedQuizzes: number; }>(this.getApiEndpoint(`category-progress/${category}`));
     }
 }

@@ -117,6 +117,27 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
 
     async redirectToRandomQuestion() {
+      const { canAttempt } = await lastValueFrom(this.userService.canAttemptRandomQuestion());
+      if (!canAttempt) { 
+          const alert = await this.alertController.create({
+              animated: true,
+              backdropDismiss: true,
+              header: 'Atenção',
+              subHeader: 'Ação Bloqueada',
+              message: 'Você não pode realizar uma nova questão aleatória no momento.',
+              buttons: [
+                  {
+                      text: 'OK',
+                      role: 'cancel',
+                      cssClass: 'alert-button-confirm',
+                  },
+              ],
+          });
+          await alert.present();
+      
+          return;
+      }
+    
       const listQuizIds = (await lastValueFrom(this.quizService.listYears())).data.map(({ id }) => id);
 
       const presentAlert = async (message: string) => {
@@ -152,6 +173,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
       }
 
       const randomCategory = listCategories[Math.floor(Math.random() * listCategories.length)];
+
+      await lastValueFrom(this.userService.disableRandomQuestionAccess());
 
       this.router.navigate(['/quiz/started', randomQuizId], {
         queryParams: {
@@ -215,7 +238,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       this.socket()?.close();
-      this.killAllObservers.unsubscribe();
+      this.killAllObservers.next(true);
   }
 
 }

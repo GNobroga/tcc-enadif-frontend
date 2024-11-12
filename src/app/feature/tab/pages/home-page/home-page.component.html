@@ -105,7 +105,7 @@
     </div>
     <div (click)="redirectToRandomQuestion()" class="flex flex-col py-4 px-2 mat-elevation-z2 rounded-md bg-gradient-to-b from-[#ffd966] to-[#ff9c00] mt-3 cursor-pointer" matRipple>
       <span class="flex justify-end">
-        <ion-label class="relative right-1 top-0">
+        <ion-label class="relative right-1 top-0" (touchstart)="randomQuestionOp.toggle($event)" (mouseenter)="randomQuestionOp.toggle($event)">
           <span class="bg-white w-20 rounded-full flex justify-center items-center text-xs uppercase h-5 text-orange-800 font-medium">Aleatório</span>
         </ion-label>
       </span>
@@ -117,6 +117,20 @@
         </div>
       </div>
     </div>
+    <p-overlayPanel #randomQuestionOp styleClass="w-[80vw]">
+      <ng-template pTemplate="content">
+        <div class="p-4 text-center">
+          <p class="text-lg font-semibold text-gray-800">Questão Aleatória</p>
+          <p class="text-sm text-gray-600">
+            Você pode tentar uma nova questão aleatória a cada 2 minutos.
+          </p>
+          <p class="text-xs text-gray-500 mt-2">
+            Aproveite esse intervalo para revisar outras áreas de estudo!
+          </p>
+        </div>
+      </ng-template>
+    </p-overlayPanel>
+    
     
     <div class="flex [&_div]:flex-1 gap-2 flex-wrap">
       <div routerLink="/tabs/statistic" class=" flex p-4 flex-col mat-elevation-z2 rounded-md bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] mt-3 cursor-pointer" matRipple>

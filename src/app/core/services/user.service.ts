@@ -54,4 +54,13 @@ export default class UserService extends BaseService {
     checkDaySequence() {
         return this.httpClient.get(this.getApiEndpoint('check/day-sequence'));
     }
+
+    canAttemptRandomQuestion() {
+        return this.httpClient.get<{ canAttempt: boolean; }>(this.getApiEndpoint('can-attempt-random-question'));
+    }
+
+
+    disableRandomQuestionAccess() {
+        return this.httpClient.get<{ disabled: boolean }>(this.getApiEndpoint('disable-random-question-access'));
+    }
 }
