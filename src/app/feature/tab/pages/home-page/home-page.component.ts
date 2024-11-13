@@ -88,14 +88,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
                   showHeader: false,
               });
             });
+            this.userService.getDaysSequence().subscribe(data => {
+              this.numberOfOffensives.set(data.numberOfOffensives);
+          });    
         }
 
         if (url.startsWith('/tabs/home')) return; // Parando para economizar recurso.
 
-        this.userService.getDaysSequence().subscribe(data => {
-          this.numberOfOffensives.set(data.numberOfOffensives);
-        });
-
+        
         this.userService.checkDaySequence().subscribe();
 
         this.achievementService.countAcquired().subscribe(({ count }) => {

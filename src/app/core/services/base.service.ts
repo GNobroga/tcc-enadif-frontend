@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Inject } from "@angular/core";
+import { Observable, shareReplay } from "rxjs";
 import { environment } from "src/environments/environment";
 
 export default abstract class BaseService {
@@ -15,4 +16,5 @@ export default abstract class BaseService {
         } 
         return endpoint;
     }
+
 } 
