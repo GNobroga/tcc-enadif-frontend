@@ -3,7 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { catchError, lastValueFrom, throwError } from 'rxjs';
-import AchievementService from 'src/app/core/services/achievement.service';
+import AchievementService, { Achievement } from 'src/app/core/services/achievement.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
 import UserService, { UserStats } from 'src/app/core/services/user.service';
 
@@ -53,6 +53,8 @@ export class UserProfileComponent implements OnInit  {
   profileId = signal<string>('');
   
   userStats!: UserStats;
+  
+  achievements: Achievement[] = [];
 
   countAchievements = 0;
 
@@ -85,7 +87,7 @@ export class UserProfileComponent implements OnInit  {
         this.userStats = await lastValueFrom(this.userService.getStatsByOwnerId(id));
         const { count } = await lastValueFrom(this.achievementService.countAcquired());
         this.countAchievements = count;
-
+        this.achievements = await lastValueFrom(this.achievementService.listAll(id));
         this.isLoading = false;
       });
   }

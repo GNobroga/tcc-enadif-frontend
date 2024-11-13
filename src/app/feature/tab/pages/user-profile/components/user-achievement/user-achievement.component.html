@@ -1,31 +1,29 @@
 <div>
   <p-toggleButton styleClass="mb-3 w-full" [onLabel]="'Exibir Disponíveis'" offLabel="Exibir Todos" /><ion-grid>
-    <ion-row>
-      <ion-col size="6">
 
-        <div class="relative h-48" >
-          <div class="flex flex-col bg-[#5D9CCC] text-white rounded-lg shadow-md p-3 h-full">
-            <!-- <div class="item-hidden">
-              <ion-img src="assets/image/trancar.png" class="w-16 h-16"></ion-img>
-            </div> -->
-            <ion-img src="assets/image/lancamento-do-foguete.png" class="w-20 h-20 mb-2 mx-auto"></ion-img>
-          <ion-text class="font-medium text-sm">Tudo tem um <br/> começo</ion-text>
-          <ion-text class="text-xs opacity-80">Você fez seu primeiro quizz</ion-text>
-          </div>
-       </div>
-      </ion-col>
-      <ion-col size="6">
-       <div class="relative h-48" >
-          <div class="flex flex-col bg-[#b79d5c] text-white rounded-lg shadow-md p-3 h-full">
-            <div class="item-hidden">
-              <ion-img src="assets/image/trancar.png" class="w-16 h-16"></ion-img>
+      <div class="grid grid-cols-2 gap-2">
+          @for (achievement of achievements; track achievement._id; let i = $index) {
+      
+            <div matRipple class="relative" [routerLink]="['/tabs/achievement-view', achievement._id]">
+              <div 
+                [ngClass]="{
+                  'from-yellow-500 to-yellow-700': i % 3 === 0,
+                  'from-blue-500 to-blue-700': i % 3 === 1,
+                  'from-purple-500 to-pink-500': i % 3 === 2
+                }"
+              
+              class="flex flex-col bg-gradient-to-b pb-5  text-white rounded-lg shadow-md p-3 h-full">
+              <img [src]="achievement.imageUrl" class="w-20 h-20  object-cover rounded-full mb-2 mx-auto"/>
+              <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>
+              <ion-text class="text-xs opacity-80">{{ achievement.detail }}</ion-text>
+              <div class="item-hidden absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg" *ngIf="!achievement.acquired">
+                <ion-img src="assets/image/trancar.png" class="w-10 h-10 opacity-80 hover:opacity-100 transition-opacity"></ion-img>
+              </div>
             </div>
-            <ion-img src="assets/image/livro-de-feiticos.png" class="w-20 h-20 mb-2 mx-auto"></ion-img>
-            <ion-text class="font-medium text-sm">Estudioso</ion-text>
-            <ion-text class="text-xs opacity-80">Você fez completou 10 quizz</ion-text>
           </div>
-       </div>
-      </ion-col>
-    </ion-row>
+
+        }
+
+      </div>
   </ion-grid>
 </div>

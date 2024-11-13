@@ -7,7 +7,10 @@
           <ion-text class="text-lg font-semibold text-white">Perfil</ion-text>
         </span>
         <p-menu #menu [model]="cacheMenuItems()" [popup]="true" />
-        <p-button styleClass="text-white bg-transparent outline-none border-none" (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v"/>
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-user text-white text-lg"></i>
+          <p-button styleClass="text-white bg-transparent outline-none border-none" (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v"/>
+        </span>
       </div>
       <div class="flex flex-col items-center gap-3 mt-4 mb-3">
         <p-avatar
@@ -15,7 +18,7 @@
         size="xlarge"
         styleClass="font-bold bg-[#5B6CBE] text-white"
         shape="circle" />
-        <ion-text class="text-xl font-medium text-white">{{ currentUser()?.displayName! | textTruncate: 20 }}</ion-text>
+        <ion-text class="text-xl font-medium text-white" *ngIf="userStats">{{ userStats.displayName! | textTruncate: 20 }}</ion-text>
         <div class="flex gap-4 justify-center items-center ">
           <!-- Achievements Chip -->
           <p-chip 
@@ -51,7 +54,7 @@
         <app-user-stats class="mt-5" [userStats]="userStats"/>
     </p-tabPanel>
     <p-tabPanel header="Conquistas">
-       <app-user-achievement/>
+       <app-user-achievement [achievements]="achievements"/>
     </p-tabPanel>
     <p-tabPanel header="Atividades">
         <p>

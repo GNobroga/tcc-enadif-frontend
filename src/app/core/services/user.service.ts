@@ -12,6 +12,7 @@ export interface UserStats {
     correctAnswersByCategory: Record<string, number>;
     trialPeriod: boolean;
     dailyHintCount: number;
+    displayName?: string;
 }
 
 export interface UserDaysSequence {

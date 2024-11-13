@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Achievement } from 'src/app/core/services/achievement.service';
 
 @Component({
   selector: 'app-user-achievement',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-achievement.component.scss'],
 })
 export class UserAchievementComponent  {
+
+  @Input({ required: true })
+  achievements: Achievement[] = [];
 
   constructor() { }
 
