@@ -1,8 +1,11 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <div slot="start" class="w-full mb-3">
       <div class="flex justify-between">
-        <ion-back-button color="light"></ion-back-button>
+        <span class="flex gap-2 items-center">
+          <ion-back-button color="light" defaultHref="/tabs/community"></ion-back-button>
+          <ion-text class="text-lg font-semibold text-white">Perfil</ion-text>
+        </span>
         <p-menu #menu [model]="cacheMenuItems()" [popup]="true" />
         <p-button styleClass="text-white bg-transparent outline-none border-none" (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v"/>
       </div>
@@ -12,27 +15,40 @@
         size="xlarge"
         styleClass="font-bold bg-[#5B6CBE] text-white"
         shape="circle" />
-        <ion-text class="text-lg font-medium text-white">Gabriel Cardoso</ion-text>
-        <div class="flex gap-2">
-          <p-chip  styleClass="flex items-center bg-[#eee]  gap-1 min-w-14 h-8" matRipple>
-            <ion-icon class="text-[#c0ac4c] text-xl" name="trophy"></ion-icon>
-            <span class="font-semibold text-[#9f8f3f]">1</span>
+        <ion-text class="text-xl font-medium text-white">{{ currentUser()?.displayName! | textTruncate: 20 }}</ion-text>
+        <div class="flex gap-4 justify-center items-center ">
+          <!-- Achievements Chip -->
+          <p-chip 
+            styleClass="flex items-center bg-gradient-to-r from-[#FFDA5C] to-[#FFB700] gap-2 min-w-[100px] h-10 rounded-lg shadow-md hover:scale-105 transition-all duration-300" 
+            matRipple
+          >
+            <ion-icon class="text-[#fff] text-2xl" name="trophy"></ion-icon>
+            <span class="font-semibold text-[#fff]">{{ countAchievements }}</span>
           </p-chip>
-          <p-chip styleClass="flex items-center  bg-[#eee] gap-1 min-w-14 h-8" matRipple>
-            <i class="fa-solid fa-medal text-[#c0ac4c]"></i>
-            <span class="font-semibold text-[#9f8f3f]">100k</span>
+        
+          <!-- Score Chip -->
+          <p-chip 
+            styleClass="flex items-center bg-gradient-to-r from-[#57E1A5] to-[#28A745] gap-2 min-w-[100px] h-10 rounded-lg shadow-md hover:scale-105 transition-all duration-300" 
+            matRipple
+          >
+            <i class="fa-solid fa-medal text-[#fff] text-2xl"></i>
+            <span class="font-semibold text-[#fff]" *ngIf="userStats">{{ userStats.score }}</span>
           </p-chip>
         </div>
+        
       </div>
     </div>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
 
+  <div *ngIf="isLoading" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+  </div>
 
-  <p-tabView>
+  <p-tabView *ngIf="!isLoading">
     <p-tabPanel header="Status">
-        <app-user-stats class="mt-5"/>
+        <app-user-stats class="mt-5" [userStats]="userStats"/>
     </p-tabPanel>
     <p-tabPanel header="Conquistas">
        <app-user-achievement/>
@@ -42,7 +58,8 @@
             Em construção
         </p>
     </p-tabPanel>
-</p-tabView>
+  </p-tabView>
+
 </ion-content>
 
 <p-toast position="top-center" styleClass="w-[80vw]" />

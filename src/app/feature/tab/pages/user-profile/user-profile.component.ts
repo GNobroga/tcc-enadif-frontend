@@ -2,8 +2,10 @@ import { Component, effect, OnInit, signal } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
-import { catchError, throwError } from 'rxjs';
+import { catchError, lastValueFrom, throwError } from 'rxjs';
+import AchievementService from 'src/app/core/services/achievement.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
+import UserService, { UserStats } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -49,6 +51,10 @@ export class UserProfileComponent implements OnInit  {
   cacheMenuItems = signal([] as MenuItem[]);
 
   profileId = signal<string>('');
+  
+  userStats!: UserStats;
+
+  countAchievements = 0;
 
   constructor(
     readonly messageService: MessageService,
@@ -56,14 +62,18 @@ export class UserProfileComponent implements OnInit  {
     readonly auth: Auth,
     readonly router: Router,
     readonly userFriendService: UserFriendService,
+    readonly userService: UserService,
+    readonly achievementService: AchievementService,
   ) {}
 
   currentUser = signal(this.auth.currentUser);
 
   isFriend = signal(false);
 
+  isLoading = false;
 
   async ngOnInit() {
+      this.isLoading = true;
       this.route.params.subscribe(async params => {
         const { id } = params;
         if (id === this.currentUser()?.uid) {
@@ -72,6 +82,11 @@ export class UserProfileComponent implements OnInit  {
         }
         this.profileId.set(id);
         await this.loadCheckIfTheyFriends(id);
+        this.userStats = await lastValueFrom(this.userService.getStatsByOwnerId(id));
+        const { count } = await lastValueFrom(this.achievementService.countAcquired());
+        this.countAchievements = count;
+
+        this.isLoading = false;
       });
   }
 
@@ -83,5 +98,6 @@ export class UserProfileComponent implements OnInit  {
       this.cacheMenuItems.set(this.items.filter(item => item.id === 'remove-friend'));
     }
   }
+
 
 }

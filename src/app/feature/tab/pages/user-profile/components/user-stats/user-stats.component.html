@@ -1,8 +1,9 @@
 <div class="flex flex-wrap gap-3 mt-2">
 
   <span class="flex mat-elevation-z2 flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+    @let accuracyRate = calculateAccuracyRate(userStats);
     <span class="flex flex-col">
-      <ion-text class="text-lg font-bold">0%</ion-text>
+      <ion-text class="text-lg font-bold">{{ accuracyRate }}%</ion-text>
       <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
     </span>
     <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
@@ -11,15 +12,15 @@
 
   <span class="flex  mat-elevation-z2 flex-1 min-w-32 justify-between bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
     <span class="flex flex-col">
-      <ion-text class="text-lg font-bold">0</ion-text>
-      <ion-text class="text-sm opacity-70">Quizzes</ion-text>
+      <ion-text class="text-lg font-bold">{{ userStats.totalAnsweredQuestions }}</ion-text>
+      <ion-text class="text-sm opacity-70">Questões</ion-text>
     </span>
     <i class="fa-solid fa-arrow-trend-up text-2xl"></i>
   </span>
 
   <span  class="flex mat-elevation-z2 flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#47A34C] text-white p-5 items-center rounded-lg">
     <span class="flex flex-col">
-      <ion-text class="text-lg font-bold">0</ion-text>
+      <ion-text class="text-lg font-bold">{{ userStats.correctAnswersCount }}</ion-text>
       <ion-text class="text-sm opacity-70">Certas</ion-text>
     </span>
     <i class="fa-solid fa-check text-2xl"></i>
@@ -27,24 +28,16 @@
 
   <span  class="flex mat-elevation-z2 flex-1 min-w-32 justify-between bg-gradient-to-l  bg-[#c10808]  text-white p-5 items-center rounded-lg">
     <span class="flex flex-col">
-      <ion-text class="text-lg font-bold">0</ion-text>
+      <ion-text class="text-lg font-bold">{{ userStats.incorrectAnswersCount }}</ion-text>
       <ion-text class="text-sm">Erradas</ion-text>
     </span>
     <i class="fa-solid fa-xmark text-3xl"></i>
   </span>
 
-  <span  class="flex mat-elevation-z2 flex-1 min-w-full p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
-    <i class="fa-solid fa-chart-simple  text-2xl "></i>
-    <span class="flex flex-col ms-4">
-      <ion-text class="text-lg font-bold">?</ion-text>
-      <ion-text class="text-sm">Ranking Setembro</ion-text>
-    </span>
-  </span>
-
   <span  class="flex mat-elevation-z2 flex-1 min-w-full  p-4 px-5  bg-gradient-to-l  from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
     <i class="fa-solid fa-clock text-3xl "></i>
     <span class="flex flex-col ms-4">
-      <ion-text class="text-lg font-bold">0 min</ion-text>
+      <ion-text class="text-lg font-bold">{{ userStats.averageResponseTime | number:'1.2-2'  }} s</ion-text>
       <ion-text class="text-sm">Tempo médio/questão</ion-text>
     </span>
   </span>
@@ -62,9 +55,10 @@
           />
           <div>
             <ion-text class="font-semibold text-white">Lógica de Programação</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2" color="#ffb429">
+            @let logicPercent = calculateCategoryPercent('logic');
+            <p-progressBar [value]="logicPercent" styleClass="mt-2 bg-white" color="#ffb429">
               <ng-template pTemplate="content" let-value>
-              <span>{{value}}/100</span>
+               <span>{{ logicPercent }}/100</span>
               </ng-template>
           </p-progressBar>
           </div>
@@ -78,10 +72,11 @@
           styleClass="relative top-1"
           />
           <div>
+            @let computingPercent = calculateCategoryPercent('computing');
             <ion-text class="font-semibold text-white">Teoria da Computação</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2" color="#59eb60">
+            <p-progressBar [value]="computingPercent" styleClass="mt-2 bg-white" color="#59eb60">
               <ng-template pTemplate="content" let-value>
-              <span>{{value}}/100</span>
+              <span>{{computingPercent}}/100</span>
               </ng-template>
           </p-progressBar>
           </div>
@@ -95,10 +90,11 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
+            @let softwarePercent = calculateCategoryPercent('software');
             <ion-text class="font-semibold text-white">Desenvolvimento</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2" color="#2fd6e9">
+            <p-progressBar [value]="softwarePercent" styleClass="mt-2 bg-white" color="#2fd6e9">
               <ng-template pTemplate="content" let-value>
-              <span>{{value}}/100</span>
+              <span>{{softwarePercent}}/100</span>
               </ng-template>
           </p-progressBar>
           </div>
@@ -113,10 +109,11 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
+            @let securityPercent = calculateCategoryPercent('security');
             <ion-text class="font-semibold text-white">Segurança</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2 w-full" color="#9fe949">
+            <p-progressBar [value]="50" styleClass="mt-2 w-full bg-white" color="#9fe949">
               <ng-template pTemplate="content" let-value>
-              <span>{{value}}/100</span>
+              <span>{{securityPercent}}/100</span>
               </ng-template>
           </p-progressBar>
           </div>
@@ -130,10 +127,11 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
+            @let infrastructurePercent = calculateCategoryPercent('infrastructure');
             <ion-text class="font-semibold text-white">Infraestrutura</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2 w-full" color="#55e4c5">
+            <p-progressBar [value]="infrastructurePercent" styleClass="mt-2 w-full bg-white" color="#55e4c5">
               <ng-template pTemplate="content" let-value>
-              <span>{{value}}/100</span>
+              <span>{{infrastructurePercent}}/100</span>
               </ng-template>
           </p-progressBar>
           </div>

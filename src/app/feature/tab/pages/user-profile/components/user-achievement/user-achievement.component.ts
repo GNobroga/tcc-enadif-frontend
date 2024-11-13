@@ -5,10 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './user-achievement.component.html',
   styleUrls: ['./user-achievement.component.scss'],
 })
-export class UserAchievementComponent  implements OnInit {
+export class UserAchievementComponent  {
 
   constructor() { }
-
-  ngOnInit() {}
 
 }

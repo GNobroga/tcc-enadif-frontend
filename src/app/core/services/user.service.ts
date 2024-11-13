@@ -63,4 +63,9 @@ export default class UserService extends BaseService {
     disableRandomQuestionAccess() {
         return this.httpClient.get<{ disabled: boolean }>(this.getApiEndpoint('disable-random-question-access'));
     }
+
+    //stats/:ownerId
+    getStatsByOwnerId(ownerId: string) {
+        return this.httpClient.get<UserStats>(this.getApiEndpoint(`stats/${ownerId}`));
+    }
 }
