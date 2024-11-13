@@ -98,7 +98,8 @@ export class CommunityPage implements ViewDidEnter, OnInit, OnDestroy {
       })
 
       this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe(() => {
+        .subscribe((event: any) => {
+          if (event.url !== '/tabs/community') return;
           this.chatManagerService.listPrivateChat().subscribe(() => {
             this.cacheListPrivateChat.set(this.chatManagerService.privateChats());
             this.isLoading.set(false);

@@ -31,7 +31,8 @@ export class StudyPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
       this.router.events.pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.killAllObservers))
-        .subscribe(async () => {
+        .subscribe(async (event: any) => {
+            if (event.url !== '/tabs/study') return;
             this.isLoading = true;
             const categories = ['logic', 'computing', 'software', 'infrastructure', 'security'];
             const categoryPromises = categories.map(category => lastValueFrom(this.quizService.getCategoryQuizProgress(category)));
