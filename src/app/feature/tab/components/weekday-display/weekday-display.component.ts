@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WeekdaySequenceDialogComponent } from '../weekday-sequence-dialog/weekday-sequence-dialog.component';
 import UserService, { UserDaysSequence } from 'src/app/core/services/user.service';
 import { ViewDidEnter } from '@ionic/angular';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, lastValueFrom } from 'rxjs';
 
 @Component({
@@ -20,11 +20,17 @@ export class WeekdayDisplayComponent implements OnInit  {
     readonly userService: UserService,
     readonly router: Router,
     readonly cdRef: ChangeDetectorRef,
+    readonly route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)) 
-      .subscribe(() => {
+      .subscribe((event: any) => {
+        const url = event.url as string;
+        const path = this.route.snapshot.url.map(segment => segment.path).join('/');
+        if (!url.includes(path)) {
+          return;
+        }
         this.userService.getDaysSequence().subscribe(data => {
             this.daysSequence.set(data);
         });

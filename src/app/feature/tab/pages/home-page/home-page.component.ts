@@ -73,9 +73,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.killAllObservers))
-      .subscribe(async event => {
-        let url = '';
-        if ('url' in event) url = event.url;
+      .subscribe(async (event: any) => {
+        const { url } = event as { url: string};
         if (url.startsWith('/tabs/home') || url.startsWith('/quiz/result')) {
             this.achievementService.check()
               .subscribe(({ hasNew }) => {
