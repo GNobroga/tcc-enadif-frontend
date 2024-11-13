@@ -1,5 +1,5 @@
 <div>
-  <p-toggleButton styleClass="mb-3 w-full" [onLabel]="'Exibir Disponíveis'" offLabel="Exibir Todos" /><ion-grid>
+  <p-toggleButton (click)="toggleShowAvailables.emit()" styleClass="mb-3 w-full" [onLabel]="'Exibir Disponíveis'" offLabel="Exibir Todos" /><ion-grid>
 
       <div class="grid grid-cols-2 gap-2">
           @for (achievement of achievements; track achievement._id; let i = $index) {

@@ -54,9 +54,9 @@
         <app-user-stats class="mt-5" [userStats]="userStats"/>
     </p-tabPanel>
     <p-tabPanel header="Conquistas">
-       <app-user-achievement [achievements]="achievements"/>
+       <app-user-achievement (toggleShowAvailables)="toggleAchievements()" [achievements]="cacheAchievements"/>
     </p-tabPanel>
-    <p-tabPanel header="Atividades">
+    <p-tabPanel header="Atividades" [disabled]="true">
         <p>
             Em construção
         </p>

@@ -56,6 +56,8 @@ export class UserProfileComponent implements OnInit  {
   
   achievements: Achievement[] = [];
 
+  cacheAchievements: typeof this.achievements = [];
+
   countAchievements = 0;
 
   constructor(
@@ -74,6 +76,8 @@ export class UserProfileComponent implements OnInit  {
 
   isLoading = false;
 
+  isToggleAchievements = true;
+
   async ngOnInit() {
       this.isLoading = true;
       this.route.params.subscribe(async params => {
@@ -88,6 +92,7 @@ export class UserProfileComponent implements OnInit  {
         const { count } = await lastValueFrom(this.achievementService.countAcquired());
         this.countAchievements = count;
         this.achievements = await lastValueFrom(this.achievementService.listAll(id));
+        this.cacheAchievements = this.achievements;
         this.isLoading = false;
       });
   }
@@ -101,5 +106,13 @@ export class UserProfileComponent implements OnInit  {
     }
   }
 
+  toggleAchievements() {
+    if (this.isToggleAchievements) {
+      this.cacheAchievements = this.achievements.filter(({ acquired }) => acquired);
+    } else {
+      this.cacheAchievements = this.achievements;
+    }
+    this.isToggleAchievements = !this.isToggleAchievements;
+  }
 
 }
