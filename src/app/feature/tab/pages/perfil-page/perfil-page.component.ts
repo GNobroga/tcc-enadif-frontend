@@ -22,6 +22,8 @@ export class PerfilPageComponent {
 
   user = signal<User | null>(this.auth.currentUser);
 
+  isLoading = signal(false);
+
   
   async onSignOut() {
     const actionSheet = await this.actionSheetController.create({
@@ -44,9 +46,12 @@ export class PerfilPageComponent {
     const { role } = await actionSheet.onDidDismiss();
 
     if (role === 'no') return;
-
+    this.isLoading.set(true);
     await signOut(this.auth);
-    window.location.href = '/account/login';
+    setTimeout(() => {
+      window.location.href = '/account/login';
+      this.isLoading.set(false);
+    }, 50);
   }
 
 
@@ -67,7 +72,6 @@ export class PerfilPageComponent {
     });
 
     await actionSheet.present();
-
     const { role } = await actionSheet.onDidDismiss();
 
     if (role === 'no') return;
@@ -82,8 +86,10 @@ export class PerfilPageComponent {
     dialog.onClose.pipe(first())
       .subscribe(async password => {
         if (isNullOrEmpty(password)) return;
+
         
         try {
+          this.isLoading.set(true);
           const credential = EmailAuthProvider.credential(this.user()?.email!, password);
           await reauthenticateWithCredential(this.user()!, credential);
           await this.deleteUserFiles(this.user()?.uid!);
@@ -92,11 +98,9 @@ export class PerfilPageComponent {
             severity: 'success',
             detail: 'Conta excluída',
           });
-
-          setTimeout(async () => {
-            await deleteUser(this.user()!);    
-            this.userService.deleteUser().subscribe();
-          }, 1000);
+          
+          this.userService.deleteUser().subscribe();
+          await deleteUser(this.user()!);    
 
         } catch (error) {
           if (error instanceof FirebaseError && error.code === 'auth/invalid-credential') {
@@ -105,6 +109,8 @@ export class PerfilPageComponent {
               detail: 'Credenciais inválidas',
             });
           }
+        } finally {
+          this.isLoading.set(false);
         }
       }); 
   
@@ -137,6 +143,7 @@ export class PerfilPageComponent {
     ref.onClose.subscribe(async newName => {
       const displayName = this.user()?.displayName ?? '';
       if (!isNullOrEmpty(newName) && newName.trim() !== displayName.trim()) {
+        this.isLoading.set(true);
         await updateProfile(this.user()!, {
           displayName: newName,
         });
@@ -146,6 +153,7 @@ export class PerfilPageComponent {
           summary: 'Atualização', detail: 'Nome atualizado',
           styleClass: 'left-0'
         });
+        this.isLoading.set(false);
       } 
     });
   }

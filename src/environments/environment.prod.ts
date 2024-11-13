@@ -1,4 +1,5 @@
 export const environment = {
     firebaseConfig: {},
-    production: true,
+    apiUrl: '',
+    geminiAPIKey: '',
 };

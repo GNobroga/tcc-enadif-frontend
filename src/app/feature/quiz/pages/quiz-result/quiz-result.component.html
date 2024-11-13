@@ -1,8 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-item lines="none" slot="start" class="w-full">
-      <ion-back-button [disabled]="true" defaultHref="/tabs/study" ></ion-back-button>
-      <ion-title class="font-semibold">Resultado</ion-title>
+      <ion-text class="font-semibold text-xl relative left-1.5">Resultado</ion-text>
 
       <div slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded bg-blue-200 text-blue-800">
         <ion-text class="text-lg font-medium">{{ timerFormatted }}</ion-text>
@@ -66,9 +65,9 @@
   <ion-button *ngIf="!isRandomize() && showButtons()" expand="block" class="mt-5 !h-12" (click)="restart()">
     <span class="normal-case text-white text-lg">Reiniciar Simulado</span>
   </ion-button>
-  <ion-fab *ngIf="showButtons()" horizontal="end" vertical="center" color="tertiary" (click)="goToStudyPage()">
+  <ion-fab class="exit-animation" *ngIf="showButtons()" horizontal="end" vertical="center" color="tertiary" (click)="goToStudyPage()">
     <ion-fab-button>
-      <ion-icon color="light" name="book"></ion-icon>
+      <ion-icon color="light" name="exit" class="text-3xl"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

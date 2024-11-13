@@ -40,7 +40,7 @@ export class RankingPageComponent implements ViewDidEnter {
   }
 
   get thirdUserRanking() { 
-    return this.getUserRanking(3);
+    return this.getUserRanking(2);
   }
 
   getFirstName(name: string) {

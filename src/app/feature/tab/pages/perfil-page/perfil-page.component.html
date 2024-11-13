@@ -1,5 +1,5 @@
 <ion-content>
-  <div class="p-4 pt-8">
+  <div class="p-4 pt-8" *ngIf="!isLoading()">
     <div class="profile bg-white p-6 rounded-md shadow">
       <div class="relative w-24 h-24 rounded-full mx-auto">
         <img class="w-full h-full rounded-full" alt="Silhouette of a person's head" src="{{ user()?.photoURL ? user()?.photoURL : 'assets/image/avatar.svg' }}" />
@@ -47,6 +47,11 @@
       <ion-text class="text-xs">Feito com &#10084;&#65039; por  <strong class="font-medium">Gabriel Cardoso</strong></ion-text>
     </div>
   </div>
+    
+    <div *ngIf="isLoading()" class="h-full flex items-center justify-center">
+      <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+    </div>
+
 </ion-content>
 
 <p-toast [position]="'top-center'" styleClass="w-[80vw]" />
