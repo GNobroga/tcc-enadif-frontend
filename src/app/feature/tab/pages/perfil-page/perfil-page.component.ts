@@ -46,7 +46,7 @@ export class PerfilPageComponent {
     if (role === 'no') return;
 
     await signOut(this.auth);
-    this.navController.navigateRoot('/account/login');
+    window.location.href = '/account/login';
   }
 
 

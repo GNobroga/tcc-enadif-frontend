@@ -9,7 +9,7 @@ import { filter, lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import AchievementService from 'src/app/core/services/achievement.service';
 import UserFriendService from 'src/app/core/services/user-friend.service';
-import UserService from 'src/app/core/services/user.service';
+import UserService, { UserDaysSequence } from 'src/app/core/services/user.service';
 import { environment } from 'src/environments/environment';
 import { WeekdaySequenceDialogComponent } from '../../components/weekday-sequence-dialog/weekday-sequence-dialog.component';
 import AcquiredAchievementComponent from '../achievement-page/components/acquired-achievement/acquired-achievement.component';
@@ -51,6 +51,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   killAllObservers = new Subject();
 
+  listDays = signal<UserDaysSequence | null>(null);
+
   constructor(
     readonly dialog: MatDialog,
     readonly auth: Auth,
@@ -74,14 +76,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.killAllObservers))
       .subscribe(async (event: any) => {
         const { url } = event as { url: string};
-        if (!url.startsWith('/tabs/home') || url !== '/tabs') {
+        if (url !== '/tabs/home' && url !== '/tabs') {
           this.randomQuestionOp?.hide();
           this.changeDetectorRef.detectChanges();
           return;
         }
+        
         this.initializeProgress();
     
-
         this.achievementService.countAcquired().subscribe(({ count }) => {
           this.achievementAcquiredCount.set(count);
         });
@@ -121,8 +123,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
               
             });
 
-        this.userService.getDaysSequence().subscribe(data => 
-            this.numberOfOffensives.set(data.numberOfOffensives));    
+        this.userService.getDaysSequence().subscribe(data => {
+          this.listDays.set(data);
+          this.numberOfOffensives.set(data.numberOfOffensives)
+        });   
 
         this.userService.checkDaySequence().subscribe();
     }

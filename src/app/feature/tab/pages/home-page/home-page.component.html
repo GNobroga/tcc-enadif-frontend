@@ -74,7 +74,9 @@
           <ion-text class="text-sm font-thin">Minha semana - {{ currentDay }} de {{ currentMonth }}</ion-text>
         </div>
       <div class="mt-1">
-        <app-weekday-display/>
+       @if (listDays(); as daysSequence) {
+          <app-weekday-display  [daysSequence]="daysSequence"/>
+       }
       </div>
     </div>
     <div class="flex items-center p-5 gap-5 rounded-md bg-gradient-to-l mat-elevation-z2 from-[#cd75ff] to-[#4c47ec] text-white mx-3 relative -top-3">

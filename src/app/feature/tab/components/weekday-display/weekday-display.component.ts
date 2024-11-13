@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WeekdaySequenceDialogComponent } from '../weekday-sequence-dialog/weekday-sequence-dialog.component';
 import UserService, { UserDaysSequence } from 'src/app/core/services/user.service';
@@ -10,32 +10,18 @@ import { filter, lastValueFrom } from 'rxjs';
   selector: 'app-weekday-display',
   templateUrl: './weekday-display.component.html',
   styleUrls: ['./weekday-display.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WeekdayDisplayComponent implements OnInit  {
+export class WeekdayDisplayComponent  {
 
-  daysSequence = signal<UserDaysSequence | null>(null);
+  daysSequence = input<UserDaysSequence>();
 
   constructor(
     readonly dialog: MatDialog,
     readonly userService: UserService,
     readonly router: Router,
-    readonly cdRef: ChangeDetectorRef,
-    readonly route: ActivatedRoute,
   ) { }
 
-  ngOnInit() {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)) 
-      .subscribe((event: any) => {
-        const url = event.url as string;
-        const path = this.route.snapshot.url.map(segment => segment.path).join('/');
-        if (!url.includes(path)) {
-          return;
-        }
-        this.userService.getDaysSequence().subscribe(data => {
-            this.daysSequence.set(data);
-        });
-      })
-  }
 
   isMarked(day: number) {
     const sequence = this.daysSequence()?.days;
