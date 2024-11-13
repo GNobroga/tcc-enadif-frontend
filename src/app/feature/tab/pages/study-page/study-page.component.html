@@ -61,7 +61,7 @@
         <div >
           @if (getProgressByCategory('software'); as logicProgress) {
             <span class="flex justify-between items-center text-white mb-1">
-              <ion-text class="font-medium text-sm">Fundamentos</ion-text>
+              <ion-text class="font-medium text-sm">Sofware</ion-text>
               <ion-text class="opacity-90 text-thin text-sm">{{ logicProgress.completedQuizzes }}/{{ logicProgress.totalQuizzes }}</ion-text>
             </span>
             <ion-progress-bar [class.progress]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes) > 0" [value]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes)"/>
@@ -76,7 +76,7 @@
         <div >
           @if (getProgressByCategory('security'); as logicProgress) {
             <span class="flex justify-between items-center text-white mb-1">
-              <ion-text class="font-medium text-sm">Fundamentos</ion-text>
+              <ion-text class="font-medium text-sm">Segurança</ion-text>
               <ion-text class="opacity-90 text-thin text-sm">{{ logicProgress.completedQuizzes }}/{{ logicProgress.totalQuizzes }}</ion-text>
             </span>
             <ion-progress-bar [class.progress]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes) > 0" [value]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes)"/>
@@ -91,7 +91,7 @@
         <div >
           @if (getProgressByCategory('infrastructure'); as logicProgress) {
             <span class="flex justify-between items-center text-white mb-1">
-              <ion-text class="font-medium text-sm">Fundamentos</ion-text>
+              <ion-text class="font-medium text-sm">Infrastrutura</ion-text>
               <ion-text class="opacity-90 text-thin text-sm">{{ logicProgress.completedQuizzes }}/{{ logicProgress.totalQuizzes }}</ion-text>
             </span>
             <ion-progress-bar [class.progress]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes) > 0" [value]="getProgressPercent(logicProgress.completedQuizzes, logicProgress.totalQuizzes)"/>

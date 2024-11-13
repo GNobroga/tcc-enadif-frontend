@@ -2,20 +2,6 @@ import { Injectable, signal } from "@angular/core";
 import BaseService from "./base.service";
 import { tap } from "rxjs";
 
-// [
-//     {
-//         "id": "672527bdc531a5acbd801a28",
-//         "header": "Master Coder",
-//         "detail": "Awarded for completing 100 coding challenges.",
-//         "type": "ranking",
-//         "goal": {
-//             "description": "Complete 100 coding challenges",
-//             "count": 100
-//         },
-//         "imageUrl": "https://example.com/images/achievement.png",
-//         "createdAt": "2024-11-01T19:10:53.474Z",
-//         "acquired": false
-//     },
 
 export type Achievement = {
     _id: string;

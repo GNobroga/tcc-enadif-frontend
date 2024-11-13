@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { authRedirectGuard } from './core/guards/auth-redirect.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./feature/welcome/welcome.module'),
-    canActivate: [],
+    canActivate: [authRedirectGuard],
   },
   {
     path: 'quiz',

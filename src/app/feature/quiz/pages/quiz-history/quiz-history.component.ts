@@ -56,9 +56,9 @@ export class QuizHistoryComponent implements ViewDidEnter, OnInit {
     const { detail: { value } } = event; 
     let quizzes = [...this.quizzes];
     if (value === 'smaller') {
-      quizzes = quizzes.sort((a, b) => b.score - a.score);
-    } else if (value === 'greater') {
       quizzes = quizzes.sort((a, b) => a.score - b.score);
+    } else if (value === 'greater') {
+      quizzes = quizzes.sort((a, b) => b.score - a.score);
     }
     this.cacheQuizzes = quizzes;
     this.cdr.detectChanges();
