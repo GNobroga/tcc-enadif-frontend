@@ -160,10 +160,9 @@
     </div>
     <swiper-container [slidesPerView]="1"  [spaceBetween]="10" [speed]="300">
       <swiper-slide>
-        <div class="bg-[#1c69e4] p-4 rounded-md cursor-pointer mat-elevation-z2 h-32 " matRipple>
-          <ion-label class="flex justify-end">
-            <ion-img src="assets/image/star.png" class="w-6 h-6"></ion-img>
-          </ion-label>
+        <div class="bg-[#1c69e4] relative p-4 rounded-md flex items-center gap-4 cursor-pointer mat-elevation-z2 h-32 " matRipple>
+          <span class="absolute top-0 right-0 m-4"><i class="fa-solid fa-star text-lg text-orange-200"></i></span>
+          <ion-img src="assets/image/cat.png" class="w-14 h-14"></ion-img>
           <div class="text-white flex flex-col">
             <ion-text class="text-lg font-bold">Avalie meu app!</ion-text>
             <ion-text class="text-sm">Me conte o que achou</ion-text>

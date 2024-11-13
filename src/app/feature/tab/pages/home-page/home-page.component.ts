@@ -65,35 +65,40 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }  
 
   async ngOnInit() {
+    
+
     this.achievementService.countAcquired().subscribe(({ count }) => {
       this.achievementAcquiredCount.set(count);
     });
+
     this.user.set(this.auth.currentUser);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.killAllObservers))
-      .subscribe(async () => {
+      .subscribe(async event => {
+        let url = '';
+        if ('url' in event) url = event.url;
+        if (url.startsWith('/tabs/home') || url.startsWith('/quiz/result')) {
+            this.achievementService.check()
+              .subscribe(({ hasNew }) => {
+                if (!hasNew) return;
+                this.dialogService.open(AcquiredAchievementComponent, {
+                  contentStyle: {
+                      backgroundImage: 'linear-gradient(to bottom right, #ebf8ff, #c3dafe)',
+                      borderRadius: '0.5rem',
+                      width: '95vw',
+                  },
+                  modal: true,
+                  showHeader: false,
+              });
+            });
+        }
+
+        if (url.startsWith('/tabs/home')) return; // Parando para economizar recurso.
 
         this.userService.getDaysSequence().subscribe(data => {
           this.numberOfOffensives.set(data.numberOfOffensives);
         });
 
         this.userService.checkDaySequence().subscribe();
-
-        this.achievementService.check()
-        .subscribe(({ hasNew }) => {
-          if (!hasNew) return;
-          this.dialogService.open(AcquiredAchievementComponent, {
-            contentStyle: {
-                backgroundImage: 'linear-gradient(to bottom right, #ebf8ff, #c3dafe)',
-                borderRadius: '0.5rem',
-                width: '95vw',
-            },
-            modal: true,
-            showHeader: false,
-        });
-        
-          this.ngOnInit();
-        });
-        
 
         this.achievementService.countAcquired().subscribe(({ count }) => {
           this.achievementAcquiredCount.set(count);

@@ -44,7 +44,7 @@ export class StudyPageComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.studyItems.map(item => item.nativeElement)
               .forEach((element, position) => {
-                  this.createAnimation(element, (1 + position) * 150).play();
+                  this.createAnimation(element, (1 + position) * 50).play();
               });
             }, 100);
         });

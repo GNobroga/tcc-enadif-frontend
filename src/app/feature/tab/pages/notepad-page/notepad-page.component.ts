@@ -13,9 +13,13 @@ export class NotepadPageComponent implements OnInit {
   constructor(public readonly notepadService: NotepadService) {}
   
   notepads = this.notepadService.notepads;
+  isLoading = false;
 
   ngOnInit(): void {
-    this.notepadService.listAll().subscribe();
+    this.isLoading = true;
+    this.notepadService.listAll().subscribe(() => {
+      this.isLoading = false;
+    });
   }
 
   getBackgroundColor(color: string) {

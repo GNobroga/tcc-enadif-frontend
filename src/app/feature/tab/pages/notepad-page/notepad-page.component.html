@@ -10,13 +10,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div *ngIf="!notepads()?.length" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
+  <div *ngIf="isLoading" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+  </div>
+  <div *ngIf="!notepads()?.length && !isLoading" class="h-full flex-col flex gap-2 items-center justify-center text-center px-4">
     <i class="fa-solid fa-pen-to-square text-7xl text-[var(--ion-color-primary)]"></i>
     <ion-text class="text-xl font-semibold text-gray-800">Parece que você ainda não tem nenhuma nota! ✨</ion-text>
     <ion-text class="text-lg opacity-80 font-medium text-gray-600">Clique em "+" para criar a sua primeira nota e começar a organizar suas ideias!</ion-text>
   </div>  
-  <div *ngIf="notepads()?.length" class="p-4 mt-3">
-    <div class="flex flex-wrap gap-2 cursor-pointer [&_div]:w-40">
+  <div *ngIf="notepads()?.length && !isLoading" class="p-4 mt-3">
+    <div class="grid grid-cols-2 gap-2 xs:grid-cols-1">
       @for (notepad of notepads(); track notepad.id) {
         <div
           class="bg-white rounded-md shadow-md hover:shadow-lg transition-shadow duration-200"

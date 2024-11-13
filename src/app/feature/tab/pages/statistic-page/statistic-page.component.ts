@@ -50,7 +50,16 @@ export class StatisticPageComponent  implements OnInit {
                 label: 'My dataset'
             }
         ],
-        labels: Object.keys(correctAnswersByCategory),
+        labels: Object.keys(correctAnswersByCategory).map(category => {
+            const categories: { [ key: string ]: string} = {
+                logic: 'Lógica',
+                computing: 'Computação',
+                software: 'Software',
+                infrastructure: 'Infrasetrutura',
+                security: 'Segurança',
+            }
+            return categories[category] || null;
+        }).filter(category => category !== null),
     };
 
     this.options = {
@@ -83,6 +92,9 @@ export class StatisticPageComponent  implements OnInit {
         return parseFloat(accuracyRate.toFixed(2)); 
     }
 
+    get userFistName() {
+        return this.connectedUser()?.displayName?.split(' ')[0] || '';
+    }
 
 
 }

@@ -3,9 +3,14 @@
   <ion-header>
     <ion-toolbar color="primary">
       <ion-back-button slot="start" defaultHref="/tabs"></ion-back-button>
+      <ion-text color="light" class="text-xl font-semibold flex items-center">
+        Estatísticas
+      </ion-text>
+      <i slot="end" class="fa fa-chart-bar mr-2 text-white text-xl me-5"></i>
     </ion-toolbar>
+    
     <ion-toolbar color="primary">
-      <ion-item slot="start" color="primary" lines="none">
+      <ion-item slot="start" color="primary" lines="none" class="mt-3">
         <p-avatar
           routerLink="/tabs/perfil"
           [image]="connectedUser()?.photoURL ?? undefined"
@@ -16,8 +21,8 @@
           size="large" />
         
         <span class="flex flex-col text-white pb-2 space-y-1 ms-3">
-          <ion-text class="font-bold text-2xl">Olá, {{ connectedUser()?.displayName }}</ion-text>
-          <ion-text class="text-sm font-light">Vamos analisar o seu desempenho?</ion-text>
+          <ion-text class="font-bold text-2xl">Olá, {{ userFistName }}</ion-text>
+          <ion-text class="text-base font-light">Vamos analisar o seu desempenho?</ion-text>
         </span>
       </ion-item>
     </ion-toolbar>
@@ -26,14 +31,17 @@
 
   <div class="p-4" *ngIf="stats()">
     <!-- Estatísticas -->
-    <div class="flex flex-col items-start space-y-2">
-      <ion-text class="text-3xl font-semibold text-primary">Estatísticas</ion-text>
-      <p class="text-sm text-gray-600">Visualize os dados e métricas importantes em tempo real.</p>
-      <div class="h-1 w-16 bg-primary rounded-full"></div>
-    </div>
-
+    <ion-segment color="primary" value="default">
+      <ion-segment-button value="default">
+        <ion-label>Geral</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [disabled]="true">
+        <ion-label>7 Dias</ion-label> 
+      </ion-segment-button>
+    </ion-segment>
+    
     <!-- Gráfico de Acertos por Categoria -->
-    <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-2 mb-4">
+    <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-4 mb-4">
       <ion-text class="font-medium text-lg">Acertos por Categoria</ion-text>
       <p-chart type="polarArea" [data]="data" [options]="options"/>
     </div>
@@ -80,7 +88,7 @@
       <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
         <i class="fa-solid fa-chart-simple text-3xl"></i>
         <span class="flex flex-col ms-4">
-          <ion-text class="text-2xl font-semibold"># {{ stats()!.score }}</ion-text>
+          <ion-text class="text-2xl font-semibold">{{ stats()!.score }}</ion-text>
           <ion-text class="text-sm">Score</ion-text>
         </span>
       </span>

@@ -8,10 +8,7 @@ import RankingService, { UserRanking } from 'src/app/core/services/ranking.servi
   templateUrl: './ranking-page.component.html',
   styleUrls: ['./ranking-page.component.scss'],
 })
-export class RankingPageComponent implements ViewDidEnter,  AfterViewInit {
-
-  @ViewChildren('personRank')
-  children!: QueryList<ElementRef>;
+export class RankingPageComponent implements ViewDidEnter {
 
   rankings: Array<UserRanking> = [];
 
@@ -58,22 +55,6 @@ export class RankingPageComponent implements ViewDidEnter,  AfterViewInit {
 
   get hasTopRankings() {
     return this.firstUserRanking || this.secondUserRanking || this.thirdUserRanking;
-  }
-
-  ngAfterViewInit(): void {
-      this.children?.forEach((e, index) => this.animateElement(e.nativeElement, (index + 1) * 500));
-  }
-
-  animateElement(e: HTMLElement, duration: number) {
-    this.animationController.create()
-    .addElement(e)
-    .fromTo('transform', 'translateY(2rem)', 'translateY(0)')
-    .fromTo('opacity', '0', '1')
-    .easing('ease-in-out')
-    .duration(duration)
-    .fill('forwards')
-    .play();
-
   }
 
 }
