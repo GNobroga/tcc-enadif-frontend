@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core";
 import BaseService from "./base.service";
-import { tap } from "rxjs";
+import { Observable, shareReplay, tap } from "rxjs";
 
 
 export type Achievement = {
@@ -26,20 +26,27 @@ export default class AchievementService extends BaseService {
         super('achievements');
     }
 
+    private getData<T>(endpoint: string): Observable<T> {
+        return this.httpClient.get<T>(this.getApiEndpoint(endpoint)).pipe(
+          shareReplay(1) 
+        );
+      }
+
     listAll(ownerId: string) {
-        return this.httpClient.get<Achievement[]>(this.getApiEndpoint(`user/${ownerId}`))
-            .pipe(tap(response => this.achievements.set(response)));
+        return this.getData<Achievement[]>(`user/${ownerId}`).pipe(
+            tap(response => this.achievements.set(response)) 
+        );
     }
 
-    countAcquired() {
-        return this.httpClient.get<{ count: number; }>(this.getApiEndpoint('count'));
+    countAcquired(): Observable<{ count: number }> {
+        return this.getData('count');
     }
 
-    check() {
-        return this.httpClient.get<{ hasNew: boolean; }>(this.getApiEndpoint('check/user'));
+    check(): Observable<{ hasNew: boolean }> {
+        return this.getData('check/user');
     }
 
-    findById(achievementId: string) {
-        return this.httpClient.get<Achievement>(this.getApiEndpoint(`${achievementId}`));
+    findById(achievementId: string): Observable<Achievement> {
+        return this.getData<Achievement>(`${achievementId}`);
     }
 }

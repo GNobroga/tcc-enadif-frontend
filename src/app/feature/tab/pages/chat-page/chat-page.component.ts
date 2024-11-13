@@ -141,15 +141,15 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.key !== 'Enter' || this.message.trim() === '') return;
-    this.sendSocketMessage(this.message);
+    this.sendSocketMessage();
   }
 
   sendMessage()  {
     if (this.message.trim() === '') return;
-    this.sendSocketMessage(this.message);
+    this.sendSocketMessage();
   }
 
-  private sendSocketMessage(message: string) {
+  private sendSocketMessage() {
     if (!this.isGlobal() && this.roomId()) {
       this.socket().emit('send-message', { roomId: this.roomId(), message: this.message, });
     } else {
@@ -167,7 +167,6 @@ export class ChatPageComponent implements ViewDidEnter, ViewWillLeave {
     });
     socket.on('connect', () => this.socket.set(socket));
     socket.on('receive-message', payload => {
-      console.log(payload)
       this.messages().push(payload);
       this.scrollToEnd();
     });

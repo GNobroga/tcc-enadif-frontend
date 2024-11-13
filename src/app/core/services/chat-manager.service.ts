@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core";
 import BaseService from "./base.service";
-import { debounceTime, switchMap, tap } from "rxjs";
+import { debounceTime, Observable, shareReplay, switchMap, tap } from "rxjs";
 import { User } from "@angular/fire/auth";
 import { ChatMessage } from "src/app/feature/tab/pages/chat-page/chat-page.component";
 
@@ -28,21 +28,34 @@ export default class ChatManagerService extends BaseService {
 
     privateChats = signal([] as ChatPrivate[]);
 
-    leavePrivateChat(roomId: string) {
-        return this.httpClient.get<{ leave: boolean }>(this.getApiEndpoint(`leave-private-chat/${roomId}`))
-            .pipe(switchMap(() => this.listPrivateChat()));
+    private getData<T>(endpoint: string): Observable<T> {
+        return this.httpClient.get<T>(this.getApiEndpoint(endpoint)).pipe(
+            shareReplay(1)  
+        );
     }
 
-    createPrivateChat(participantTwoId: string) {
-        return this.httpClient.post<{ roomId: string }>(this.getApiEndpoint('create-private'), { participantTwoId });
+    private postData<T>(endpoint: string, body: any): Observable<T> {
+        return this.httpClient.post<T>(this.getApiEndpoint(endpoint), body);
     }
 
-    listPrivateChat() {
-        return this.httpClient.get<ChatPrivate[]>(this.getApiEndpoint('list-private'))
-            .pipe(tap(chats => this.privateChats.set(chats)));
+
+    leavePrivateChat(roomId: string): Observable<ChatPrivate[]> {
+        return this.httpClient.get<{ leave: boolean }>(this.getApiEndpoint(`leave-private-chat/${roomId}`)).pipe(
+            switchMap(() => this.listPrivateChat())  
+        );
     }
 
-    listMessagesFromChat(roomId: string) {
-        return this.httpClient.get<ChatMessage[]>(this.getApiEndpoint(`messages-from-private/${roomId}`));
+    createPrivateChat(participantTwoId: string): Observable<{ roomId: string }> {
+        return this.postData('create-private', { participantTwoId });
+    }
+
+    listPrivateChat(): Observable<ChatPrivate[]> {
+        return this.getData<ChatPrivate[]>('list-private').pipe(
+            tap(chats => this.privateChats.set(chats))  
+        );
+    }
+
+    listMessagesFromChat(roomId: string): Observable<ChatMessage[]> {
+        return this.getData<ChatMessage[]>(`messages-from-private/${roomId}`);
     }
 }
