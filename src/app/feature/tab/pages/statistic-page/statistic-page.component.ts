@@ -55,7 +55,7 @@ export class StatisticPageComponent  implements OnInit {
                 logic: 'Lógica',
                 computing: 'Computação',
                 software: 'Software',
-                infrastructure: 'Infrasetrutura',
+                infrastructure: 'Infraestrutura',
                 security: 'Segurança',
             }
             return categories[category] || null;

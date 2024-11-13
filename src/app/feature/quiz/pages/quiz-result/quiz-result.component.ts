@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, QueryList, signal, ViewChildren } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimationController, ViewDidEnter } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { interval, lastValueFrom, Subscription } from 'rxjs';
+import { first, interval, lastValueFrom, Subscription } from 'rxjs';
 import { AppState, selectQuizResultData } from 'src/app/store';
 import { resetQuizResultData, setQuizResultData } from 'src/app/store/actions/quiz-result.actions';
 import { Question } from '../../components/quiz-question/quiz-question.component';
@@ -46,6 +46,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
   isRandomize = signal(false);
 
+  showButtons = signal(true);
+
   constructor(
     readonly animationController: AnimationController,
     readonly route: ActivatedRoute,
@@ -64,7 +66,9 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     this.isRandomize.set(randomize);
 
     const data = this.store.selectSignal(selectQuizResultData)();
-    if (!data) return;
+    if (!data) {
+      return;
+    }
     const { questions = [], timer, correctQuestionsId, showDialog = true } = data;
     this.questions.set(questions);
     this.timer.set(timer);
@@ -73,6 +77,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     if (!showDialog) {
       return;
     }
+
+    this.showButtons.set(false);
 
     const { score } = await lastValueFrom(this.quizService.finishQuiz({
       quizId: this.quizId()!,
@@ -83,28 +89,34 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       randomize,
     }));
 
+    let ref: MatDialogRef<QuizResultDialogComponent, any> | null = null;
+
     if (correctQuestionsId.length === questions.length) {
-      this.dialog.open(QuizResultDialogComponent, {
+      ref = this.dialog.open(QuizResultDialogComponent, {
         data: {
           type: 'good-job',
           score,
         }
       });
     } else if (correctQuestionsId.length >= questions.length / 2) {
-      this.dialog.open(QuizResultDialogComponent, {
+      ref = this.dialog.open(QuizResultDialogComponent, {
         data: {
           type: 'good-effort',
           score,
         }
       });
     } else {
-      this.dialog.open(QuizResultDialogComponent, {
+      ref = this.dialog.open(QuizResultDialogComponent, {
         data: {
           type: 'failure',
           score
         }
       });
     }
+
+    ref?.afterClosed().pipe(first()).subscribe(() => {
+      this.showButtons.set(true);
+    });
     
   }
 

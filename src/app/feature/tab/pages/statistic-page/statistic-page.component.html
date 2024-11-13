@@ -22,7 +22,7 @@
         
         <span class="flex flex-col text-white pb-2 space-y-1 ms-3">
           <ion-text class="font-bold text-2xl">Olá, {{ userFistName }}</ion-text>
-          <ion-text class="text-base font-light">Vamos analisar o seu desempenho?</ion-text>
+          <p class="text-base font-light">Vamos analisar o seu desempenho?</p>
         </span>
       </ion-item>
     </ion-toolbar>
@@ -42,7 +42,7 @@
     
     <!-- Gráfico de Acertos por Categoria -->
     <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-4 mb-4">
-      <ion-text class="font-medium text-lg">Acertos por Categoria</ion-text>
+      <ion-text class="font-medium text-xl">Acertos por Categoria</ion-text>
       <p-chart type="polarArea" [data]="data" [options]="options"/>
     </div>
 

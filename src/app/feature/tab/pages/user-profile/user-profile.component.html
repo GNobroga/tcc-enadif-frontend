@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" *ngIf="!isLoading">
   <ion-toolbar>
     <div slot="start" class="w-full mb-3">
       <div class="flex justify-between">
@@ -13,11 +13,21 @@
         </span>
       </div>
       <div class="flex flex-col items-center gap-3 mt-4 mb-3">
-        <p-avatar
-        label="G"
-        size="xlarge"
-        styleClass="font-bold bg-[#5B6CBE] text-white"
-        shape="circle" />
+        @let imageUrl = userStats?.photoUrl || undefined;
+        @if (imageUrl) {
+          <p-avatar
+          class="scale-125"
+          size="xlarge"
+          [image]="imageUrl"
+          styleClass="font-bold bg-[#5B6CBE] text-white"
+          shape="circle" />
+        } @else {
+          <p-avatar
+          [label]="userStats.displayName![0]"
+          size="xlarge"
+          styleClass="font-bold bg-[#5B6CBE] text-white"
+          shape="circle" />
+        }
         <ion-text class="text-xl font-medium text-white" *ngIf="userStats">{{ userStats.displayName! | textTruncate: 20 }}</ion-text>
         <div class="flex gap-4 justify-center items-center ">
           <!-- Achievements Chip -->

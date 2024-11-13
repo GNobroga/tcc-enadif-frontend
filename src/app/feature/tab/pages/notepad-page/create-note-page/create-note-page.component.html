@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" *ngIf="notepad">
   <ion-toolbar [ngStyle]="{ '--background': headerColor() }">
     <ion-item lines="none" [ngStyle]="{ '--background': headerColor() }">
       <ion-back-button color="light" defaultHref="/tabs/notes"></ion-back-button>
@@ -46,13 +46,16 @@
   </div>
 </ion-header>
 <ion-content>
-  <div class="h-full flex flex-col border space-y-2 border-red-600" [formGroup]="form">
+  <div *ngIf="notepad" class="h-full flex flex-col border space-y-2 border-red-600" [formGroup]="form">
     <div class="px-2">
       <ion-input formControlName="title" autofocus clearInput placeholder="Título" class="text-3xl font-medium opacity-80" autocapitalize="on"></ion-input>
     </div>
     <div class="flex-1">
       <p-editor formControlName="description" placeholder="Escreva..." styleClass="h-full"></p-editor>
     </div>
+  </div>
+  <div *ngIf="!notepad" class="h-full flex items-center justify-center">
+    <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
   </div>
 </ion-content>
 

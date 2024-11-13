@@ -13,6 +13,7 @@ export interface UserStats {
     trialPeriod: boolean;
     dailyHintCount: number;
     displayName?: string;
+    photoUrl?: string;
 }
 
 export interface UserDaysSequence {

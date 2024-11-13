@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-item lines="none" slot="start" class="w-full">
-      <ion-back-button [disabled]="true"></ion-back-button>
+      <ion-back-button [disabled]="true" defaultHref="/tabs/study" ></ion-back-button>
       <ion-title class="font-semibold">Resultado</ion-title>
 
       <div slot="end" class="h-8 min-w-14 px-2 flex items-center justify-center rounded bg-blue-200 text-blue-800">
@@ -51,14 +51,22 @@
       </div>
       <ion-button color="dark">Avaliar</ion-button>
     </div>
-    <ion-button expand="block" class="mt-5 !h-12" (click)="reviewQuestions()">
-      <span class="normal-case text-white text-lg">Revisar</span>
-    </ion-button>
+
+    @if (showButtons()) {
+      <ion-button expand="block" class="mt-5 !h-12" (click)="reviewQuestions()">
+        <span class="normal-case text-white text-lg">Revisar</span>
+      </ion-button>
+    } @else {
+      <div class="flex items-center justify-center">
+        <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
+      </div>
+    }
+
   </div>
-  <ion-button *ngIf="!isRandomize()" expand="block" class="mt-5 !h-12" (click)="restart()">
+  <ion-button *ngIf="!isRandomize() && showButtons()" expand="block" class="mt-5 !h-12" (click)="restart()">
     <span class="normal-case text-white text-lg">Reiniciar Simulado</span>
   </ion-button>
-  <ion-fab horizontal="end" vertical="center" color="tertiary" (click)="goToStudyPage()">
+  <ion-fab *ngIf="showButtons()" horizontal="end" vertical="center" color="tertiary" (click)="goToStudyPage()">
     <ion-fab-button>
       <ion-icon color="light" name="book"></ion-icon>
     </ion-fab-button>

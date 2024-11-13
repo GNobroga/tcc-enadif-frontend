@@ -56,11 +56,17 @@
           <div>
             <ion-text class="font-semibold text-white">Lógica de Programação</ion-text>
             @let logicPercent = calculateCategoryPercent('logic');
-            <p-progressBar [value]="logicPercent" styleClass="mt-2 bg-white" color="#ffb429">
-              <ng-template pTemplate="content" let-value>
-               <span>{{ logicPercent }}/100</span>
-              </ng-template>
-          </p-progressBar>
+            @if (logicPercent > 20) {
+              <p-progressBar [value]="logicPercent" styleClass="mt-2 bg-white" color="#ffb429">
+                <ng-template pTemplate="content" let-value>
+                 <span>{{ logicPercent }}/100</span>
+                </ng-template>
+            </p-progressBar>
+            } @else {
+              <div>
+                <ion-text class="text-xs font-medium relative bottom-1.5 text-white">Sem análise</ion-text>
+              </div>
+            }
           </div>
       </span>
 
@@ -72,13 +78,19 @@
           styleClass="relative top-1"
           />
           <div>
-            @let computingPercent = calculateCategoryPercent('computing');
             <ion-text class="font-semibold text-white">Teoria da Computação</ion-text>
-            <p-progressBar [value]="computingPercent" styleClass="mt-2 bg-white" color="#59eb60">
-              <ng-template pTemplate="content" let-value>
-              <span>{{computingPercent}}/100</span>
-              </ng-template>
-          </p-progressBar>
+            @let computingPercent = calculateCategoryPercent('computing');
+            @if (computingPercent > 20) {
+              <p-progressBar [value]="computingPercent" styleClass="mt-2 bg-white" color="#ffb429">
+                <ng-template pTemplate="content" let-value>
+                 <span>{{ computingPercent }}/100</span>
+                </ng-template>
+            </p-progressBar>
+            } @else {
+              <div>
+                <ion-text class="text-xs font-medium relative bottom-1.5 text-white">Sem análise</ion-text>
+              </div>
+            }
           </div>
       </span>
 
@@ -90,13 +102,19 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
-            @let softwarePercent = calculateCategoryPercent('software');
             <ion-text class="font-semibold text-white">Desenvolvimento</ion-text>
-            <p-progressBar [value]="softwarePercent" styleClass="mt-2 bg-white" color="#2fd6e9">
-              <ng-template pTemplate="content" let-value>
-              <span>{{softwarePercent}}/100</span>
-              </ng-template>
-          </p-progressBar>
+            @let sofwarePercent = calculateCategoryPercent('sofware');
+            @if (sofwarePercent > 20) {
+              <p-progressBar [value]="sofwarePercent" styleClass="mt-2 bg-white" color="#ffb429">
+                <ng-template pTemplate="content" let-value>
+                 <span>{{ sofwarePercent }}/100</span>
+                </ng-template>
+            </p-progressBar>
+            } @else {
+              <div>
+                <ion-text class="text-xs font-medium relative bottom-1.5 text-white">Sem análise</ion-text>
+              </div>
+            }
           </div>
       </span>
 
@@ -109,13 +127,19 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
-            @let securityPercent = calculateCategoryPercent('security');
             <ion-text class="font-semibold text-white">Segurança</ion-text>
-            <p-progressBar [value]="50" styleClass="mt-2 w-full bg-white" color="#9fe949">
-              <ng-template pTemplate="content" let-value>
-              <span>{{securityPercent}}/100</span>
-              </ng-template>
-          </p-progressBar>
+            @let securityPercent = calculateCategoryPercent('security');
+            @if (securityPercent > 20) {
+              <p-progressBar [value]="securityPercent" styleClass="mt-2 bg-white" color="#ffb429">
+                <ng-template pTemplate="content" let-value>
+                 <span>{{ securityPercent }}/100</span>
+                </ng-template>
+            </p-progressBar>
+            } @else {
+              <div>
+                <ion-text class="text-xs font-medium relative bottom-1.5 text-white">Sem análise</ion-text>
+              </div>
+            }
           </div>
       </span>
 
@@ -127,13 +151,19 @@
           styleClass="relative top-1"
           />
           <div class="w-full">
-            @let infrastructurePercent = calculateCategoryPercent('infrastructure');
             <ion-text class="font-semibold text-white">Infraestrutura</ion-text>
-            <p-progressBar [value]="infrastructurePercent" styleClass="mt-2 w-full bg-white" color="#55e4c5">
-              <ng-template pTemplate="content" let-value>
-              <span>{{infrastructurePercent}}/100</span>
-              </ng-template>
-          </p-progressBar>
+            @let infrastructurePercent = calculateCategoryPercent('infrastructure');
+            @if (infrastructurePercent > 20) {
+              <p-progressBar [value]="infrastructurePercent" styleClass="mt-2 bg-white" color="#ffb429">
+                <ng-template pTemplate="content" let-value>
+                 <span>{{ infrastructurePercent }}/100</span>
+                </ng-template>
+            </p-progressBar>
+            } @else {
+              <div>
+                <ion-text class="text-xs font-medium relative bottom-1.5 text-white">Sem análise</ion-text>
+              </div>
+            }
           </div>
       </span>
 

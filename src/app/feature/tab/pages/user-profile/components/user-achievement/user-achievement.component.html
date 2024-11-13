@@ -1,29 +1,31 @@
 <div>
-  <p-toggleButton (click)="toggleShowAvailables.emit()" styleClass="mb-3 w-full" [onLabel]="'Exibir Disponíveis'" offLabel="Exibir Todos" /><ion-grid>
-
-      <div class="grid grid-cols-2 gap-2">
-          @for (achievement of achievements; track achievement._id; let i = $index) {
-      
-            <div matRipple class="relative" [routerLink]="['/tabs/achievement-view', achievement._id]">
-              <div 
-                [ngClass]="{
-                  'from-yellow-500 to-yellow-700': i % 3 === 0,
-                  'from-blue-500 to-blue-700': i % 3 === 1,
-                  'from-purple-500 to-pink-500': i % 3 === 2
-                }"
-              
-              class="flex flex-col bg-gradient-to-b pb-5  text-white rounded-lg shadow-md p-3 h-full">
-              <img [src]="achievement.imageUrl" class="w-20 h-20  object-cover rounded-full mb-2 mx-auto"/>
-              <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>
-              <ion-text class="text-xs opacity-80">{{ achievement.detail }}</ion-text>
-              <div class="item-hidden absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg" *ngIf="!achievement.acquired">
-                <ion-img src="assets/image/trancar.png" class="w-10 h-10 opacity-80 hover:opacity-100 transition-opacity"></ion-img>
-              </div>
+  <p-toggleButton (click)="toggleShowAvailables.emit()" styleClass="mb-3 w-full" [onLabel]="'Exibir Disponíveis'" offLabel="Exibir Todos" />
+    <div class="grid grid-cols-2 gap-2" *ngIf="achievements.length">
+        @for (achievement of achievements; track achievement._id; let i = $index) {
+    
+          <div matRipple class="relative" [routerLink]="['/tabs/achievement-view', achievement._id]">
+            <div 
+              [ngClass]="{
+                'from-yellow-500 to-yellow-700': i % 3 === 0,
+                'from-blue-500 to-blue-700': i % 3 === 1,
+                'from-purple-500 to-pink-500': i % 3 === 2
+              }"
+            
+            class="flex flex-col bg-gradient-to-b pb-5  text-white rounded-lg shadow-md p-3 h-full">
+            <img [src]="achievement.imageUrl" class="w-20 h-20  object-cover rounded-full mb-2 mx-auto"/>
+            <ion-text class="font-medium text-sm">{{ achievement.header }}</ion-text>
+            <ion-text class="text-xs opacity-80">{{ achievement.detail }}</ion-text>
+            <div class="item-hidden absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg" *ngIf="!achievement.acquired">
+              <ion-img src="assets/image/trancar.png" class="w-10 h-10 opacity-80 hover:opacity-100 transition-opacity"></ion-img>
             </div>
           </div>
+        </div>
 
-        }
+      }
+    </div>
 
-      </div>
-  </ion-grid>
+</div>
+
+<div *ngIf="!achievements.length" class="flex items-center mt-4 justify-center h-full text-center text-gray-500">
+  <ion-text class="text-base font-medium">No momento não há nenhuma conquista</ion-text>
 </div>

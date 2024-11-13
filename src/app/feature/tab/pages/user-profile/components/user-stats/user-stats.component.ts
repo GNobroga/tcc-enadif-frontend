@@ -38,7 +38,7 @@ export class UserStatsComponent {
       return 0; 
     }
   
-    return (correctAnswersForCategory / totalCorrectAnswers) * 100;
+    return Math.floor((correctAnswersForCategory / totalCorrectAnswers) * 100);
   }
   
 
