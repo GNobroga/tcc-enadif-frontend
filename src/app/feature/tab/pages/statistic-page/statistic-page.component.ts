@@ -28,6 +28,7 @@ export class StatisticPageComponent  implements OnInit {
   ngOnInit() {
       this.route.url.subscribe(() => {
         this.userService.getStats().subscribe(stats => {
+            console.log(stats);
             this.updateData(stats.correctAnswersByCategory);
             this.stats.set(stats);
         });
@@ -47,7 +48,7 @@ export class StatisticPageComponent  implements OnInit {
                     documentStyle.getPropertyValue('--bluegray-500'),
                     documentStyle.getPropertyValue('--blue-500'),
                 ],
-                label: 'My dataset'
+                label: 'Acertos',
             }
         ],
         labels: Object.keys(correctAnswersByCategory).map(category => {
@@ -58,8 +59,8 @@ export class StatisticPageComponent  implements OnInit {
                 infrastructure: 'Infraestrutura',
                 security: 'Segurança',
             }
-            return categories[category] || null;
-        }).filter(category => category !== null),
+            return categories[category] || 'Desconhecido';
+        })
     };
 
     this.options = {
@@ -74,6 +75,10 @@ export class StatisticPageComponent  implements OnInit {
             r: {
                 grid: {
                     color: 'white'
+                },
+                beginAtZero: false,
+                ticks: {
+                    display: false 
                 }
             }
         }

@@ -14,6 +14,7 @@ export interface UserStats {
     dailyHintCount: number;
     displayName?: string;
     photoUrl?: string;
+    rankingPosition: number;
 }
 
 export interface UserDaysSequence {
@@ -33,8 +34,7 @@ export default class UserService extends BaseService {
     }
 
     initializeProgress() {
-        return this.httpClient.get(this.getApiEndpoint('initialize-progress'))
-            .subscribe();
+        return this.httpClient.get(this.getApiEndpoint('initialize-progress'));
     }
 
     getStats() {

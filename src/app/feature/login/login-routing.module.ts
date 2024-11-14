@@ -5,6 +5,8 @@ import { AccountCreatedComponent } from './pages/account-created/account-created
 import { CreateAccountPageComponent } from './pages/create-account-page/create-account-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import RecoverAccountPageComponent from './pages/recover-account-page/recover-account.component';
+import { authRedirectGuard } from 'src/app/core/guards/auth-redirect.guard';
+import { authGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,7 +21,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginPageComponent,
-        canActivate: [],
+        canActivate: [authRedirectGuard],
       },
       {
         path: 'register',
@@ -29,14 +31,14 @@ const routes: Routes = [
       {
         path: 'recover',
         component: RecoverAccountPageComponent,
-        canActivate: [],
+        canActivate: [authRedirectGuard],
       }
     ],
   },
   {
     path: 'created',
     component: AccountCreatedComponent,
-    canActivate: [],
+    canActivate: [authGuard],
   }
 ];
 

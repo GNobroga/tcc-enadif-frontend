@@ -29,94 +29,108 @@
     <div class="p-4 bg-[var(--ion-color-primary)]"></div>
   </ion-header>
 
-  <div class="p-4" *ngIf="stats()">
-    <!-- Estatísticas -->
-    <ion-segment color="primary" value="default">
-      <ion-segment-button value="default">
-        <ion-label>Geral</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [disabled]="true">
-        <ion-label>7 Dias</ion-label> 
-      </ion-segment-button>
-    </ion-segment>
-    
-    <!-- Gráfico de Acertos por Categoria -->
-    <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-4 mb-4">
-      <ion-text class="font-medium text-xl">Acertos por Categoria</ion-text>
-      <p-chart type="polarArea" [data]="data" [options]="options"/>
-    </div>
-
-    <!-- Estatísticas Individuais -->
-    <div class="flex flex-wrap gap-4 mt-4">
-      <!-- Taxa de Acerto -->
-      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
-        <span class="flex flex-col">
-          <ion-text class="text-2xl font-semibold">{{ calculateAccuracyRate(stats()!) }}%</ion-text>
-          <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
-        </span>
-        <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
-      </span>
-
-      <!-- Questões Totais -->
-      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
-        <span class="flex flex-col">
-          <ion-text class="text-2xl font-semibold">{{ stats()!.totalAnsweredQuestions }}</ion-text>
-          <ion-text class="text-sm opacity-70">Questões totais</ion-text>
-        </span>
-        <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
-      </span>
-
-      <!-- Certas -->
-      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#47A34C] text-white p-5 items-center rounded-lg">
-        <span class="flex flex-col">
-          <ion-text class="text-2xl font-semibold">{{ stats()!.correctAnswersCount }}</ion-text>
-          <ion-text class="text-sm opacity-70">Certas</ion-text>
-        </span>
-        <i class="fa-solid fa-check text-3xl"></i>
-      </span>
-
-      <!-- Erradas -->
-      <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#c10808] text-white p-5 items-center rounded-lg">
-        <span class="flex flex-col">
-          <ion-text class="text-2xl font-semibold">{{ stats()!.incorrectAnswersCount }}</ion-text>
-          <ion-text class="text-sm">Erradas</ion-text>
-        </span>
-        <i class="fa-solid fa-xmark text-3xl"></i>
-      </span>
-
-      <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#FF8C42] to-[#FF3D68] text-white items-center rounded-lg">
-        <i class="fa-solid fa-user-friends text-3xl"></i>
-        <span class="flex flex-col ms-4">
-          <span class="flex items-center gap-2">
-            <ion-text class="text-2xl font-semibold">{{ stats()!.countFriends }}</ion-text>
-            <i class="fas fa-users text-white text-base"></i>
-          </span>
-          <ion-text class="text-sm">Friends</ion-text>
-        </span>
-      </span>
+  @if (stats(); as stats) {
+    <div class="p-4">
+      <!-- Estatísticas -->
+      <ion-segment color="primary" value="default">
+        <ion-segment-button value="default">
+          <ion-label>Geral</ion-label>
+        </ion-segment-button>
+        <ion-segment-button [disabled]="true">
+          <ion-label>7 Dias</ion-label> 
+        </ion-segment-button>
+      </ion-segment>
       
-      <!-- Ranking -->
-      <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
-        <i class="fa-solid fa-chart-simple text-3xl"></i>
-        <span class="flex flex-col ms-4">
-          <span class="flex items-center gap-2">
-            <ion-text class="text-2xl font-semibold">{{ stats()!.score }}</ion-text>
-            <i class="fas fa-medal text-white text-base"></i>
+      <!-- Gráfico de Acertos por Categoria -->
+      <div class="shadow-md p-5 rounded-lg flex flex-col gap-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white mt-4 mb-4">
+        <ion-text class="font-medium text-xl">Acertos por Categoria</ion-text>
+        <p-chart type="polarArea" [data]="data" [options]="options"/>
+      </div>
+  
+      <!-- Estatísticas Individuais -->
+      <div class="flex flex-wrap gap-4 mt-4">
+        <!-- Taxa de Acerto -->
+        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+          <span class="flex flex-col">
+            <ion-text class="text-2xl font-semibold">{{ calculateAccuracyRate(stats) }}%</ion-text>
+            <ion-text class="text-sm opacity-70">Taxa de acerto</ion-text>
           </span>
-          <ion-text class="text-sm">Score</ion-text>
+          <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
         </span>
-      </span>
+  
+        <!-- Questões Totais -->
+        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white p-5 items-center rounded-lg">
+          <span class="flex flex-col">
+            <ion-text class="text-2xl font-semibold">{{ stats.totalAnsweredQuestions }}</ion-text>
+            <ion-text class="text-sm opacity-70">Questões totais</ion-text>
+          </span>
+          <i class="fa-solid fa-arrow-trend-up text-3xl"></i>
+        </span>
+  
+        <!-- Certas -->
+        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#47A34C] text-white p-5 items-center rounded-lg">
+          <span class="flex flex-col">
+            <ion-text class="text-2xl font-semibold">{{ stats.correctAnswersCount }}</ion-text>
+            <ion-text class="text-sm opacity-70">Certas</ion-text>
+          </span>
+          <i class="fa-solid fa-check text-3xl"></i>
+        </span>
+  
+        <!-- Erradas -->
+        <span class="shadow-md flex flex-1 min-w-32 justify-between bg-gradient-to-l bg-[#c10808] text-white p-5 items-center rounded-lg">
+          <span class="flex flex-col">
+            <ion-text class="text-2xl font-semibold">{{ stats.incorrectAnswersCount }}</ion-text>
+            <ion-text class="text-sm">Erradas</ion-text>
+          </span>
+          <i class="fa-solid fa-xmark text-3xl"></i>
+        </span>
 
-      <!-- Tempo Médio por Questão -->
-      <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
-        <i class="fa-solid fa-clock text-3xl"></i>
-        <span class="flex flex-col ms-4">
-          <ion-text class="text-2xl font-semibold">{{ stats()!.averageResponseTime | number:'1.2-2' }} s</ion-text>
-          <ion-text class="text-sm">Tempo médio/questão</ion-text>
+        <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#42A5FF] to-[#426DFF] text-white items-center rounded-lg">
+          <i class="fa-solid fa-trophy text-3xl"></i>
+          <span class="flex flex-col ms-4">
+            <span class="flex items-center gap-2">
+              <ion-text class="text-2xl font-semibold">{{ stats?.rankingPosition }}</ion-text>
+              <i class="fas fa-medal text-white text-base"></i>
+            </span>
+            <ion-text class="text-sm">Posição no Ranking</ion-text>
+          </span>
         </span>
-      </span>
+        
+  
+        <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#FF8C42] to-[#FF3D68] text-white items-center rounded-lg">
+          <i class="fa-solid fa-user-friends text-3xl"></i>
+          <span class="flex flex-col ms-4">
+            <span class="flex items-center gap-2">
+              <ion-text class="text-2xl font-semibold">{{ stats.countFriends }}</ion-text>
+              <i class="fas fa-users text-white text-base"></i>
+            </span>
+            <ion-text class="text-sm">Amigos</ion-text>
+          </span>
+        </span>
+        
+        <!-- Ranking -->
+        <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+          <i class="fa-solid fa-chart-simple text-3xl"></i>
+          <span class="flex flex-col ms-4">
+            <span class="flex items-center gap-2">
+              <ion-text class="text-2xl font-semibold">{{ stats.score }}</ion-text>
+              <i class="fas fa-medal text-white text-base"></i>
+            </span>
+            <ion-text class="text-sm">Pontos</ion-text>
+          </span>
+        </span>
+  
+        <!-- Tempo Médio por Questão -->
+        <span class="shadow-md flex flex-1 min-w-full p-4 px-5 bg-gradient-to-l from-[#39CCDC] to-[#578DE3] text-white items-center rounded-lg">
+          <i class="fa-solid fa-clock text-3xl"></i>
+          <span class="flex flex-col ms-4">
+            <ion-text class="text-2xl font-semibold">{{ stats.averageResponseTime | number:'1.2-2' }} s</ion-text>
+            <ion-text class="text-sm">Tempo médio/questão</ion-text>
+          </span>
+        </span>
+      </div>
     </div>
-  </div>
+  }
  </ng-container>
  <div *ngIf="!stats()" class="h-full flex items-center justify-center">
   <ion-spinner color="primary" name="bubbles" class="w-20 h-20"></ion-spinner>
