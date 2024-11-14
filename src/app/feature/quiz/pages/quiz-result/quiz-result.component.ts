@@ -65,6 +65,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     this.isCustomized.set(this.route.snapshot.queryParams['customized'] as boolean);
     this.excludeCategories.set(this.route.snapshot.queryParams['excludeCategories'] as string[]);
     const randomize = this.route.snapshot.queryParams['randomize'] === 'true';
+    this.isRandomize.set(randomize);
     this.limit.set(this.route.snapshot.queryParams['limit']);
 
     const data = this.store.selectSignal(selectQuizResultData)();

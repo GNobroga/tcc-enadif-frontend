@@ -77,7 +77,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     isCompletedReview = signal(false);
 
-    isRandomize = signal(false);
+    isRandomize = signal<boolean | undefined>(undefined);
 
     limit = signal<number | undefined>(undefined);
 
