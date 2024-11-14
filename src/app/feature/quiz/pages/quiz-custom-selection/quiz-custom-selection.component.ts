@@ -90,6 +90,7 @@ export class QuizCustomSelectionComponent implements ViewDidEnter {
       queryParams: {
         customized: true,
         excludeCategories: this.excludeCategories().length ? this.excludeCategories() : undefined,
+        limit: this.count(),
       },
     })
   }

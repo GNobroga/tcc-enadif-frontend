@@ -109,6 +109,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       const isCustomized = this.route.snapshot.queryParams['customized'];
       const excludeCategories = this.route.snapshot.queryParams['excludeCategories'] ?? [];
       const randomize = this.route.snapshot.queryParams['randomize'] === 'true';
+      const limit = this.route.snapshot.queryParams['limit'];
 
       this.isCustomized.set(isCustomized);
       this.excludeCategories.set(excludeCategories);
@@ -116,7 +117,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       this.isRandomize.set(randomize);
  
       let fetchQuestions = isCustomized  ? 
-        lastValueFrom(this.quizService.findById(quizId, excludeCategories)) :
+        lastValueFrom(this.quizService.findById(quizId, excludeCategories, limit)) :
         lastValueFrom(this.quizService.getByQuizIdAndCategory(quizId, category, randomize ? 1 : null));
       
       if (category) {

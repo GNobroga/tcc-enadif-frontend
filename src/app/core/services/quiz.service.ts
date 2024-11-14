@@ -54,9 +54,10 @@ export default class QuizService extends BaseService {
         return this.httpClient.get<{ data: { year: number; id: string; }[] }>(this.getApiEndpoint('years'));
     }
 
-    findById(id: string, excludeCategories: string[] = []) {
-        const queryParam = excludeCategories?.length ?  `?excludeCategories=[${excludeCategories.map(category => `"${category}"`)}]` : '';
-        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}${queryParam}`));
+    findById(id: string, excludeCategories: string[] = [], limit?: string) {
+        const limitParam = limit ? `limit=${limit}` : '';
+        const excludeCategoriesParam = excludeCategories?.length ?  `?excludeCategories=[${excludeCategories.map(category => `"${category}"`)}]` : '';
+        return this.httpClient.get<Quiz>(this.getApiEndpoint(`${id}?${limitParam}&${excludeCategoriesParam}`));
     }
 
     listHistory() {
