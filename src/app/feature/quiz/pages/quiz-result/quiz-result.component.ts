@@ -48,6 +48,8 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
   showButtons = signal(true);
 
+  limit = signal<number | undefined>(undefined);
+
   constructor(
     readonly animationController: AnimationController,
     readonly route: ActivatedRoute,
@@ -63,7 +65,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
     this.isCustomized.set(this.route.snapshot.queryParams['customized'] as boolean);
     this.excludeCategories.set(this.route.snapshot.queryParams['excludeCategories'] as string[]);
     const randomize = this.route.snapshot.queryParams['randomize'] === 'true';
-    this.isRandomize.set(randomize);
+    this.limit.set(this.route.snapshot.queryParams['limit']);
 
     const data = this.store.selectSignal(selectQuizResultData)();
     if (!data) {
@@ -154,7 +156,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
 
     if (!this.isCustomized()) {
       this.router.navigate(['/quiz/started', this.quizId()], {
-        queryParams: { category: this.category(),  randomize: this.isRandomize(),},
+        queryParams: { category: this.category(),  randomize: this.isRandomize(), },
       });
       return;
     }
@@ -163,6 +165,7 @@ export class QuizResultComponent implements ViewDidEnter, AfterViewInit, OnDestr
       queryParams: { 
         customized: this.isCustomized(), 
         excludeCategories: this.excludeCategories(),
+        limit: this.limit(),
       },
     });
   }

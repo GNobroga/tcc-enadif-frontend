@@ -79,6 +79,8 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
     isRandomize = signal(false);
 
+    limit = signal<number | undefined>(undefined);
+
     constructor(
       readonly router: Router,
       readonly route: ActivatedRoute,
@@ -103,7 +105,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
 
       this.isLoading.set(true);
       this.quizId.set(quizId);
-
+    
       const isCompletedReview = this.route.snapshot.queryParams['completedReview'];
       const category = this.route.snapshot.queryParams['category'];
       const isCustomized = this.route.snapshot.queryParams['customized'];
@@ -115,6 +117,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       this.excludeCategories.set(excludeCategories);
       this.isCompletedReview.set(isCompletedReview);
       this.isRandomize.set(randomize);
+      this.limit.set(limit);
  
       let fetchQuestions = isCustomized  ? 
         lastValueFrom(this.quizService.findById(quizId, excludeCategories, limit)) :
@@ -202,10 +205,13 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
   async showAnswer(modal: IonModal) {
     const question = this.currentQuestion()!;
     if (!question) return;
+    const alternative = question.alternatives.find(alternative => alternative.id === question.correctId);
     const message = `
         Pergunta: ${question?.title || 'Desconhecida'}
         Detalhes da Pergunta: ${JSON.stringify(question, null, 2)}  
-        Me explique do porque a 'correctId' é a correta? Resuma.
+         Me explique do porque da opção ${alternative?.label} está correta? Como resposta me retorne um conteúdo
+        dentro de tags HTML para tornar mais bonito a resposta. O conteúdo será exibido em dispositivos pequenos
+        então deixe o mais responsivo.
     `;
     this.questionExplanation.set(await this.geminiAPIService.sendMessage(message));
     modal.present();
@@ -227,10 +233,13 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
       this.remainingChances.update(oldRemainingChances => oldRemainingChances - 1);
       this.quizQuestionComponent.markAnswer(correctId);
       const question = this.currentQuestion()!;
+      const alternative = question.alternatives.find(alternative => alternative.id === question.correctId);
       const message = `
           Pergunta: ${question?.title || 'Desconhecida'}
           Detalhes da Pergunta: ${JSON.stringify(question, null, 2)}  
-          Me explique do porque a 'correctId' é a correta? Resuma.
+          Me explique do porque da opção ${alternative?.label} está correta? Como resposta me retorne um conteúdo
+          dentro de tags HTML para tornar mais bonito a resposta. O conteúdo será exibido em dispositivos pequenos
+          então deixe o mais responsivo.
       `;
       this.questionExplanation.set(await this.geminiAPIService.sendMessage(message));
       this.userService.decreaseDailyHint().subscribe();
@@ -276,6 +285,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
               customized: this.isCustomized(),
               excludeCategories: this.excludeCategories(),
               randomize: this.isRandomize(),
+              limit: this.limit(),
             },
           });
         }
@@ -330,6 +340,7 @@ export class QuizStartedComponent implements OnDestroy, ViewDidEnter {
             customized: this.isCustomized(),
             excludeCategories: this.excludeCategories(),
             randomize: this.isRandomize(),
+            limit: this.limit(),
           },
         });
       }

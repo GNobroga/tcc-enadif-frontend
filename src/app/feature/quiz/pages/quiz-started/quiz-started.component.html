@@ -27,7 +27,7 @@
       <ion-text class="text-sm font-semibold text-gray-700 flex items-center gap-2">
         <!-- Número da Questão e Total -->
         <span class="text-gray-700">Questão</span> 
-        <span class="text-primary text-lg">{{ isReview() ? (currentQuestionIndex()! + 1) : currentQuestionIndex() }}</span> 
+        <span class="text-primary text-lg">{{ currentQuestionIndex()! + 1 }}</span> 
         <span class="text-gray-500">de</span> 
         <span class="text-primary text-lg">{{ questions().length }}</span>
         
@@ -114,8 +114,7 @@
   
           <!-- Conteúdo da explicação -->
           <div class="modal-body text-base text-gray-800 space-y-4">
-            <p *ngIf="this.questionExplanation()" class="leading-relaxed bg-gray-50 p-4 rounded-lg shadow-inner text-gray-700">
-              {{ this.questionExplanation() }}
+            <p *ngIf="this.questionExplanation()" [innerHTML]="this.questionExplanation()" class="leading-relaxed bg-gray-50 p-4 rounded-lg shadow-inner text-gray-700">
             </p>
 
             <div *ngIf="!this.questionExplanation()" class="h-full flex flex-col items-center justify-center">

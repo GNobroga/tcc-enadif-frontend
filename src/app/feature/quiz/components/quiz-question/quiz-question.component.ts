@@ -7,7 +7,7 @@ export type Alternative = {
 };
 
 export type Asking = {
-  title: string;
+  title?: string;
   body?: string[];
   footer?: string;
 };

@@ -48,7 +48,7 @@
               </span>
               
               <!-- Progress bar -->
-              <p-progressBar [value]="(getCountQuestionsDone(quiz.questions) / quiz.questions.length) * 100"  styleClass="my-1"></p-progressBar>
+              <p-progressBar [value]="((getCountQuestionsDone(quiz.questions) / quiz.questions.length) * 100).toFixed(1) "  styleClass="my-1"></p-progressBar>
               
               <!-- Time spent on quiz -->
               <span class="flex items-center gap-2 text-sm text-gray-600">
