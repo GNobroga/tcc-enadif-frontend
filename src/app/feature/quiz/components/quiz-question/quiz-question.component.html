@@ -3,15 +3,13 @@
   <div class="question__header p-4 bg-white border-b border-gray-200">
     <span class="label text-3xl font-semibold text-gray-800">{{ parent.currentQuestionIndex()! + 1 }}</span>
     <div *ngIf="data.title" class="mt-4 font-medium text-lg text-gray-700">
-      <ion-text class="text-base">{{ data.title }}</ion-text>
+      <div class="text-base" [innerHTML]="data.title"></div>
     </div>
   </div>
 
   <!-- Conteúdo da pergunta -->
   <div class="question__content px-4 py-3 bg-gray-50">
-    <p class="leading-relaxed text-base text-gray-700">
-      {{ data.content }}
-    </p>
+    <p [innerHTML]="data.content" class="leading-relaxed text-base text-gray-700"></p>
 
     <div *ngIf="data.photos" class="mt-4">
       <ion-grid>
@@ -23,19 +21,19 @@
       </ion-grid>
     </div>
 
-    <div class="space-y-3 mt-4">
-      <ion-text class="font-medium text-xl text-gray-800">
-        {{ data.asking.title }}
-      </ion-text>
+    <div class="space-y-3">
+      <ion-text [innerHTML]="data.asking.title" class="font-medium text-xl text-gray-800"></ion-text>
       <div *ngIf="data.asking.body" class="ms-3 opacity-85">
         <div *ngFor="let askingContent of data.asking.body">
-          <p class="text-base text-gray-600">{{ askingContent }}</p>
+          <p class="text-base text-gray-600" [innerHTML]="askingContent"></p>
         </div>
       </div>
-      <p class="font-medium text-xs break-words text-gray-500">
-        {{ data.asking.footer }}
-      </p>
+      <p class="font-medium text-xs break-words text-gray-500" [innerHTML]="data.asking.footer"></p>
     </div>
+
+      <div class="mt-3">
+        <ion-text [innerHTML]="data.subAsking" *ngIf="data?.subAsking" class="font-medium text-base text-gray-800"></ion-text>
+      </div>
   </div>
 
   <!-- Alternativas -->

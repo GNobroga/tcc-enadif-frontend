@@ -19,6 +19,7 @@ export type Question = {
   photos?: string[];
   asking: Asking;
   alternatives: Alternative[];
+  subAsking?: string;
   correctId: number;
   category: 'logic' | 'computing' | 'software' | 'security' | 'infrastructure',
   done?: boolean;
