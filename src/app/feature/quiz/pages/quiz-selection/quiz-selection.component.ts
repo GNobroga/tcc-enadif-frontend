@@ -1,16 +1,17 @@
-import { Component, Input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges } from '@angular/core';
 import QuizService, { Quiz } from 'src/app/core/services/quiz.service';
 import { Question } from '../../components/quiz-question/quiz-question.component';
 import { ActivatedRoute } from '@angular/router';
 import { Tag } from 'primeng/tag';
 import { FormControl } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-quiz-selection',
   templateUrl: './quiz-selection.component.html',
   styleUrls: ['./quiz-selection.component.scss'],
 })
-export class QuizSelectionComponent implements OnChanges, OnInit {
+export class QuizSelectionComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   title!: string;
@@ -31,14 +32,21 @@ export class QuizSelectionComponent implements OnChanges, OnInit {
 
   selectedYear = new FormControl('all');
 
+  killAllObservers = new Subject();
+
   constructor(
     readonly quizService: QuizService,
     readonly route: ActivatedRoute,
   ) { }
 
+  ngOnDestroy(): void {
+      this.killAllObservers.next(true);
+      this.killAllObservers.unsubscribe();
+  }
+
   ngOnInit() {
 
-    this.selectedYear.valueChanges.subscribe(value => {
+    this.selectedYear.valueChanges.pipe(takeUntil(this.killAllObservers)).subscribe(value => {
       if (value === 'all') {
         this.cacheQuizzes.set(this.quizzes());
         return;

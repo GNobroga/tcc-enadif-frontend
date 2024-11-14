@@ -23,7 +23,7 @@
 
     <div class="space-y-3">
       <ion-text [innerHTML]="data.asking.title" class="font-medium text-xl text-gray-800"></ion-text>
-      <div *ngIf="data.asking.body" class="ms-3 opacity-85">
+      <div *ngIf="data.asking.body" class="ms-3 opacity-85 max-w-full overflow-hidden overflow-x-auto">
         <div *ngFor="let askingContent of data.asking.body">
           <p class="text-base text-gray-600" [innerHTML]="askingContent"></p>
         </div>
