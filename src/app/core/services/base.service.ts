@@ -1,6 +1,5 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { inject, Inject } from "@angular/core";
-import { Observable, shareReplay } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { inject } from "@angular/core";
 import { environment } from "src/environments/environment";
 
 export default abstract class BaseService {
