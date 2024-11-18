@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { environment } from "src/environments/environment";
 
+
 export default abstract class BaseService {
 
     protected httpClient: HttpClient = inject(HttpClient);
